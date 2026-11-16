@@ -21,13 +21,30 @@ from src import config
 _WS_RE = re.compile(r"\s+")
 _PUNCT_RE = re.compile(r"[\"'«»“”„.,;:!?()\[\]{}№/\\-]+")
 _DIGIT_RE = re.compile(r"\d+")
+_WORD_RE = re.compile(r"\w+")
+_CYRILLIC_RE = re.compile(r"[а-яәғқңөұүһіё]")
+_LATIN_RE = re.compile(r"[a-z]")
+# Latin look-alikes that appear inside Kazakh words (e.g. Latin "i" for "і").
+# Same table as text_prep.HOMOGLYPHS; duplicated here to avoid a circular import.
+_HOMOGLYPHS = str.maketrans({"i": "і", "a": "а", "e": "е", "o": "о", "p": "р", "c": "с", "x": "х",
+                             "y": "у", "k": "к", "m": "м", "h": "һ", "t": "т", "b": "в"})
+
+
+def _fold_homoglyphs(text: str) -> str:
+    """Map Latin look-alikes to Cyrillic, only inside words that contain Cyrillic."""
+    def fold(match: re.Match) -> str:
+        word = match.group(0)
+        if _CYRILLIC_RE.search(word) and _LATIN_RE.search(word):
+            return word.translate(_HOMOGLYPHS)
+        return word
+    return _WORD_RE.sub(fold, text)
 
 
 def normalize_title(title: str, mask_digits: bool = False) -> str:
     """Canonical form of a title used for duplicate / leakage detection."""
     if not isinstance(title, str):
         return ""
-    text = unicodedata.normalize("NFC", title).lower()
+    text = _fold_homoglyphs(unicodedata.normalize("NFC", title).lower())
     text = _PUNCT_RE.sub(" ", text)
     if mask_digits:
         text = _DIGIT_RE.sub("0", text)
@@ -41,9 +58,15 @@ def split_act_form(raw: str) -> list[str]:
     return [t.strip() for t in raw.split(",") if t.strip() and t.strip() not in config.PLACEHOLDERS]
 
 
-def primary_form(raw: str) -> str:
-    """Highest-ranked base legal form of an act, or FORM_OTHER."""
+def primary_form(raw: str) -> str | None:
+    """Highest-ranked base legal form of an act, FORM_OTHER, or None if act_form is missing.
+
+    Missing act_form means "unlabelled", not "other": such rows are excluded
+    from the form task (exactly like missing sections for the area task).
+    """
     tokens = {config.FORM_ALIASES.get(t, t) for t in split_act_form(raw)}
+    if not tokens:
+        return None
     for form in config.FORM_PRIORITY:
         if form in tokens:
             return form
