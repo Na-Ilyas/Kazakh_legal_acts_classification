@@ -214,11 +214,11 @@ for (const task of ["form", "area"]) {
       valAxisMinVal: task === "form" ? 0.6 : 0.45, valAxisMaxVal: task === "form" ? 0.9 : 0.66, valAxisHidden: true,
       catAxisLabelFontSize: 11, catAxisOrientation: "maxMin", showLegend: true, legendPos: "t", legendFontSize: 11,
       valGridLine: { style: "none" }, catGridLine: { style: "none" }, catAxisLabelColor: HEX.dk1, ...chartText });
-  const best = rows.filter((r) => !r.model.includes("trainval")).reduce((a, r) => (r.test_strict > (a?.test_strict ?? 0) ? r : a), null);
+  const best = rows.filter((r) => !r.model.includes("trainval") && !r.model.startsWith("ensemble")).reduce((a, r) => (r.test_strict > (a?.test_strict ?? 0) ? r : a), null);
   const tiny = rows.find((r) => r.label.startsWith("Tiny 4L"));
   const tfidf = rows.find((r) => r.model === "tfidf_word_char_lr");
   card(s, 9.2, 1.4, 3.5, 5.4);
-  if (best) stat(s, 9.4, 1.55, 3.2, pct(best.test_strict), `best test_strict: ${best.label} (${fmtParams(best.n_params)} params)`);
+  if (best) stat(s, 9.4, 1.55, 3.2, pct(best.test_strict), `best single model ≤120M (test_strict): ${best.label}, ${fmtParams(best.n_params)} params`);
   if (tiny) stat(s, 9.4, 3.3, 3.2, pct(tiny.test_strict), `tiny transformer (${fmtParams(tiny.n_params)}) vs TF-IDF ${tfidf ? pct(tfidf.test_strict) : "–"}`, C.accent5);
   txt(s, "Axis truncated to show differences; majority-class baseline: " + pct((D.tasks[task].find((r) => r.model === "majority_dummy") || {}).test),
     { x: 9.4, y: 5.3, w: 3.2, h: 1.2, fontSize: 11, color: C.accent3 });

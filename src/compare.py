@@ -157,8 +157,9 @@ def to_markdown(table: pd.DataFrame, kinds: tuple[str, ...] = ("main", "referenc
              "their only val score is on val half B, which is in-sample for their weights/λ, so they are "
              "never ranked against single models on validation.", ""] if header else []
     titles = {"main": "## Task `{t}`: main models (val-best variant per group)",
-              "reference": "### Task `{t}`: ensembles and post-hoc adjustment - REFERENCE ONLY (no held-out "
-                           "val: F1 val½B is in-sample for weights/λ; ensembles exceed the 120M budget)",
+              "reference": "### Task `{t}`: ensembles, post-hoc adjustment and LLM teacher - REFERENCE ONLY "
+                           "(ensembles/post-hoc: F1 val½B is in-sample for weights/λ; >120M rows exceed the "
+                           "budget; the LLM is a distillation teacher only)",
               "refit": "### Task `{t}`: refits on train+val (no held-out val score, never selected on val)",
               "ablation": "## Task `{t}`: ablations and other variants"}
     groups = [(task, kind, part) for (task, kind), part in table.groupby(["task", "table"], sort=False)
@@ -171,8 +172,12 @@ def to_markdown(table: pd.DataFrame, kinds: tuple[str, ...] = ("main", "referenc
             cells = []
             for col in show:
                 v = r[col] if col in r else None
+                if col == "latency_ms_per_1000" and r.get("group") in REFERENCE_GROUPS:
+                    v = None if v is None or isinstance(v, float) and np.isnan(v) else f"GPU {v:,.0f}"
+                    cells.append(v or "–")
+                    continue
                 if col == "model_name" and r.get("n_params", 0) and r["n_params"] > PARAM_BUDGET:
-                    v = f"{v} (>120M, reference)"
+                    v = f"{v} ({'teacher only, ' if r.get('group') in REFERENCE_GROUPS else ''}>120M, reference)"
                 if v is None or isinstance(v, float) and np.isnan(v):
                     cells.append("–")
                 elif col.startswith(("f1", "acc")):
@@ -196,6 +201,7 @@ REFIT_SUFFIX = "_trainval"    # refits on train+val: their val score is not held
 ABLATIONS_MD = config.RESULTS_DIR / "ablations.md"
 POSTHOC_GROUPS = ("ensemble", "posthoc")       # val only on half B (in-sample for weights/lam)
 NON_MAIN_GROUPS = ("tiny tokenizer ablation",)  # always listed with the ablations
+REFERENCE_GROUPS = ("llm_teacher",)             # teachers over the budget: reference section only
 PARAM_BUDGET = 120_000_000
 
 
@@ -243,6 +249,7 @@ def mark_main(table: pd.DataFrame) -> pd.DataFrame:
     table["group"] = [model_group(m, f) for m, f in zip(table["model_name"], table["model_family"])]
     is_refit = table["model_name"].str.endswith(REFIT_SUFFIX)
     is_post = table["group"].isin(POSTHOC_GROUPS)
+    is_ref = is_post | table["group"].isin(REFERENCE_GROUPS)
     # selection score: full-val F1 for single models; for posthoc/ensembles (no held-out val) the
     # val-half-B F1, used ONLY to pick the best variant inside their own group
     table["select_score"] = np.where(is_post, table["f1_val_half_b"], table["f1_val"])
@@ -250,11 +257,11 @@ def mark_main(table: pd.DataFrame) -> pd.DataFrame:
     best = selectable.sort_values("select_score", ascending=False).groupby(["task", "group"]).head(1)
     main_keys = set(zip(best["task"], best["model_name"]))
     kinds = []
-    for t, m, r, post in zip(table["task"], table["model_name"], is_refit, is_post):
+    for t, m, r, ref in zip(table["task"], table["model_name"], is_refit, is_ref):
         if r:
             kinds.append("refit")
         elif (t, m) in main_keys or m in MAIN_REFERENCE:
-            kinds.append("reference" if post else "main")
+            kinds.append("reference" if ref else "main")
         else:
             kinds.append("ablation")
     table["table"] = kinds

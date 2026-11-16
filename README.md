@@ -18,7 +18,39 @@ The comparison reports macro-F1, parameter count, model size and latency, on a t
 
 The dataset is [KazakhLawCorpus-clean](https://huggingface.co/datasets/Arailym-tleubayeva/KazakhLawCorpus-clean): 215,889 acts, a 337 MB CSV, CC BY 4.0.
 
-<!-- RESULTS -->
+## Key results
+
+The tables show macro-F1 on the 2023–2026 test acts and on **test_strict**, which drops test titles that have a templated near-duplicate in the training years. The CPU column is the time to classify 1000 titles on CPU.
+
+**Act form (7 classes)**
+
+| Model | Params | CPU ms / 1000 | Test | Strict | vs TF-IDF (95 % CI) |
+|---|---|---|---|---|---|
+| TF-IDF word+char + LR (baseline) | 1.5M | ~190 | 0.820 | 0.825 | — |
+| Tiny transformer, from scratch (2L, d128) | 1.4M | ~150 | 0.810 | 0.809 | tie |
+| **Tiny transformer + MLM + distillation** | **5.2M** | **~540** | **0.827** | **0.829** | tie |
+| e5-small fine-tuned | 117.7M | ~3,700 | 0.842 | 0.846 | better |
+| e5-small, Kazakh vocab-pruned | 25.5M | — | 0.845 | 0.852 | better |
+| kaz-roberta fine-tuned | 83.5M | ~9,700 | 0.853 | 0.868 | better |
+| **KazBERT fine-tuned** | 110.6M | — | **0.860** | 0.866 | better |
+
+**Regulation area (33 classes)**
+
+| Model | Params | CPU ms / 1000 | Test | Strict | vs TF-IDF (95 % CI) |
+|---|---|---|---|---|---|
+| TF-IDF word+char + LR (baseline) | 7.1M | ~230 | 0.583 | 0.556 | — |
+| Tiny transformer, from scratch (4L) | 5.2M | ~500 | 0.584 | 0.564 | tie |
+| **Tiny transformer + MLM + distillation** | **5.2M** | **~520** | **0.598** | **0.576** | better |
+| e5-small fine-tuned | 117.7M | ~3,500 | 0.601 | 0.579 | better |
+| **kaz-roberta + LLRD + recency** | 83.5M | ~9,800 | **0.629** | **0.608** | better |
+
+The full tables, with every variant, latency, memory and bootstrap CIs, are in `results/model_comparison.md` and `results/ablations.md`. The written report is `reports/report.md` (also `.docx`), and the slides are `reports/presentation.pptx`.
+
+**Takeaways**
+
+- The tiny transformer needs MLM pretraining and distillation to catch the TF-IDF baseline. With them, it matches the 23× larger e5-small on the area task at about 1/7 of its CPU latency.
+- Kazakh-specific encoders are the most accurate models within the 120M-parameter budget.
+- Kazakh vocabulary pruning shrinks e5-small by 78 % at equal F1.
 
 ## Setup
 

@@ -134,7 +134,10 @@ class _E5Base(BasePredictor):
             batch = [E5_PREFIX + t for t in texts[start:start + batch_size]]
             enc = self.tokenizer(batch, truncation=True, max_length=self.max_len, padding=True,
                                  return_tensors="pt")
-            yield enc["input_ids"].to(self.device), enc["attention_mask"].to(self.device).bool()
+            ids = enc["input_ids"]
+            if getattr(self, "lookup", None) is not None:   # vocabulary-pruned encoder: old id -> new id
+                ids = self.lookup[ids]
+            yield ids.to(self.device), enc["attention_mask"].to(self.device).bool()
 
     def _embed(self, encoder, texts: list[str], batch_size: int, normalize: bool) -> np.ndarray:
         torch = _torch()
@@ -163,7 +166,14 @@ class E5FinetunedPredictor(_E5Base):
         l2id = load_json(self.model_dir / "label2id.json")
         self.classes = [c for c, _ in sorted(l2id.items(), key=lambda kv: kv[1])]
         self.max_len = int(cfg["max_len"])
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_dir / "encoder")
+        # Pruned models save no tokenizer next to the encoder (they reuse the base one + id_lookup);
+        # AutoTokenizer would then silently build an empty tokenizer, so check for the file explicitly.
+        tok_src = (self.model_dir / "encoder" if (self.model_dir / "encoder" / "tokenizer.json").exists()
+                   else cfg.get("tokenizer", E5_MODEL_NAME))
+        self.tokenizer = AutoTokenizer.from_pretrained(tok_src)
+        lookup_path = self.model_dir / "id_lookup.npy"
+        self.lookup = (torch.from_numpy(np.load(lookup_path).astype(np.int64)) if lookup_path.exists()
+                       else None)
         self.encoder = AutoModel.from_pretrained(self.model_dir / "encoder").eval()
         self.head = torch.nn.Linear(self.encoder.config.hidden_size, len(self.classes))
         self.head.load_state_dict(torch.load(self.model_dir / "head.pt", map_location="cpu", weights_only=True))
@@ -395,6 +405,7 @@ def discover_models(task: str | None = None, include_quick: bool = False) -> lis
     """Find every trained model on disk (own models via config.json, baselines via SQLite)."""
     specs: list[ModelSpec] = []
     kind_by_prefix = {"tiny_transformer_": "tiny", "e5_small_ft_": "e5_ft", "e5_frozen_lr_": "e5_frozen_lr",
+                      "e5_small_kkprune_ft_": "e5_ft",
                       "posthoc_": "posthoc"}
     for cfg_path in sorted(config.MODELS_DIR.glob("*/config.json")):
         d = cfg_path.parent

@@ -12,6 +12,12 @@
       "val_split": "val_half_b",
       "f1_test": 0.6215
     },
+    "llm_teacher": {
+      "model_name": "llm_teacher_qwen3_1p7b",
+      "f1_val": 0.5486,
+      "val_split": "val",
+      "f1_test": 0.5862
+    },
     "posthoc": {
       "model_name": "tiny_transformer_4L_recency_tau8_prioradj",
       "f1_val": 0.6386,
@@ -29,6 +35,12 @@
       "f1_val": 0.6162,
       "val_split": "val",
       "f1_test": 0.6285
+    },
+    "pretrained kazbert": {
+      "model_name": "kazbert_ft",
+      "f1_val": 0.6239,
+      "val_split": "val",
+      "f1_test": 0.6201
     },
     "pretrained_frozen": {
       "model_name": "e5_frozen_lr",
@@ -73,10 +85,10 @@
       "f1_test": 0.5832
     },
     "_overall": {
-      "model_name": "kaz_roberta_llrd_rec",
-      "f1_val": 0.6162,
+      "model_name": "kazbert_ft",
+      "f1_val": 0.6239,
       "val_split": "val",
-      "f1_test": 0.6285
+      "f1_test": 0.6201
     }
   },
   "form": {
@@ -92,6 +104,12 @@
       "val_split": "val_half_b",
       "f1_test": 0.8497
     },
+    "llm_teacher": {
+      "model_name": "llm_teacher_qwen3_1p7b",
+      "f1_val": 0.7536,
+      "val_split": "val",
+      "f1_test": 0.7747
+    },
     "pretrained e5": {
       "model_name": "e5_small_ft",
       "f1_val": 0.8656,
@@ -103,6 +121,12 @@
       "f1_val": 0.8978,
       "val_split": "val",
       "f1_test": 0.8414
+    },
+    "pretrained kazbert": {
+      "model_name": "kazbert_ft",
+      "f1_val": 0.8794,
+      "val_split": "val",
+      "f1_test": 0.8601
     },
     "pretrained_frozen": {
       "model_name": "e5_frozen_lr",

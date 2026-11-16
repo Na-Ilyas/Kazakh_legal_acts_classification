@@ -10,7 +10,8 @@ Models analysed (val-best model of each comparison group, as in the main table):
 |---|---|---|---|
 | baseline/tfidf | tfidf_word_char_lr | 0.8576 | 0.8202 |
 | pretrained_frozen | e5_frozen_lr | 0.6634 | 0.6992 |
-| tiny_transformer | tiny_transformer_4L_kd_a90_T2 | 0.8716 | 0.7992 |
+| tiny (from scratch) | tiny_transformer_2L_d128 | 0.8405 | 0.8099 |
+| tiny + MLM + KD (teacher e5) | tiny_transformer_4L_mlm_kd_a90_T2 | 0.8647 | 0.8252 |
 | pretrained e5 | e5_small_ft | 0.8656 | 0.8415 |
 | pretrained kaz-roberta | kaz_roberta_llrd_rec | 0.8978 | 0.8414 |
 | ensemble | ensemble_tfidf_tiny_e5_roberta | 0.9314 | 0.8497 |
@@ -80,14 +81,14 @@ Error rate by adopting-body type (SQL JOIN predictions-acts-bodies, groups with 
 
 `max_cos` = highest char-ngram TF-IDF cosine between a test title and any train title (data/processed/nn_similarity.parquet; >= 0.9 means a near-duplicate, excluded from test_strict).
 
-| sim_bucket | n | e5_frozen_lr | e5_small_ft | ensemble_tfidf_tiny_e5_roberta | kaz_roberta_llrd_rec | tfidf_word_char_lr | tiny_transformer_4L_kd_a90_T2 |
-|---|---|---|---|---|---|---|---|
-| 1: <0.60 | 3388 | 0.2774 | 0.1756 | 0.1626 | 0.1712 | 0.1809 | 0.1939 |
-| 2: 0.60-0.75 | 5128 | 0.1488 | 0.0525 | 0.0521 | 0.0612 | 0.0632 | 0.0595 |
-| 3: 0.75-0.85 | 4914 | 0.1079 | 0.0391 | 0.0352 | 0.0368 | 0.0446 | 0.0397 |
-| 4: 0.85-0.90 | 4211 | 0.0850 | 0.0247 | 0.0228 | 0.0221 | 0.0249 | 0.0256 |
-| 5: 0.90-0.95 | 6790 | 0.0493 | 0.0100 | 0.0090 | 0.0102 | 0.0130 | 0.0099 |
-| 6: >=0.95 | 14036 | 0.0393 | 0.0081 | 0.0074 | 0.0081 | 0.0081 | 0.0085 |
+| sim_bucket | n | e5_frozen_lr | e5_small_ft | ensemble_tfidf_tiny_e5_roberta | kaz_roberta_llrd_rec | tfidf_word_char_lr | tiny_transformer_2L_d128 | tiny_transformer_4L_mlm_kd_a90_T2 |
+|---|---|---|---|---|---|---|---|---|
+| 1: <0.60 | 3388 | 0.2774 | 0.1756 | 0.1626 | 0.1712 | 0.1809 | 0.1916 | 0.1809 |
+| 2: 0.60-0.75 | 5128 | 0.1488 | 0.0525 | 0.0521 | 0.0612 | 0.0632 | 0.0688 | 0.0515 |
+| 3: 0.75-0.85 | 4914 | 0.1079 | 0.0391 | 0.0352 | 0.0368 | 0.0446 | 0.0515 | 0.0334 |
+| 4: 0.85-0.90 | 4211 | 0.0850 | 0.0247 | 0.0228 | 0.0221 | 0.0249 | 0.0278 | 0.0237 |
+| 5: 0.90-0.95 | 6790 | 0.0493 | 0.0100 | 0.0090 | 0.0102 | 0.0130 | 0.0140 | 0.0103 |
+| 6: >=0.95 | 14036 | 0.0393 | 0.0081 | 0.0074 | 0.0081 | 0.0081 | 0.0100 | 0.0082 |
 
 The label of the nearest train title equals the true label for 90.6% of test titles (a 1-NN 'copy' rule). kaz_roberta_llrd_rec predicts the neighbour's label for 91.7% of titles, and 52.7% of its errors are exactly the neighbour's label (errors inherited from a similar training title).
 
@@ -95,7 +96,8 @@ The label of the nearest train title equals the true label for 90.6% of test tit
 |---|---|---|---|---|---|
 | tfidf_word_char_lr | 38467 | 1462 | 0.9063 | 0.9192 | 0.5793 |
 | e5_frozen_lr | 38467 | 3478 | 0.9063 | 0.8721 | 0.2510 |
-| tiny_transformer_4L_kd_a90_T2 | 38467 | 1452 | 0.9063 | 0.9131 | 0.5034 |
+| tiny_transformer_2L_d128 | 38467 | 1607 | 0.9063 | 0.9117 | 0.4704 |
+| tiny_transformer_4L_mlm_kd_a90_T2 | 38467 | 1326 | 0.9063 | 0.9130 | 0.5053 |
 | e5_small_ft | 38467 | 1342 | 0.9063 | 0.9129 | 0.5104 |
 | kaz_roberta_llrd_rec | 38467 | 1350 | 0.9063 | 0.9167 | 0.5274 |
 | ensemble_tfidf_tiny_e5_roberta | 38467 | 1252 | 0.9063 | 0.9176 | 0.5599 |
@@ -107,36 +109,42 @@ Confidence: 97.0% of test predictions have confidence >= 0.9 with accuracy 0.976
 | A | B | both right | only A right | only B right | both wrong | same prediction |
 |---|---|---|---|---|---|---|
 | tfidf_word_char_lr | e5_frozen_lr | 34543 | 2462 | 446 | 1016 | 0.921 |
-| tfidf_word_char_lr | tiny_transformer_4L_kd_a90_T2 | 36535 | 470 | 480 | 982 | 0.973 |
+| tfidf_word_char_lr | tiny_transformer_2L_d128 | 36385 | 620 | 475 | 987 | 0.969 |
+| tfidf_word_char_lr | tiny_transformer_4L_mlm_kd_a90_T2 | 36608 | 397 | 533 | 929 | 0.974 |
 | tfidf_word_char_lr | e5_small_ft | 36589 | 416 | 536 | 926 | 0.973 |
 | tfidf_word_char_lr | kaz_roberta_llrd_rec | 36628 | 377 | 489 | 973 | 0.976 |
 | tfidf_word_char_lr | ensemble_tfidf_tiny_e5_roberta | 36788 | 217 | 427 | 1035 | 0.982 |
-| e5_frozen_lr | tiny_transformer_4L_kd_a90_T2 | 34606 | 383 | 2409 | 1069 | 0.923 |
+| e5_frozen_lr | tiny_transformer_2L_d128 | 34432 | 557 | 2428 | 1050 | 0.919 |
+| e5_frozen_lr | tiny_transformer_4L_mlm_kd_a90_T2 | 34649 | 340 | 2492 | 986 | 0.924 |
 | e5_frozen_lr | e5_small_ft | 34657 | 332 | 2468 | 1010 | 0.924 |
 | e5_frozen_lr | kaz_roberta_llrd_rec | 34626 | 363 | 2491 | 987 | 0.923 |
 | e5_frozen_lr | ensemble_tfidf_tiny_e5_roberta | 34680 | 309 | 2535 | 943 | 0.924 |
-| tiny_transformer_4L_kd_a90_T2 | e5_small_ft | 36727 | 288 | 398 | 1054 | 0.980 |
-| tiny_transformer_4L_kd_a90_T2 | kaz_roberta_llrd_rec | 36638 | 377 | 479 | 973 | 0.975 |
-| tiny_transformer_4L_kd_a90_T2 | ensemble_tfidf_tiny_e5_roberta | 36765 | 250 | 450 | 1002 | 0.979 |
+| tiny_transformer_2L_d128 | tiny_transformer_4L_mlm_kd_a90_T2 | 36548 | 312 | 593 | 1014 | 0.975 |
+| tiny_transformer_2L_d128 | e5_small_ft | 36466 | 394 | 659 | 948 | 0.971 |
+| tiny_transformer_2L_d128 | kaz_roberta_llrd_rec | 36430 | 430 | 687 | 920 | 0.968 |
+| tiny_transformer_2L_d128 | ensemble_tfidf_tiny_e5_roberta | 36549 | 311 | 666 | 941 | 0.972 |
+| tiny_transformer_4L_mlm_kd_a90_T2 | e5_small_ft | 36859 | 282 | 266 | 1060 | 0.985 |
+| tiny_transformer_4L_mlm_kd_a90_T2 | kaz_roberta_llrd_rec | 36753 | 388 | 364 | 962 | 0.979 |
+| tiny_transformer_4L_mlm_kd_a90_T2 | ensemble_tfidf_tiny_e5_roberta | 36881 | 260 | 334 | 992 | 0.983 |
 | e5_small_ft | kaz_roberta_llrd_rec | 36738 | 387 | 379 | 963 | 0.978 |
 | e5_small_ft | ensemble_tfidf_tiny_e5_roberta | 36851 | 274 | 364 | 978 | 0.982 |
 | kaz_roberta_llrd_rec | ensemble_tfidf_tiny_e5_roberta | 37048 | 69 | 167 | 1183 | 0.994 |
 
-Oracle (at least one of the 6 models right): 0.9836 accuracy; all models wrong on 632 of 38467 test titles.
+Oracle (at least one of the 7 models right): 0.9844 accuracy; all models wrong on 599 of 38467 test titles.
 
-Examples where **tfidf_word_char_lr** is right and **tiny_transformer_4L_kd_a90_T2** is wrong:
+Examples where **tfidf_word_char_lr** is right and **tiny_transformer_2L_d128** is wrong:
 
-- "Төлеби ауданы бойынша қалдықтарды басқару бағдарламасын бекіту туралы" — true Қаулы, tiny_transformer_4L_kd_a90_T2 predicted Шешім (conf 0.997)
-- "Шортанды ауданының ішкі саясат, мәдениет және тілдерді дамыту бөліміненің "Жастар ресурстық орталығы" және "Тілдерді оқыту орталығы" коммуналдық мемлекеттік мекемелері қызметкерлерінің лауазымдық айлы" — true Қаулы, tiny_transformer_4L_kd_a90_T2 predicted Шешім (conf 0.997)
-- "Казталов ауданы бойынша арнаулы әлеуметтік қызметтер көрсетуге арналған тарифтерді бекіту туралы" — true Қаулы, tiny_transformer_4L_kd_a90_T2 predicted Шешім (conf 0.997)
-- "2006 жылғы 4 шiлдедегі Қазақстан Республикасының Үкiметi мен Қырғыз Республикасының Үкiметi арасындағы Қырғыз Республикасы Ыстықкөл облысының аумағында орналасқан курорттық-рекреациялық шаруашылық объ" — true Заң, tiny_transformer_4L_kd_a90_T2 predicted Қаулы (conf 0.997)
+- "Балалар ауылының пәтер үлгісіндегі тұрғын үй-жайлар, әкімшілік ғимараттар мен отбасылардың тұруына арналған құрылысжайлар, сондай-ақ үй іргесiндегi және қосалқы (үй) шаруашылық орналасқан оқшауланған " — true Бұйрық, tiny_transformer_2L_d128 predicted Қаулы (conf 0.94)
+- "Еуразиялық экономикалық одақ Соты алқасының 2023 жылғы 12 шілдедегі шешімін орындау туралы" — true Шешім, tiny_transformer_2L_d128 predicted Өкім (conf 0.934)
+- "Еуразиялық экономикалық одақ Соты алқасының 2024 жылғы 23 сәуірдегі шешімін орындау туралы" — true Шешім, tiny_transformer_2L_d128 predicted Өкім (conf 0.934)
+- ""Дәрілік заттарды өндірушілердің өндірістік алаңдарының Еуразиялық экономикалық одақтың Тиісті өндірістік практика қағидаларының талаптарына сәйкестігіне инспекция жүргізу нәтижелері туралы мәліметтер" — true Шешім, tiny_transformer_2L_d128 predicted Бұйрық (conf 0.929)
 
-Examples where **tiny_transformer_4L_kd_a90_T2** is right and **tfidf_word_char_lr** is wrong:
+Examples where **tiny_transformer_2L_d128** is right and **tfidf_word_char_lr** is wrong:
 
-- "Қаумдық сервитутты орнату туралы" — true Шешім, tfidf_word_char_lr predicted Қаулы (conf 0.996)
-- "Жергілікті бюджеттен қаржыландырылатын ішкі саясат бөлімінің жанындағы "Астрахан ауданының Жастар ресурстық орталығы" КММ мамандарының лауазымдық айлықақыларына ынталандырушы үстемеақылар белгілеу тур" — true Шешім, tfidf_word_char_lr predicted Қаулы (conf 0.995)
-- "Солтүстік Қазақстан облысы Айыртау ауданының жергілікті бюджетінен қаржыландырылатын ұйымдар қызметкерлерінің лауазымдық айлықақыларына ынталандырушы үстемеақылар белгілеудің тәртібі мен шарттарын айқ" — true Шешім, tfidf_word_char_lr predicted Қаулы (conf 0.992)
-- "Солтүстік Қазақстан облысы Жамбыл ауданының жергілікті бюджеттен қаржыландырылатын ұйымдар жұмыскерлерінің лауазымдық айлықақыларына ынталандыру үстемеақыларын белгілеу туралы" — true Шешім, tfidf_word_char_lr predicted Қаулы (conf 0.987)
+- "Тәуелсіз Мемлекеттер Достастығына қатысушы мемлекеттердің Сот-сараптама қызметі саласындағы үйлестіру кеңесін құру туралы келісімге қол қою туралы" — true Жарлық, tfidf_word_char_lr predicted Қаулы (conf 0.995)
+- "Тәуелсіз Мемлекеттер Достастығына қатысушы мемлекеттердің Сот-сараптама қызметі саласындағы үйлестіру кеңесін құру туралы келісімге қол қою туралы" — true Жарлық, tfidf_word_char_lr predicted Қаулы (conf 0.995)
+- "Қоғамдық сервитутты белгілеу туралы" — true Шешім, tfidf_word_char_lr predicted Қаулы (conf 0.992)
+- "Қоғамдық сервитутты белгілеу туралы" — true Шешім, tfidf_word_char_lr predicted Қаулы (conf 0.992)
 
 ## Task `area`
 
@@ -146,7 +154,8 @@ Models analysed (val-best model of each comparison group, as in the main table):
 |---|---|---|---|
 | baseline/tfidf | tfidf_word_char_lr | 0.5985 | 0.5827 |
 | pretrained_frozen | e5_frozen_lr | 0.5277 | 0.5324 |
-| tiny_transformer | tiny_transformer_4L_recency_tau8 | 0.6003 | 0.5832 |
+| tiny (from scratch) | tiny_transformer_4L_do30 | 0.5907 | 0.5798 |
+| tiny + MLM + KD (teacher e5) | tiny_transformer_4L_mlm_kd_a50_T2 | 0.5922 | 0.5974 |
 | pretrained e5 | e5_small_ft | 0.5836 | 0.6010 |
 | pretrained kaz-roberta | kaz_roberta_llrd_rec | 0.6162 | 0.6285 |
 | ensemble | ensemble_tfidf_tiny_e5_roberta | 0.6407 | 0.6215 |
@@ -216,14 +225,14 @@ Error rate by adopting-body type (SQL JOIN predictions-acts-bodies, groups with 
 
 `max_cos` = highest char-ngram TF-IDF cosine between a test title and any train title (data/processed/nn_similarity.parquet; >= 0.9 means a near-duplicate, excluded from test_strict).
 
-| sim_bucket | n | e5_frozen_lr | e5_small_ft | ensemble_tfidf_tiny_e5_roberta | kaz_roberta_llrd_rec | tfidf_word_char_lr | tiny_transformer_4L_recency_tau8 |
-|---|---|---|---|---|---|---|---|
-| 1: <0.60 | 3378 | 0.4663 | 0.3727 | 0.3372 | 0.3505 | 0.4121 | 0.3999 |
-| 2: 0.60-0.75 | 5117 | 0.3541 | 0.2720 | 0.2595 | 0.2644 | 0.2972 | 0.2982 |
-| 3: 0.75-0.85 | 4899 | 0.3131 | 0.2533 | 0.2384 | 0.2382 | 0.2672 | 0.2733 |
-| 4: 0.85-0.90 | 4191 | 0.3080 | 0.2701 | 0.2434 | 0.2484 | 0.2651 | 0.2677 |
-| 5: 0.90-0.95 | 6781 | 0.2901 | 0.2759 | 0.2647 | 0.2657 | 0.2712 | 0.2770 |
-| 6: >=0.95 | 14011 | 0.1051 | 0.0879 | 0.0822 | 0.0837 | 0.0908 | 0.0911 |
+| sim_bucket | n | e5_frozen_lr | e5_small_ft | ensemble_tfidf_tiny_e5_roberta | kaz_roberta_llrd_rec | tfidf_word_char_lr | tiny_transformer_4L_do30 | tiny_transformer_4L_mlm_kd_a50_T2 |
+|---|---|---|---|---|---|---|---|---|
+| 1: <0.60 | 3378 | 0.4663 | 0.3727 | 0.3372 | 0.3505 | 0.4121 | 0.3999 | 0.3620 |
+| 2: 0.60-0.75 | 5117 | 0.3541 | 0.2720 | 0.2595 | 0.2644 | 0.2972 | 0.3033 | 0.2740 |
+| 3: 0.75-0.85 | 4899 | 0.3131 | 0.2533 | 0.2384 | 0.2382 | 0.2672 | 0.2747 | 0.2494 |
+| 4: 0.85-0.90 | 4191 | 0.3080 | 0.2701 | 0.2434 | 0.2484 | 0.2651 | 0.2789 | 0.2632 |
+| 5: 0.90-0.95 | 6781 | 0.2901 | 0.2759 | 0.2647 | 0.2657 | 0.2712 | 0.2814 | 0.2759 |
+| 6: >=0.95 | 14011 | 0.1051 | 0.0879 | 0.0822 | 0.0837 | 0.0908 | 0.0936 | 0.0874 |
 
 The label of the nearest train title equals the true label for 73.8% of test titles (a 1-NN 'copy' rule). kaz_roberta_llrd_rec predicts the neighbour's label for 83.6% of titles, and 64.1% of its errors are exactly the neighbour's label (errors inherited from a similar training title).
 
@@ -231,7 +240,8 @@ The label of the nearest train title equals the true label for 73.8% of test tit
 |---|---|---|---|---|---|
 | tfidf_word_char_lr | 38377 | 8444 | 0.7376 | 0.8434 | 0.6440 |
 | e5_frozen_lr | 38377 | 9651 | 0.7376 | 0.7714 | 0.4409 |
-| tiny_transformer_4L_recency_tau8 | 38377 | 8492 | 0.7376 | 0.8294 | 0.5950 |
+| tiny_transformer_4L_do30 | 38377 | 8638 | 0.7376 | 0.8180 | 0.5622 |
+| tiny_transformer_4L_mlm_kd_a50_T2 | 38377 | 8045 | 0.7376 | 0.8218 | 0.5882 |
 | e5_small_ft | 38377 | 8126 | 0.7376 | 0.8184 | 0.5845 |
 | kaz_roberta_llrd_rec | 38377 | 7720 | 0.7376 | 0.8358 | 0.6407 |
 | ensemble_tfidf_tiny_e5_roberta | 38377 | 7602 | 0.7376 | 0.8491 | 0.6880 |
@@ -243,34 +253,40 @@ Confidence: 74.5% of test predictions have confidence >= 0.9 with accuracy 0.890
 | A | B | both right | only A right | only B right | both wrong | same prediction |
 |---|---|---|---|---|---|---|
 | tfidf_word_char_lr | e5_frozen_lr | 27040 | 2893 | 1686 | 6758 | 0.833 |
-| tfidf_word_char_lr | tiny_transformer_4L_recency_tau8 | 28468 | 1465 | 1417 | 7027 | 0.896 |
+| tfidf_word_char_lr | tiny_transformer_4L_do30 | 28250 | 1683 | 1489 | 6955 | 0.886 |
+| tfidf_word_char_lr | tiny_transformer_4L_mlm_kd_a50_T2 | 28589 | 1344 | 1743 | 6701 | 0.891 |
 | tfidf_word_char_lr | e5_small_ft | 28454 | 1479 | 1797 | 6647 | 0.885 |
 | tfidf_word_char_lr | kaz_roberta_llrd_rec | 28882 | 1051 | 1775 | 6669 | 0.900 |
 | tfidf_word_char_lr | ensemble_tfidf_tiny_e5_roberta | 29441 | 492 | 1334 | 7110 | 0.937 |
-| e5_frozen_lr | tiny_transformer_4L_recency_tau8 | 26926 | 1800 | 2959 | 6692 | 0.829 |
+| e5_frozen_lr | tiny_transformer_4L_do30 | 26969 | 1757 | 2770 | 6881 | 0.834 |
+| e5_frozen_lr | tiny_transformer_4L_mlm_kd_a50_T2 | 27352 | 1374 | 2980 | 6671 | 0.846 |
 | e5_frozen_lr | e5_small_ft | 27439 | 1287 | 2812 | 6839 | 0.854 |
 | e5_frozen_lr | kaz_roberta_llrd_rec | 27270 | 1456 | 3387 | 6264 | 0.834 |
 | e5_frozen_lr | ensemble_tfidf_tiny_e5_roberta | 27513 | 1213 | 3262 | 6389 | 0.846 |
-| tiny_transformer_4L_recency_tau8 | e5_small_ft | 28464 | 1421 | 1787 | 6705 | 0.886 |
-| tiny_transformer_4L_recency_tau8 | kaz_roberta_llrd_rec | 28841 | 1044 | 1816 | 6676 | 0.898 |
-| tiny_transformer_4L_recency_tau8 | ensemble_tfidf_tiny_e5_roberta | 29178 | 707 | 1597 | 6895 | 0.919 |
+| tiny_transformer_4L_do30 | tiny_transformer_4L_mlm_kd_a50_T2 | 28777 | 962 | 1555 | 7083 | 0.907 |
+| tiny_transformer_4L_do30 | e5_small_ft | 28480 | 1259 | 1771 | 6867 | 0.891 |
+| tiny_transformer_4L_do30 | kaz_roberta_llrd_rec | 28610 | 1129 | 2047 | 6591 | 0.889 |
+| tiny_transformer_4L_do30 | ensemble_tfidf_tiny_e5_roberta | 28956 | 783 | 1819 | 6819 | 0.908 |
+| tiny_transformer_4L_mlm_kd_a50_T2 | e5_small_ft | 29270 | 1062 | 981 | 7064 | 0.927 |
+| tiny_transformer_4L_mlm_kd_a50_T2 | kaz_roberta_llrd_rec | 29179 | 1153 | 1478 | 6567 | 0.906 |
+| tiny_transformer_4L_mlm_kd_a50_T2 | ensemble_tfidf_tiny_e5_roberta | 29463 | 869 | 1312 | 6733 | 0.923 |
 | e5_small_ft | kaz_roberta_llrd_rec | 29028 | 1223 | 1629 | 6497 | 0.901 |
 | e5_small_ft | ensemble_tfidf_tiny_e5_roberta | 29343 | 908 | 1432 | 6694 | 0.919 |
 | kaz_roberta_llrd_rec | ensemble_tfidf_tiny_e5_roberta | 30108 | 549 | 667 | 7053 | 0.957 |
 
-Oracle (at least one of the 6 models right): 0.8656 accuracy; all models wrong on 5157 of 38377 test titles.
+Oracle (at least one of the 7 models right): 0.8686 accuracy; all models wrong on 5041 of 38377 test titles.
 
-Examples where **tfidf_word_char_lr** is right and **tiny_transformer_4L_recency_tau8** is wrong:
+Examples where **tfidf_word_char_lr** is right and **tiny_transformer_4L_do30** is wrong:
 
-- "Қызметтік тұрғынжайларды ұстау жəне орталықтандырылған жылыту жүйесі бюджет қаражаты есебінен қамтамасыз етілетін, сондай-ақ қызметтік тұрғынжайы жекешелендіруге жатпайтын жабық жəне оқшауланған əскер" — true Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету, tiny_transformer_4L_recency_tau8 predicted Құрылыс (conf 0.928)
-- "Сарыағаш ауданының құрылыс, сәулет және қала құрылысы бөлімінің Ережесін бекітудің кейбір мәселелері туралы" — true Конституциялық құрылыс және мемлекеттік басқару негіздері, tiny_transformer_4L_recency_tau8 predicted Құрылыс (conf 0.915)
-- ""Ұлытау облысы бойынша тексеру комиссиясы" мемлекеттік мекемесінің "Б" корпусы мемлекеттік әкімшілік қызметшілерінің қызметін бағалаудың әдістемесін бекіту туралы" — true Еңбек, tiny_transformer_4L_recency_tau8 predicted Конституциялық құрылыс және мемлекеттік басқару негіздері (conf 0.913)
-- "Е.К. Жамаубаевты тағайындау туралы" — true Конституциялық құрылыс және мемлекеттік басқару негіздері, tiny_transformer_4L_recency_tau8 predicted Еңбек (conf 0.909)
+- "Сарыағаш ауданының құрылыс, сәулет және қала құрылысы бөлімінің Ережесін бекітудің кейбір мәселелері туралы" — true Конституциялық құрылыс және мемлекеттік басқару негіздері, tiny_transformer_4L_do30 predicted Құрылыс (conf 0.959)
+- "Қала әкімдігінің 2024 жылғы 16 шілдедегі № 264 "Инватакси қызметін алушылардың санатын кеңейту туралы" қаулысына өзгерістер мен толықтыру енгізу туралы" — true Әлеуметтік қамсыздандыру. Сақтандыру, tiny_transformer_4L_do30 predicted Шаруашылық қызмет (conf 0.945)
+- "Қазақстан Республикасының Ұлттық қорын орналастыру үшін материалдық емес активтерді қоспағанда, рұқсат етілген қаржы құралдарының және олармен жасалатын мәмілелердің тізбесін бекіту туралы" — true Қаржы, tiny_transformer_4L_do30 predicted Шаруашылық қызмет (conf 0.944)
+- ""Уәлиханов аудандық мәслихатының аппараты" коммуналдық мемлекеттік мекемесінің ережесін бекіту туралы" — true Конституциялық құрылыс және мемлекеттік басқару негіздері, tiny_transformer_4L_do30 predicted Еңбек (conf 0.942)
 
-Examples where **tiny_transformer_4L_recency_tau8** is right and **tfidf_word_char_lr** is wrong:
+Examples where **tiny_transformer_4L_do30** is right and **tfidf_word_char_lr** is wrong:
 
 - "Білім беру саласындағы пилоттық ұлттық жоба шеңберінде бюджеттік инвестицияларды жоспарлау және іске асыру қағидаларын және Білім беру саласындағы пилоттық ұлттық жобаны іске асыру кезінде бюджеттің а" — true Білім, tfidf_word_char_lr predicted Қаржы (conf 0.979)
-- ""Жоғары және жоғары оқу орнынан кейінгі медициналық және фармацевтикалық білімі бар мамандарды даярлауға 2024-2025 оқу жылына арналған мемлекеттік білім беру тапсырысын орналастыру туралы" Қазақстан Р" — true Білім, tfidf_word_char_lr predicted Денсаулық сақтау (conf 0.978)
-- ""Шектеу шараларының, оның ішінде карантиннің, әлеуметтік, табиғи және техногендік сипаттағы төтенше жағдайлардың қолданылу кезеңіне Нұр-Сұлтан қаласының мектепке дейінгі ұйымдарына мемлекеттік білім б" — true Конституциялық құрылыс және мемлекеттік басқару негіздері, tfidf_word_char_lr predicted Білім (conf 0.962)
-- ""Мемлекеттік реттеуге жататын өлшемдер тізбесін бекіту туралы" Қазақстан Республикасы Сауда және интеграция министрінің 2021 жылғы 20 қазандағы № 566-НҚ бұйрығына өзгеріс енгізу туралы"" — true Шаруашылық қызмет, tfidf_word_char_lr predicted Конституциялық құрылыс және мемлекеттік басқару негіздері (conf 0.953)
+- ""Сақтандыру (қайта сақтандыру) ұйымдары, Қазақстан Республикасы бейрезидент-сақтандыру (қайта сақтандыру) ұйымдарының филиалдары үшін тәуекелдерді басқару және ішкі бақылау жүйесін қалыптастыру қағида" — true Әлеуметтік қамсыздандыру. Сақтандыру, tfidf_word_char_lr predicted Қаржы (conf 0.973)
+- ""Шектеу шараларының, оның ішінде карантиннің, әлеуметтік, табиғи және техногендік сипаттағы төтенше жағдайлардың қолданылу кезеңіне Нұр-Сұлтан қаласының мектепке дейінгі ұйымдарына мемлекеттік білім б" — true Конституциялық құрылыс және мемлекеттік басқару негіздері, tfidf_word_char_lr predicted Білім (conf 0.966)
+- ""Шектеу шараларының, оның ішінде карантиннің, әлеуметтік, табиғи және техногендік сипаттағы төтенше жағдайлардың қолданылу кезеңіне Нұр-Сұлтан қаласының мектепке дейінгі ұйымдарына мемлекеттік білім б" — true Конституциялық құрылыс және мемлекеттік басқару негіздері, tfidf_word_char_lr predicted Білім (conf 0.963)
 

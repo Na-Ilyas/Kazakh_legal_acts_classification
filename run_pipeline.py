@@ -108,10 +108,15 @@ def redirect_outputs(quick_dir: Path) -> None:
     print(f"[quick] all outputs go to {quick_dir}")
 
 
+# Expensive steps that are NOT needed to reproduce the main comparison table: excluded from
+# `--steps all`, run only when named explicitly (e.g. --steps llm_teacher).
+OPTIONAL_STEPS = {"llm_teacher"}          # Qwen3-1.7B LoRA teacher: ~26 GPU-minutes, reference only
+
+
 def parse_steps(spec: str) -> list[str]:
-    """'all' or a comma-separated list -> validated, ordered list of step names."""
+    """'all' (= every step except OPTIONAL_STEPS) or a comma-separated list -> ordered step names."""
     if spec.strip().lower() == "all":
-        return list(STEPS)
+        return [s for s in STEPS if s not in OPTIONAL_STEPS]
     steps = [s.strip() for s in spec.split(",") if s.strip()]
     unknown = [s for s in steps if s not in STEPS]
     if unknown:
@@ -149,7 +154,9 @@ def run_step(name: str, quick: bool, force_data: bool) -> dict:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--steps", default="all", help=f"'all' or comma list of: {', '.join(STEPS)}")
+    parser.add_argument("--steps", default="all",
+                        help=f"'all' (excludes the optional {sorted(OPTIONAL_STEPS)}) or comma list of: "
+                             f"{', '.join(STEPS)}")
     parser.add_argument("--quick", action="store_true", help="small, fast smoke-test run")
     parser.add_argument("--force-data", action="store_true", help="in quick mode, rerun finished data steps")
     parser.add_argument("--stop-on-error", action="store_true")

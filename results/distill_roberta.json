@@ -82,5 +82,51 @@
     "latency_cpu_ms_per_1000": 23422.1,
     "train_time_s": 125.87,
     "path": "artifacts/models/kazbert_ft_form"
+  },
+  "kazbert_area": {
+    "name": "kazbert_ft",
+    "task": "area",
+    "f1_macro": {
+      "val": 0.6239,
+      "test": 0.6201,
+      "test_strict": 0.5968
+    },
+    "best_epoch": 5,
+    "epochs_run": 5,
+    "n_params": 110642721,
+    "size_mb": 422.9,
+    "latency_cpu_ms_per_1000": 23375.2,
+    "train_time_s": 212.89,
+    "path": "artifacts/models/kazbert_ft_area"
+  },
+  "e5kd_form": {
+    "name": "e5_small_kkprune_kdrob",
+    "task": "form",
+    "alpha": 0.5,
+    "f1_macro": {
+      "val": 0.8527,
+      "test": 0.845,
+      "test_strict": 0.8543
+    },
+    "n_params": 25517191,
+    "size_mb": 114.6,
+    "latency_cpu_ms_per_1000": 7767.3,
+    "best_epoch": 3,
+    "train_time_s": 77.71
+  },
+  "e5kd_area": {
+    "name": "e5_small_kkprune_kdrob",
+    "task": "area",
+    "alpha": 0.5,
+    "f1_macro": {
+      "val": 0.5769,
+      "test": 0.6043,
+      "test_strict": 0.584
+    },
+    "n_params": 25529121,
+    "size_mb": 114.7,
+    "latency_cpu_ms_per_1000": 8090.3,
+    "best_epoch": 3,
+    "train_time_s": 75.37
   }
 }

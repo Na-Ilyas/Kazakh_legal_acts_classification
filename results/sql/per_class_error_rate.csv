@@ -296,39 +296,6 @@ area,ensemble_tfidf_tiny_e5,Әлеуметтік қамсыздандыру. С�
 area,ensemble_tfidf_tiny_e5,Халықаралық қатынастар,477,10.69,0.8,258.4,203.1
 area,ensemble_tfidf_tiny_e5,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,7.07,0.818,154.2,217.1
 area,ensemble_tfidf_tiny_e5,Қаржы,16928,2.17,0.92,237.5,162.6
-area,ensemble_tfidf_tiny_e5_prioradj,Сыртқы экономикалық қызмет,8,100.0,0.619,215.6,
-area,ensemble_tfidf_tiny_e5_prioradj,Қылмыстық құқық,29,89.66,0.64,242.2,220.7
-area,ensemble_tfidf_tiny_e5_prioradj,Басқа,26,88.46,0.532,214.2,219.0
-area,ensemble_tfidf_tiny_e5_prioradj,Қоршаған ортаны қорғау,67,82.09,0.471,192.5,156.1
-area,ensemble_tfidf_tiny_e5_prioradj,Ғылым,85,65.88,0.474,234.3,182.3
-area,ensemble_tfidf_tiny_e5_prioradj,Кеден ісі,16,62.5,0.396,305.2,289.7
-area,ensemble_tfidf_tiny_e5_prioradj,Азаматтық құқық,133,60.9,0.494,206.6,244.4
-area,ensemble_tfidf_tiny_e5_prioradj,Шаруашылық қызмет,2115,58.16,0.552,218.6,234.3
-area,ensemble_tfidf_tiny_e5_prioradj,Байланыс,56,55.36,0.513,259.8,297.8
-area,ensemble_tfidf_tiny_e5_prioradj,Жер қойнауын пайдалану және қорғау,117,54.7,0.518,267.3,278.2
-area,ensemble_tfidf_tiny_e5_prioradj,Өнеркәсіп,362,54.42,0.531,222.1,242.1
-area,ensemble_tfidf_tiny_e5_prioradj,Конституциялық құрылыс және мемлекеттік басқару негіздері,7304,43.33,0.77,199.7,185.1
-area,ensemble_tfidf_tiny_e5_prioradj,Сауда қызметі мен қоғамдық тамақтандыру,227,40.09,0.552,205.3,181.0
-area,ensemble_tfidf_tiny_e5_prioradj,Құрылыс,234,39.32,0.587,203.2,251.4
-area,ensemble_tfidf_tiny_e5_prioradj,Қорғаныс,333,38.74,0.639,246.9,251.1
-area,ensemble_tfidf_tiny_e5_prioradj,Мемлекеттік наградалар,70,38.57,0.547,178.0,151.3
-area,ensemble_tfidf_tiny_e5_prioradj,Еңбек,1128,38.21,0.659,241.0,217.0
-area,ensemble_tfidf_tiny_e5_prioradj,Ормандарды қорғау мен пайдалану,36,33.33,0.564,277.2,209.5
-area,ensemble_tfidf_tiny_e5_prioradj,Сот. Әділет. Прокуратура,153,32.68,0.578,232.4,244.2
-area,ensemble_tfidf_tiny_e5_prioradj,Мәдениет,574,32.58,0.52,184.2,149.9
-area,ensemble_tfidf_tiny_e5_prioradj,Ауыл шаруашылығы,748,31.42,0.558,180.8,212.2
-area,ensemble_tfidf_tiny_e5_prioradj,Суларды қорғау мен пайдалану,282,31.21,0.599,145.3,179.1
-area,ensemble_tfidf_tiny_e5_prioradj,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,850,29.88,0.561,190.8,177.2
-area,ensemble_tfidf_tiny_e5_prioradj,Жануарлар дүниесін қорғау және пайдалану,192,29.69,0.611,198.6,206.0
-area,ensemble_tfidf_tiny_e5_prioradj,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,634,25.71,0.641,221.7,227.8
-area,ensemble_tfidf_tiny_e5_prioradj,Жерді пайдалану және қорғау,860,24.65,0.661,181.8,134.4
-area,ensemble_tfidf_tiny_e5_prioradj,Көлік,546,24.18,0.595,219.3,215.9
-area,ensemble_tfidf_tiny_e5_prioradj,Білім,875,23.2,0.713,232.1,236.6
-area,ensemble_tfidf_tiny_e5_prioradj,Денсаулық сақтау,638,18.97,0.744,223.9,279.2
-area,ensemble_tfidf_tiny_e5_prioradj,Әлеуметтік қамсыздандыру. Сақтандыру,1991,15.57,0.698,210.5,274.1
-area,ensemble_tfidf_tiny_e5_prioradj,Халықаралық қатынастар,477,14.47,0.772,254.3,201.4
-area,ensemble_tfidf_tiny_e5_prioradj,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,5.3,0.868,137.1,216.9
-area,ensemble_tfidf_tiny_e5_prioradj,Қаржы,16928,1.87,0.945,237.2,162.8
 area,ensemble_tfidf_tiny_e5_roberta,Сыртқы экономикалық қызмет,8,100.0,0.525,215.6,
 area,ensemble_tfidf_tiny_e5_roberta,Басқа,26,84.62,0.509,213.0,224.3
 area,ensemble_tfidf_tiny_e5_roberta,Қылмыстық құқық,29,82.76,0.626,251.3,185.2
@@ -626,39 +593,39 @@ area,kaz_roberta_llrd_rec,Денсаулық сақтау,638,16.77,0.893,236.4,
 area,kaz_roberta_llrd_rec,Халықаралық қатынастар,477,10.69,0.925,257.9,203.2
 area,kaz_roberta_llrd_rec,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,3.53,0.975,145.1,215.1
 area,kaz_roberta_llrd_rec,Қаржы,16928,2.26,0.987,228.7,162.7
-area,kaz_roberta_llrd_rec_prioradj,Сыртқы экономикалық қызмет,8,100.0,0.709,215.6,
-area,kaz_roberta_llrd_rec_prioradj,Басқа,26,84.62,0.713,223.9,164.5
-area,kaz_roberta_llrd_rec_prioradj,Қылмыстық құқық,29,79.31,0.854,239.6,241.3
-area,kaz_roberta_llrd_rec_prioradj,Қоршаған ортаны қорғау,67,68.66,0.695,193.0,170.5
-area,kaz_roberta_llrd_rec_prioradj,Азаматтық құқық,133,60.15,0.682,213.2,233.7
-area,kaz_roberta_llrd_rec_prioradj,Ғылым,85,55.29,0.685,268.3,152.6
-area,kaz_roberta_llrd_rec_prioradj,Шаруашылық қызмет,2115,52.96,0.764,219.2,231.9
-area,kaz_roberta_llrd_rec_prioradj,Жер қойнауын пайдалану және қорғау,117,48.72,0.752,284.6,260.4
-area,kaz_roberta_llrd_rec_prioradj,Байланыс,56,48.21,0.786,267.7,285.2
-area,kaz_roberta_llrd_rec_prioradj,Өнеркәсіп,362,47.24,0.771,233.7,229.0
-area,kaz_roberta_llrd_rec_prioradj,Кеден ісі,16,43.75,0.707,337.7,269.6
-area,kaz_roberta_llrd_rec_prioradj,Конституциялық құрылыс және мемлекеттік басқару негіздері,7304,42.52,0.902,197.4,187.0
-area,kaz_roberta_llrd_rec_prioradj,Құрылыс,234,40.6,0.805,203.3,252.4
-area,kaz_roberta_llrd_rec_prioradj,Сауда қызметі мен қоғамдық тамақтандыру,227,39.65,0.807,205.8,180.8
-area,kaz_roberta_llrd_rec_prioradj,Қорғаныс,333,35.74,0.841,274.6,235.5
-area,kaz_roberta_llrd_rec_prioradj,Еңбек,1128,33.69,0.864,235.6,221.4
-area,kaz_roberta_llrd_rec_prioradj,Ормандарды қорғау мен пайдалану,36,30.56,0.749,272.8,214.1
-area,kaz_roberta_llrd_rec_prioradj,Мемлекеттік наградалар,70,30.0,0.76,153.3,165.1
-area,kaz_roberta_llrd_rec_prioradj,Мәдениет,574,29.79,0.737,182.4,152.0
-area,kaz_roberta_llrd_rec_prioradj,Сот. Әділет. Прокуратура,153,29.41,0.815,238.3,241.2
-area,kaz_roberta_llrd_rec_prioradj,Жануарлар дүниесін қорғау және пайдалану,192,27.6,0.794,201.7,204.7
-area,kaz_roberta_llrd_rec_prioradj,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,850,25.88,0.765,199.5,174.8
-area,kaz_roberta_llrd_rec_prioradj,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,634,25.87,0.855,228.7,225.4
-area,kaz_roberta_llrd_rec_prioradj,Суларды қорғау мен пайдалану,282,24.82,0.797,147.2,175.6
-area,kaz_roberta_llrd_rec_prioradj,Білім,875,23.2,0.864,226.4,238.3
-area,kaz_roberta_llrd_rec_prioradj,Ауыл шаруашылығы,748,20.99,0.808,187.4,206.3
-area,kaz_roberta_llrd_rec_prioradj,Көлік,546,20.33,0.816,209.0,218.7
-area,kaz_roberta_llrd_rec_prioradj,Әлеуметтік қамсыздандыру. Сақтандыру,1991,20.14,0.838,218.9,275.6
-area,kaz_roberta_llrd_rec_prioradj,Жерді пайдалану және қорғау,860,19.77,0.887,182.8,137.1
-area,kaz_roberta_llrd_rec_prioradj,Денсаулық сақтау,638,17.4,0.891,245.6,273.5
-area,kaz_roberta_llrd_rec_prioradj,Халықаралық қатынастар,477,10.48,0.921,259.3,203.1
-area,kaz_roberta_llrd_rec_prioradj,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,2.83,0.977,131.8,215.0
-area,kaz_roberta_llrd_rec_prioradj,Қаржы,16928,2.14,0.988,228.1,162.8
+area,kaz_roberta_llrd_rec_prioradj,Сыртқы экономикалық қызмет,8,100.0,0.736,215.6,
+area,kaz_roberta_llrd_rec_prioradj,Басқа,26,84.62,0.719,223.9,164.5
+area,kaz_roberta_llrd_rec_prioradj,Қылмыстық құқық,29,79.31,0.861,239.6,241.3
+area,kaz_roberta_llrd_rec_prioradj,Қоршаған ортаны қорғау,67,70.15,0.703,193.3,168.8
+area,kaz_roberta_llrd_rec_prioradj,Азаматтық құқық,133,65.41,0.671,214.3,234.8
+area,kaz_roberta_llrd_rec_prioradj,Ғылым,85,58.82,0.678,269.8,140.5
+area,kaz_roberta_llrd_rec_prioradj,Шаруашылық қызмет,2115,53.76,0.758,218.3,233.2
+area,kaz_roberta_llrd_rec_prioradj,Жер қойнауын пайдалану және қорғау,117,52.14,0.726,280.4,263.4
+area,kaz_roberta_llrd_rec_prioradj,Өнеркәсіп,362,50.55,0.751,232.6,229.8
+area,kaz_roberta_llrd_rec_prioradj,Кеден ісі,16,50.0,0.721,315.6,283.1
+area,kaz_roberta_llrd_rec_prioradj,Байланыс,56,50.0,0.776,266.8,286.8
+area,kaz_roberta_llrd_rec_prioradj,Конституциялық құрылыс және мемлекеттік басқару негіздері,7304,42.06,0.902,197.4,187.2
+area,kaz_roberta_llrd_rec_prioradj,Құрылыс,234,41.45,0.797,202.6,253.6
+area,kaz_roberta_llrd_rec_prioradj,Мемлекеттік наградалар,70,38.57,0.724,159.6,162.8
+area,kaz_roberta_llrd_rec_prioradj,Сауда қызметі мен қоғамдық тамақтандыру,227,38.33,0.81,206.7,180.8
+area,kaz_roberta_llrd_rec_prioradj,Еңбек,1128,36.7,0.843,234.8,221.1
+area,kaz_roberta_llrd_rec_prioradj,Қорғаныс,333,35.74,0.829,274.6,235.5
+area,kaz_roberta_llrd_rec_prioradj,Сот. Әділет. Прокуратура,153,31.37,0.803,236.1,242.3
+area,kaz_roberta_llrd_rec_prioradj,Мәдениет,574,31.36,0.74,176.3,154.1
+area,kaz_roberta_llrd_rec_prioradj,Ормандарды қорғау мен пайдалану,36,30.56,0.719,272.8,214.1
+area,kaz_roberta_llrd_rec_prioradj,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,634,28.23,0.842,227.6,225.7
+area,kaz_roberta_llrd_rec_prioradj,Суларды қорғау мен пайдалану,282,27.66,0.76,150.3,175.5
+area,kaz_roberta_llrd_rec_prioradj,Жануарлар дүниесін қорғау және пайдалану,192,27.6,0.792,201.7,204.7
+area,kaz_roberta_llrd_rec_prioradj,Әлеуметтік қамсыздандыру. Сақтандыру,1991,24.41,0.824,220.1,278.4
+area,kaz_roberta_llrd_rec_prioradj,Білім,875,24.23,0.849,230.0,237.3
+area,kaz_roberta_llrd_rec_prioradj,Көлік,546,23.26,0.791,211.4,218.4
+area,kaz_roberta_llrd_rec_prioradj,Ауыл шаруашылығы,748,21.93,0.786,188.9,206.1
+area,kaz_roberta_llrd_rec_prioradj,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,850,21.76,0.795,207.5,173.9
+area,kaz_roberta_llrd_rec_prioradj,Жерді пайдалану және қорғау,860,20.0,0.892,183.7,136.7
+area,kaz_roberta_llrd_rec_prioradj,Денсаулық сақтау,638,18.34,0.884,247.9,273.3
+area,kaz_roberta_llrd_rec_prioradj,Халықаралық қатынастар,477,12.37,0.91,254.5,202.6
+area,kaz_roberta_llrd_rec_prioradj,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,2.12,0.982,96.7,215.2
+area,kaz_roberta_llrd_rec_prioradj,Қаржы,16928,1.9,0.989,231.4,162.9
 area,kaz_roberta_llrd_rec_trainval,Сыртқы экономикалық қызмет,8,100.0,0.702,215.6,
 area,kaz_roberta_llrd_rec_trainval,Қылмыстық құқық,29,75.86,0.856,241.1,236.3
 area,kaz_roberta_llrd_rec_trainval,Басқа,26,73.08,0.713,210.4,226.4
@@ -692,6 +659,72 @@ area,kaz_roberta_llrd_rec_trainval,Денсаулық сақтау,638,16.14,0.8
 area,kaz_roberta_llrd_rec_trainval,Халықаралық қатынастар,477,8.18,0.924,269.1,203.7
 area,kaz_roberta_llrd_rec_trainval,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,2.83,0.98,173.3,213.8
 area,kaz_roberta_llrd_rec_trainval,Қаржы,16928,2.29,0.986,234.1,162.6
+area,kazbert_ft,Сыртқы экономикалық қызмет,8,100.0,0.633,215.6,
+area,kazbert_ft,Қоршаған ортаны қорғау,67,79.1,0.681,187.9,178.6
+area,kazbert_ft,Қылмыстық құқық,29,75.86,0.782,255.9,189.9
+area,kazbert_ft,Басқа,26,61.54,0.7,199.6,238.9
+area,kazbert_ft,Шаруашылық қызмет,2115,57.12,0.745,216.3,237.0
+area,kazbert_ft,Азаматтық құқық,133,56.39,0.715,215.1,229.5
+area,kazbert_ft,Кеден ісі,16,50.0,0.715,315.6,283.1
+area,kazbert_ft,Өнеркәсіп,362,45.86,0.767,233.1,229.6
+area,kazbert_ft,Құрылыс,234,43.59,0.801,202.7,255.5
+area,kazbert_ft,Жер қойнауын пайдалану және қорғау,117,43.59,0.766,262.7,279.6
+area,kazbert_ft,Конституциялық құрылыс және мемлекеттік басқару негіздері,7304,43.07,0.899,198.4,186.2
+area,kazbert_ft,Ғылым,85,42.35,0.718,264.3,181.5
+area,kazbert_ft,Байланыс,56,41.07,0.822,283.3,272.2
+area,kazbert_ft,Сауда қызметі мен қоғамдық тамақтандыру,227,39.65,0.777,199.8,184.8
+area,kazbert_ft,Қорғаныс,333,33.33,0.853,258.4,245.0
+area,kazbert_ft,Сот. Әділет. Прокуратура,153,30.72,0.803,224.6,247.3
+area,kazbert_ft,Еңбек,1128,30.23,0.871,238.7,220.8
+area,kazbert_ft,Жануарлар дүниесін қорғау және пайдалану,192,30.21,0.79,203.8,203.9
+area,kazbert_ft,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,850,30.12,0.757,189.5,177.7
+area,kazbert_ft,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,634,25.71,0.857,228.4,225.5
+area,kazbert_ft,Суларды қорғау мен пайдалану,282,25.18,0.825,145.6,176.3
+area,kazbert_ft,Мемлекеттік наградалар,70,22.86,0.806,161.1,161.7
+area,kazbert_ft,Мәдениет,574,22.65,0.809,184.9,154.1
+area,kazbert_ft,Жерді пайдалану және қорғау,860,22.33,0.86,184.3,135.1
+area,kazbert_ft,Ормандарды қорғау мен пайдалану,36,22.22,0.83,285.0,216.9
+area,kazbert_ft,Ауыл шаруашылығы,748,21.26,0.797,178.2,208.9
+area,kazbert_ft,Білім,875,19.66,0.874,234.2,235.9
+area,kazbert_ft,Денсаулық сақтау,638,17.4,0.899,237.6,275.2
+area,kazbert_ft,Әлеуметтік қамсыздандыру. Сақтандыру,1991,16.32,0.858,228.5,271.2
+area,kazbert_ft,Көлік,546,16.3,0.846,216.7,216.8
+area,kazbert_ft,Халықаралық қатынастар,477,9.64,0.927,235.1,206.2
+area,kazbert_ft,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,3.89,0.973,109.5,216.8
+area,kazbert_ft,Қаржы,16928,2.33,0.988,230.7,162.6
+area,llm_teacher_qwen3_1p7b,Қоршаған ортаны қорғау,67,82.09,0.537,187.7,177.9
+area,llm_teacher_qwen3_1p7b,Сыртқы экономикалық қызмет,8,75.0,0.55,209.3,234.5
+area,llm_teacher_qwen3_1p7b,Басқа,26,69.23,0.525,217.7,208.1
+area,llm_teacher_qwen3_1p7b,Шаруашылық қызмет,2115,68.18,0.598,215.8,245.2
+area,llm_teacher_qwen3_1p7b,Құрылыс,234,66.24,0.57,236.5,224.6
+area,llm_teacher_qwen3_1p7b,Азаматтық құқық,133,65.41,0.549,221.4,221.4
+area,llm_teacher_qwen3_1p7b,Кеден ісі,16,50.0,0.676,313.5,285.3
+area,llm_teacher_qwen3_1p7b,Қылмыстық құқық,29,48.28,0.692,284.2,198.6
+area,llm_teacher_qwen3_1p7b,Жер қойнауын пайдалану және қорғау,117,47.86,0.662,265.5,278.4
+area,llm_teacher_qwen3_1p7b,Конституциялық құрылыс және мемлекеттік басқару негіздері,7304,46.78,0.813,203.4,181.0
+area,llm_teacher_qwen3_1p7b,Өнеркәсіп,362,46.41,0.604,238.3,225.1
+area,llm_teacher_qwen3_1p7b,Еңбек,1128,40.34,0.7,246.4,212.5
+area,llm_teacher_qwen3_1p7b,Қорғаныс,333,36.34,0.755,255.9,245.8
+area,llm_teacher_qwen3_1p7b,Мәдениет,574,35.71,0.556,186.0,147.2
+area,llm_teacher_qwen3_1p7b,Байланыс,56,35.71,0.724,262.6,284.7
+area,llm_teacher_qwen3_1p7b,Ғылым,85,35.29,0.698,219.7,214.9
+area,llm_teacher_qwen3_1p7b,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,634,34.54,0.727,240.4,218.7
+area,llm_teacher_qwen3_1p7b,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,850,33.41,0.551,199.7,171.9
+area,llm_teacher_qwen3_1p7b,Сауда қызметі мен қоғамдық тамақтандыру,227,32.6,0.593,215.4,178.8
+area,llm_teacher_qwen3_1p7b,Жануарлар дүниесін қорғау және пайдалану,192,30.73,0.72,198.8,206.1
+area,llm_teacher_qwen3_1p7b,Сот. Әділет. Прокуратура,153,28.76,0.688,234.7,242.6
+area,llm_teacher_qwen3_1p7b,Жерді пайдалану және қорғау,860,26.63,0.771,182.4,132.9
+area,llm_teacher_qwen3_1p7b,Көлік,546,25.64,0.678,217.0,216.7
+area,llm_teacher_qwen3_1p7b,Суларды қорғау мен пайдалану,282,24.47,0.732,144.9,176.2
+area,llm_teacher_qwen3_1p7b,Мемлекеттік наградалар,70,22.86,0.729,208.3,147.8
+area,llm_teacher_qwen3_1p7b,Ауыл шаруашылығы,748,21.93,0.613,197.8,203.6
+area,llm_teacher_qwen3_1p7b,Білім,875,21.37,0.816,241.6,233.9
+area,llm_teacher_qwen3_1p7b,Ормандарды қорғау мен пайдалану,36,19.44,0.721,292.0,217.6
+area,llm_teacher_qwen3_1p7b,Денсаулық сақтау,638,18.97,0.762,214.5,281.3
+area,llm_teacher_qwen3_1p7b,Әлеуметтік қамсыздандыру. Сақтандыру,1991,16.73,0.767,226.1,271.8
+area,llm_teacher_qwen3_1p7b,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,16.25,0.866,192.2,216.6
+area,llm_teacher_qwen3_1p7b,Халықаралық қатынастар,477,12.58,0.881,239.8,204.6
+area,llm_teacher_qwen3_1p7b,Қаржы,16928,2.79,0.976,240.7,162.0
 area,majority_dummy,Өнеркәсіп,362,100.0,1.0,231.2,
 area,majority_dummy,Әлеуметтік қамсыздандыру. Сақтандыру,1991,100.0,1.0,264.2,
 area,majority_dummy,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,634,100.0,1.0,226.2,
@@ -1220,6 +1253,72 @@ area,tiny_transformer_4L_mlm_kd_a50_T2,Әлеуметтік қамсызданд
 area,tiny_transformer_4L_mlm_kd_a50_T2,Халықаралық қатынастар,477,9.64,0.881,266.1,202.9
 area,tiny_transformer_4L_mlm_kd_a50_T2,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,7.42,0.917,181.0,215.2
 area,tiny_transformer_4L_mlm_kd_a50_T2,Қаржы,16928,2.46,0.98,236.5,162.4
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Сыртқы экономикалық қызмет,8,100.0,0.706,215.6,
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Басқа,26,76.92,0.712,222.0,190.5
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Қоршаған ортаны қорғау,67,76.12,0.653,192.2,166.3
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Қылмыстық құқық,29,68.97,0.728,261.9,191.0
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Ғылым,85,65.88,0.709,260.3,132.2
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Шаруашылық қызмет,2115,58.49,0.743,225.9,224.2
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Азаматтық құқық,133,57.14,0.672,216.6,227.8
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Жер қойнауын пайдалану және қорғау,117,52.14,0.742,272.6,271.8
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Байланыс,56,51.79,0.742,274.4,279.4
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Өнеркәсіп,362,48.07,0.741,221.3,240.4
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Конституциялық құрылыс және мемлекеттік басқару негіздері,7304,44.47,0.896,195.9,187.9
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Құрылыс,234,43.16,0.78,205.2,253.2
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Қорғаныс,333,39.64,0.798,281.0,228.8
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Сауда қызметі мен қоғамдық тамақтандыру,227,37.44,0.788,210.5,178.9
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Жануарлар дүниесін қорғау және пайдалану,192,34.38,0.768,205.6,202.9
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Еңбек,1128,31.83,0.874,240.9,219.3
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Мәдениет,574,31.01,0.786,202.8,142.3
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,634,28.71,0.845,238.8,221.1
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,850,26.47,0.76,205.5,172.5
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Жерді пайдалану және қорғау,860,25.58,0.829,179.5,134.6
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Ормандарды қорғау мен пайдалану,36,25.0,0.746,295.4,210.9
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Кеден ісі,16,25.0,0.837,340.8,285.6
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Суларды қорғау мен пайдалану,282,24.47,0.825,142.3,177.0
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Сот. Әділет. Прокуратура,153,23.53,0.82,241.1,240.1
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Мемлекеттік наградалар,70,22.86,0.796,175.8,157.4
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Білім,875,22.51,0.876,227.7,237.8
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Ауыл шаруашылығы,748,20.32,0.808,186.3,206.4
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Көлік,546,19.6,0.819,220.4,215.9
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Денсаулық сақтау,638,18.81,0.894,234.7,276.5
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Әлеуметтік қамсыздандыру. Сақтандыру,1991,16.88,0.858,215.1,274.2
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Халықаралық қатынастар,477,11.53,0.902,261.8,202.2
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,5.65,0.959,155.4,216.1
+area,tiny_transformer_4L_mlm_kdrob_a50_T2,Қаржы,16928,2.37,0.987,235.7,162.5
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Сыртқы экономикалық қызмет,8,100.0,0.853,215.6,
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Басқа,26,88.46,0.767,224.6,139.3
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Қылмыстық құқық,29,79.31,0.82,253.7,187.2
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Қоршаған ортаны қорғау,67,70.15,0.7,201.5,149.4
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Азаматтық құқық,133,61.65,0.7,221.5,221.1
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Шаруашылық қызмет,2115,53.66,0.779,215.4,236.5
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Ғылым,85,50.59,0.739,260.8,171.2
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Жер қойнауын пайдалану және қорғау,117,48.72,0.817,271.2,273.2
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Өнеркәсіп,362,47.24,0.791,225.5,236.3
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Мәдениет,574,47.21,0.769,164.6,157.9
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Құрылыс,234,47.01,0.782,214.0,248.8
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Байланыс,56,44.64,0.794,267.1,284.6
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Конституциялық құрылыс және мемлекеттік басқару негіздері,7304,44.39,0.909,197.0,187.0
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Кеден ісі,16,37.5,0.78,331.2,280.3
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Қорғаныс,333,36.94,0.831,270.7,237.1
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Ормандарды қорғау мен пайдалану,36,36.11,0.812,259.8,216.4
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Жануарлар дүниесін қорғау және пайдалану,192,34.9,0.755,195.4,208.4
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Мемлекеттік наградалар,70,34.29,0.808,166.0,159.3
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Сот. Әділет. Прокуратура,153,33.99,0.795,250.1,235.3
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Сауда қызметі мен қоғамдық тамақтандыру,227,31.28,0.839,223.5,175.8
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Еңбек,1128,30.14,0.888,240.1,220.2
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,634,27.44,0.87,243.5,219.7
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,850,27.41,0.743,202.8,173.1
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Білім,875,26.51,0.872,236.5,235.2
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Ауыл шаруашылығы,748,26.2,0.79,187.4,207.6
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Суларды қорғау мен пайдалану,282,23.76,0.838,145.4,175.8
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Жерді пайдалану және қорғау,860,22.21,0.873,181.2,136.1
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Көлік,546,20.7,0.834,221.4,215.5
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Әлеуметтік қамсыздандыру. Сақтандыру,1991,18.83,0.865,212.4,276.2
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Денсаулық сақтау,638,17.71,0.914,249.7,272.7
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Халықаралық қатынастар,477,11.95,0.918,251.3,203.3
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,4.95,0.975,179.7,214.4
+area,tiny_transformer_4L_mlm_kdrob_a90_T2,Қаржы,16928,2.44,0.988,230.8,162.5
 area,tiny_transformer_4L_recency_tau3,Сыртқы экономикалық қызмет,8,100.0,0.659,215.6,
 area,tiny_transformer_4L_recency_tau3,Басқа,26,88.46,0.592,214.2,219.0
 area,tiny_transformer_4L_recency_tau3,Қоршаған ортаны қорғау,67,85.07,0.562,193.1,145.1
@@ -1286,72 +1385,72 @@ area,tiny_transformer_4L_recency_tau8,Әлеуметтік қамсызданд�
 area,tiny_transformer_4L_recency_tau8,Халықаралық қатынастар,477,13.21,0.817,242.9,203.9
 area,tiny_transformer_4L_recency_tau8,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,8.13,0.855,154.3,217.8
 area,tiny_transformer_4L_recency_tau8,Қаржы,16928,2.63,0.895,230.8,162.4
-area,tiny_transformer_4L_recency_tau8_prioradj,Сыртқы экономикалық қызмет,8,87.5,0.622,211.7,243.0
-area,tiny_transformer_4L_recency_tau8_prioradj,Қылмыстық құқық,29,86.21,0.703,244.8,209.3
-area,tiny_transformer_4L_recency_tau8_prioradj,Қоршаған ортаны қорғау,67,83.58,0.566,190.9,161.1
-area,tiny_transformer_4L_recency_tau8_prioradj,Басқа,26,73.08,0.609,218.5,204.6
-area,tiny_transformer_4L_recency_tau8_prioradj,Ғылым,85,70.59,0.592,232.6,178.0
-area,tiny_transformer_4L_recency_tau8_prioradj,Байланыс,56,67.86,0.548,282.7,264.2
-area,tiny_transformer_4L_recency_tau8_prioradj,Шаруашылық қызмет,2115,59.43,0.635,215.9,238.8
-area,tiny_transformer_4L_recency_tau8_prioradj,Азаматтық құқық,133,57.14,0.606,204.9,243.3
-area,tiny_transformer_4L_recency_tau8_prioradj,Өнеркәсіп,362,53.04,0.584,225.8,237.3
-area,tiny_transformer_4L_recency_tau8_prioradj,Жер қойнауын пайдалану және қорғау,117,46.15,0.61,267.3,276.4
-area,tiny_transformer_4L_recency_tau8_prioradj,Конституциялық құрылыс және мемлекеттік басқару негіздері,7304,45.67,0.8,198.2,185.8
-area,tiny_transformer_4L_recency_tau8_prioradj,Мемлекеттік наградалар,70,41.43,0.628,168.3,156.8
-area,tiny_transformer_4L_recency_tau8_prioradj,Құрылыс,234,40.17,0.697,203.4,251.9
-area,tiny_transformer_4L_recency_tau8_prioradj,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,850,37.65,0.612,192.1,174.7
-area,tiny_transformer_4L_recency_tau8_prioradj,Жануарлар дүниесін қорғау және пайдалану,192,37.5,0.676,192.1,210.9
-area,tiny_transformer_4L_recency_tau8_prioradj,Еңбек,1128,36.88,0.76,245.5,214.9
-area,tiny_transformer_4L_recency_tau8_prioradj,Қорғаныс,333,33.93,0.724,255.8,246.3
-area,tiny_transformer_4L_recency_tau8_prioradj,Сауда қызметі мен қоғамдық тамақтандыру,227,33.92,0.687,227.5,171.8
-area,tiny_transformer_4L_recency_tau8_prioradj,Ауыл шаруашылығы,748,33.16,0.667,192.4,207.2
-area,tiny_transformer_4L_recency_tau8_prioradj,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,634,32.02,0.71,229.6,224.6
-area,tiny_transformer_4L_recency_tau8_prioradj,Сот. Әділет. Прокуратура,153,31.37,0.675,240.4,240.3
-area,tiny_transformer_4L_recency_tau8_prioradj,Жерді пайдалану және қорғау,860,28.26,0.679,183.0,131.6
-area,tiny_transformer_4L_recency_tau8_prioradj,Суларды қорғау мен пайдалану,282,24.47,0.742,137.4,178.6
-area,tiny_transformer_4L_recency_tau8_prioradj,Мәдениет,574,23.17,0.619,199.3,149.5
-area,tiny_transformer_4L_recency_tau8_prioradj,Көлік,546,23.08,0.7,218.8,216.1
-area,tiny_transformer_4L_recency_tau8_prioradj,Ормандарды қорғау мен пайдалану,36,19.44,0.693,310.3,213.2
-area,tiny_transformer_4L_recency_tau8_prioradj,Білім,875,19.43,0.794,218.4,239.7
-area,tiny_transformer_4L_recency_tau8_prioradj,Денсаулық сақтау,638,18.81,0.79,218.8,280.2
-area,tiny_transformer_4L_recency_tau8_prioradj,Кеден ісі,16,18.75,0.581,350.7,287.5
-area,tiny_transformer_4L_recency_tau8_prioradj,Әлеуметтік қамсыздандыру. Сақтандыру,1991,18.23,0.76,204.1,277.6
-area,tiny_transformer_4L_recency_tau8_prioradj,Халықаралық қатынастар,477,13.63,0.807,246.1,203.2
-area,tiny_transformer_4L_recency_tau8_prioradj,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,6.71,0.879,160.6,216.4
-area,tiny_transformer_4L_recency_tau8_prioradj,Қаржы,16928,2.45,0.918,227.1,162.6
-area,tiny_transformer_4L_recency_tau8_trainval,Сыртқы экономикалық қызмет,8,100.0,0.627,215.6,
-area,tiny_transformer_4L_recency_tau8_trainval,Қоршаған ортаны қорғау,67,85.07,0.575,191.4,154.8
-area,tiny_transformer_4L_recency_tau8_trainval,Қылмыстық құқық,29,82.76,0.709,245.1,215.0
-area,tiny_transformer_4L_recency_tau8_trainval,Басқа,26,80.77,0.625,216.4,207.8
-area,tiny_transformer_4L_recency_tau8_trainval,Ғылым,85,70.59,0.55,243.2,152.6
-area,tiny_transformer_4L_recency_tau8_trainval,Құрылыс,234,63.25,0.61,235.1,227.9
-area,tiny_transformer_4L_recency_tau8_trainval,Шаруашылық қызмет,2115,58.35,0.606,219.5,233.2
-area,tiny_transformer_4L_recency_tau8_trainval,Жер қойнауын пайдалану және қорғау,117,54.7,0.616,274.7,269.2
-area,tiny_transformer_4L_recency_tau8_trainval,Азаматтық құқық,133,51.88,0.656,209.0,234.7
-area,tiny_transformer_4L_recency_tau8_trainval,Өнеркәсіп,362,49.45,0.627,207.7,254.2
-area,tiny_transformer_4L_recency_tau8_trainval,Мемлекеттік наградалар,70,48.57,0.627,175.0,148.9
-area,tiny_transformer_4L_recency_tau8_trainval,Байланыс,56,44.64,0.675,262.8,288.1
-area,tiny_transformer_4L_recency_tau8_trainval,Еңбек,1128,44.5,0.689,243.1,212.6
-area,tiny_transformer_4L_recency_tau8_trainval,Сауда қызметі мен қоғамдық тамақтандыру,227,42.29,0.596,214.4,173.3
-area,tiny_transformer_4L_recency_tau8_trainval,Конституциялық құрылыс және мемлекеттік басқару негіздері,7304,41.89,0.796,196.6,187.7
-area,tiny_transformer_4L_recency_tau8_trainval,Қорғаныс,333,38.44,0.72,247.7,250.6
-area,tiny_transformer_4L_recency_tau8_trainval,Ормандарды қорғау мен пайдалану,36,33.33,0.724,275.4,210.4
-area,tiny_transformer_4L_recency_tau8_trainval,Жерді пайдалану және қорғау,860,29.77,0.685,180.2,131.7
-area,tiny_transformer_4L_recency_tau8_trainval,Жануарлар дүниесін қорғау және пайдалану,192,29.69,0.733,204.2,203.7
-area,tiny_transformer_4L_recency_tau8_trainval,Сот. Әділет. Прокуратура,153,28.76,0.664,252.1,235.6
-area,tiny_transformer_4L_recency_tau8_trainval,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,850,28.0,0.617,194.4,176.1
-area,tiny_transformer_4L_recency_tau8_trainval,Ауыл шаруашылығы,748,26.6,0.62,189.8,206.9
-area,tiny_transformer_4L_recency_tau8_trainval,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,634,26.03,0.72,236.6,222.6
-area,tiny_transformer_4L_recency_tau8_trainval,Суларды қорғау мен пайдалану,282,25.18,0.706,147.3,175.7
-area,tiny_transformer_4L_recency_tau8_trainval,Кеден ісі,16,25.0,0.678,295.0,300.8
-area,tiny_transformer_4L_recency_tau8_trainval,Мәдениет,574,21.43,0.714,202.2,149.8
-area,tiny_transformer_4L_recency_tau8_trainval,Әлеуметтік қамсыздандыру. Сақтандыру,1991,20.19,0.747,218.5,275.8
-area,tiny_transformer_4L_recency_tau8_trainval,Көлік,546,18.86,0.728,229.0,213.9
-area,tiny_transformer_4L_recency_tau8_trainval,Білім,875,16.0,0.752,217.6,239.0
-area,tiny_transformer_4L_recency_tau8_trainval,Денсаулық сақтау,638,14.73,0.805,205.8,279.5
-area,tiny_transformer_4L_recency_tau8_trainval,Халықаралық қатынастар,477,11.95,0.822,246.6,203.9
-area,tiny_transformer_4L_recency_tau8_trainval,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,7.77,0.825,149.7,218.0
-area,tiny_transformer_4L_recency_tau8_trainval,Қаржы,16928,2.84,0.892,243.3,161.9
+area,tiny_transformer_4L_recency_tau8_prioradj,Қоршаған ортаны қорғау,67,86.57,0.566,192.4,144.7
+area,tiny_transformer_4L_recency_tau8_prioradj,Қылмыстық құқық,29,86.21,0.697,244.8,209.3
+area,tiny_transformer_4L_recency_tau8_prioradj,Сыртқы экономикалық қызмет,8,75.0,0.653,209.3,234.5
+area,tiny_transformer_4L_recency_tau8_prioradj,Басқа,26,73.08,0.608,218.5,204.6
+area,tiny_transformer_4L_recency_tau8_prioradj,Ғылым,85,69.41,0.592,233.4,178.4
+area,tiny_transformer_4L_recency_tau8_prioradj,Байланыс,56,60.71,0.558,268.8,289.1
+area,tiny_transformer_4L_recency_tau8_prioradj,Шаруашылық қызмет,2115,59.43,0.63,215.4,239.5
+area,tiny_transformer_4L_recency_tau8_prioradj,Азаматтық құқық,133,55.64,0.606,203.8,243.4
+area,tiny_transformer_4L_recency_tau8_prioradj,Өнеркәсіп,362,53.04,0.579,225.8,237.3
+area,tiny_transformer_4L_recency_tau8_prioradj,Конституциялық құрылыс және мемлекеттік басқару негіздері,7304,45.76,0.795,198.3,185.7
+area,tiny_transformer_4L_recency_tau8_prioradj,Жер қойнауын пайдалану және қорғау,117,45.3,0.611,264.4,278.7
+area,tiny_transformer_4L_recency_tau8_prioradj,Құрылыс,234,40.17,0.693,203.4,251.9
+area,tiny_transformer_4L_recency_tau8_prioradj,Мемлекеттік наградалар,70,40.0,0.625,168.5,157.0
+area,tiny_transformer_4L_recency_tau8_prioradj,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,850,37.65,0.607,192.1,174.7
+area,tiny_transformer_4L_recency_tau8_prioradj,Жануарлар дүниесін қорғау және пайдалану,192,37.5,0.67,192.1,210.9
+area,tiny_transformer_4L_recency_tau8_prioradj,Еңбек,1128,36.61,0.757,245.7,214.9
+area,tiny_transformer_4L_recency_tau8_prioradj,Қорғаныс,333,33.93,0.719,255.8,246.3
+area,tiny_transformer_4L_recency_tau8_prioradj,Сауда қызметі мен қоғамдық тамақтандыру,227,33.92,0.681,227.5,171.8
+area,tiny_transformer_4L_recency_tau8_prioradj,Ауыл шаруашылығы,748,33.16,0.664,192.4,207.2
+area,tiny_transformer_4L_recency_tau8_prioradj,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,634,32.18,0.706,230.0,224.5
+area,tiny_transformer_4L_recency_tau8_prioradj,Сот. Әділет. Прокуратура,153,31.37,0.681,240.4,240.3
+area,tiny_transformer_4L_recency_tau8_prioradj,Жерді пайдалану және қорғау,860,28.26,0.673,183.0,131.6
+area,tiny_transformer_4L_recency_tau8_prioradj,Суларды қорғау мен пайдалану,282,23.76,0.746,136.8,178.4
+area,tiny_transformer_4L_recency_tau8_prioradj,Мәдениет,574,23.17,0.613,199.3,149.5
+area,tiny_transformer_4L_recency_tau8_prioradj,Көлік,546,22.53,0.706,218.0,216.4
+area,tiny_transformer_4L_recency_tau8_prioradj,Білім,875,19.66,0.79,219.5,239.5
+area,tiny_transformer_4L_recency_tau8_prioradj,Ормандарды қорғау мен пайдалану,36,19.44,0.709,310.3,213.2
+area,tiny_transformer_4L_recency_tau8_prioradj,Денсаулық сақтау,638,18.81,0.785,218.8,280.2
+area,tiny_transformer_4L_recency_tau8_prioradj,Кеден ісі,16,18.75,0.657,350.7,287.5
+area,tiny_transformer_4L_recency_tau8_prioradj,Әлеуметтік қамсыздандыру. Сақтандыру,1991,18.23,0.755,204.7,277.5
+area,tiny_transformer_4L_recency_tau8_prioradj,Халықаралық қатынастар,477,13.63,0.811,246.1,203.2
+area,tiny_transformer_4L_recency_tau8_prioradj,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,7.07,0.872,158.8,216.7
+area,tiny_transformer_4L_recency_tau8_prioradj,Қаржы,16928,2.5,0.913,228.8,162.6
+area,tiny_transformer_4L_recency_tau8_trainval,Сыртқы экономикалық қызмет,8,100.0,0.675,215.6,
+area,tiny_transformer_4L_recency_tau8_trainval,Басқа,26,84.62,0.661,220.4,183.5
+area,tiny_transformer_4L_recency_tau8_trainval,Қылмыстық құқық,29,82.76,0.679,231.5,280.4
+area,tiny_transformer_4L_recency_tau8_trainval,Қоршаған ортаны қорғау,67,79.1,0.567,192.3,161.9
+area,tiny_transformer_4L_recency_tau8_trainval,Ғылым,85,67.06,0.485,236.3,176.4
+area,tiny_transformer_4L_recency_tau8_trainval,Құрылыс,234,63.25,0.639,234.0,229.9
+area,tiny_transformer_4L_recency_tau8_trainval,Шаруашылық қызмет,2115,61.94,0.61,218.2,236.5
+area,tiny_transformer_4L_recency_tau8_trainval,Жер қойнауын пайдалану және қорғау,117,54.7,0.535,271.4,273.2
+area,tiny_transformer_4L_recency_tau8_trainval,Азаматтық құқық,133,53.38,0.612,207.1,237.7
+area,tiny_transformer_4L_recency_tau8_trainval,Өнеркәсіп,362,53.31,0.609,202.7,263.8
+area,tiny_transformer_4L_recency_tau8_trainval,Мемлекеттік наградалар,70,51.43,0.617,164.1,158.9
+area,tiny_transformer_4L_recency_tau8_trainval,Еңбек,1128,46.99,0.689,241.8,212.3
+area,tiny_transformer_4L_recency_tau8_trainval,Кеден ісі,16,43.75,0.677,302.1,297.2
+area,tiny_transformer_4L_recency_tau8_trainval,Байланыс,56,42.86,0.699,241.8,303.1
+area,tiny_transformer_4L_recency_tau8_trainval,Конституциялық құрылыс және мемлекеттік басқару негіздері,7304,39.95,0.804,196.6,188.0
+area,tiny_transformer_4L_recency_tau8_trainval,Сот. Әділет. Прокуратура,153,36.6,0.669,237.7,241.8
+area,tiny_transformer_4L_recency_tau8_trainval,Ормандарды қорғау мен пайдалану,36,36.11,0.617,267.3,212.1
+area,tiny_transformer_4L_recency_tau8_trainval,Қорғаныс,333,36.04,0.688,244.4,252.4
+area,tiny_transformer_4L_recency_tau8_trainval,Сауда қызметі мен қоғамдық тамақтандыру,227,33.04,0.689,223.2,174.7
+area,tiny_transformer_4L_recency_tau8_trainval,Жерді пайдалану және қорғау,860,31.86,0.698,186.0,127.5
+area,tiny_transformer_4L_recency_tau8_trainval,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,634,30.76,0.7,235.1,222.3
+area,tiny_transformer_4L_recency_tau8_trainval,Жануарлар дүниесін қорғау және пайдалану,192,30.73,0.708,203.0,204.2
+area,tiny_transformer_4L_recency_tau8_trainval,Суларды қорғау мен пайдалану,282,29.43,0.679,159.6,172.3
+area,tiny_transformer_4L_recency_tau8_trainval,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,850,25.29,0.635,190.2,178.2
+area,tiny_transformer_4L_recency_tau8_trainval,Көлік,546,24.54,0.656,233.1,211.5
+area,tiny_transformer_4L_recency_tau8_trainval,Ауыл шаруашылығы,748,22.19,0.639,180.4,208.6
+area,tiny_transformer_4L_recency_tau8_trainval,Әлеуметтік қамсыздандыру. Сақтандыру,1991,21.09,0.759,211.9,278.2
+area,tiny_transformer_4L_recency_tau8_trainval,Мәдениет,574,17.6,0.754,182.7,156.4
+area,tiny_transformer_4L_recency_tau8_trainval,Білім,875,17.26,0.759,223.8,238.0
+area,tiny_transformer_4L_recency_tau8_trainval,Денсаулық сақтау,638,15.67,0.798,210.8,279.4
+area,tiny_transformer_4L_recency_tau8_trainval,Халықаралық қатынастар,477,10.9,0.827,247.5,204.3
+area,tiny_transformer_4L_recency_tau8_trainval,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,283,6.01,0.865,174.7,215.1
+area,tiny_transformer_4L_recency_tau8_trainval,Қаржы,16928,2.47,0.9,243.6,162.2
 form,ablation_tfidf_word_fold_digits,Басқа,26,84.62,0.788,190.9,159.0
 form,ablation_tfidf_word_fold_digits,Жарлық,319,25.08,0.742,118.0,161.1
 form,ablation_tfidf_word_fold_digits,Өкім,262,12.98,0.841,121.0,248.7
@@ -1401,13 +1500,6 @@ form,e5_small_ft,Бұйрық,5648,5.91,0.936,211.1,264.2
 form,e5_small_ft,Қаулы,7215,4.16,0.967,176.3,199.7
 form,e5_small_ft,Заң,329,3.04,0.971,170.1,179.8
 form,e5_small_ft,Шешім,24668,2.29,0.993,136.5,172.2
-form,e5_small_ft_prioradj,Басқа,26,65.38,0.838,195.5,168.0
-form,e5_small_ft_prioradj,Жарлық,319,20.38,0.9,96.0,164.2
-form,e5_small_ft_prioradj,Өкім,262,16.79,0.908,110.3,256.7
-form,e5_small_ft_prioradj,Қаулы,7215,6.17,0.951,157.3,201.5
-form,e5_small_ft_prioradj,Бұйрық,5648,4.53,0.95,216.0,263.2
-form,e5_small_ft_prioradj,Заң,329,3.34,0.946,159.3,180.2
-form,e5_small_ft_prioradj,Шешім,24668,1.9,0.995,144.3,171.9
 form,e5_small_kkprune_ft,Басқа,26,69.23,0.904,186.9,183.8
 form,e5_small_kkprune_ft,Жарлық,319,21.94,0.887,101.0,164.2
 form,e5_small_kkprune_ft,Өкім,262,14.12,0.926,110.2,252.2
@@ -1422,13 +1514,13 @@ form,ensemble_tfidf_tiny_e5,Бұйрық,5648,5.21,0.93,210.8,263.9
 form,ensemble_tfidf_tiny_e5,Қаулы,7215,3.92,0.954,161.7,200.3
 form,ensemble_tfidf_tiny_e5,Заң,329,3.04,0.943,154.7,180.3
 form,ensemble_tfidf_tiny_e5,Шешім,24668,2.1,0.989,144.5,172.0
-form,ensemble_tfidf_tiny_e5_prioradj,Басқа,26,69.23,0.84,190.7,175.4
-form,ensemble_tfidf_tiny_e5_prioradj,Жарлық,319,21.63,0.842,97.9,164.8
-form,ensemble_tfidf_tiny_e5_prioradj,Өкім,262,16.03,0.9,111.3,255.2
-form,ensemble_tfidf_tiny_e5_prioradj,Қаулы,7215,4.7,0.95,158.5,200.7
-form,ensemble_tfidf_tiny_e5_prioradj,Бұйрық,5648,4.57,0.935,208.3,263.6
-form,ensemble_tfidf_tiny_e5_prioradj,Заң,329,3.34,0.937,154.8,180.3
-form,ensemble_tfidf_tiny_e5_prioradj,Шешім,24668,1.99,0.991,144.5,171.9
+form,ensemble_tfidf_tiny_e5_prioradj,Басқа,26,65.38,0.849,195.5,168.0
+form,ensemble_tfidf_tiny_e5_prioradj,Жарлық,319,21.63,0.839,97.9,164.8
+form,ensemble_tfidf_tiny_e5_prioradj,Өкім,262,15.65,0.897,112.4,254.3
+form,ensemble_tfidf_tiny_e5_prioradj,Қаулы,7215,4.95,0.945,157.5,200.9
+form,ensemble_tfidf_tiny_e5_prioradj,Бұйрық,5648,4.14,0.937,212.5,263.2
+form,ensemble_tfidf_tiny_e5_prioradj,Заң,329,3.34,0.938,154.8,180.3
+form,ensemble_tfidf_tiny_e5_prioradj,Шешім,24668,1.92,0.991,143.9,171.9
 form,ensemble_tfidf_tiny_e5_roberta,Басқа,26,69.23,0.867,199.7,155.0
 form,ensemble_tfidf_tiny_e5_roberta,Жарлық,319,20.69,0.863,100.6,163.3
 form,ensemble_tfidf_tiny_e5_roberta,Өкім,262,14.5,0.912,97.4,255.0
@@ -1457,13 +1549,20 @@ form,kaz_roberta_llrd_rec,Бұйрық,5648,6.36,0.969,181.9,266.5
 form,kaz_roberta_llrd_rec,Қаулы,7215,4.84,0.985,134.5,202.0
 form,kaz_roberta_llrd_rec,Заң,329,3.65,0.981,50.1,184.4
 form,kaz_roberta_llrd_rec,Шешім,24668,2.07,0.997,137.7,172.1
-form,kaz_roberta_llrd_rec_prioradj,Басқа,26,69.23,0.938,199.7,155.0
-form,kaz_roberta_llrd_rec_prioradj,Жарлық,319,20.69,0.957,100.4,163.4
-form,kaz_roberta_llrd_rec_prioradj,Өкім,262,13.36,0.962,99.4,252.6
-form,kaz_roberta_llrd_rec_prioradj,Бұйрық,5648,5.81,0.972,184.0,265.9
-form,kaz_roberta_llrd_rec_prioradj,Қаулы,7215,5.18,0.983,135.5,202.2
-form,kaz_roberta_llrd_rec_prioradj,Заң,329,3.95,0.981,48.5,184.9
-form,kaz_roberta_llrd_rec_prioradj,Шешім,24668,1.97,0.997,137.9,172.1
+form,kazbert_ft,Басқа,26,57.69,0.936,189.5,181.2
+form,kazbert_ft,Жарлық,319,23.51,0.911,113.3,161.7
+form,kazbert_ft,Өкім,262,13.74,0.944,102.8,252.7
+form,kazbert_ft,Қаулы,7215,4.62,0.971,153.9,200.9
+form,kazbert_ft,Бұйрық,5648,3.98,0.959,184.1,264.3
+form,kazbert_ft,Заң,329,2.74,0.981,49.1,183.2
+form,kazbert_ft,Шешім,24668,1.84,0.996,139.6,172.0
+form,llm_teacher_qwen3_1p7b,Басқа,26,80.77,0.859,181.9,203.0
+form,llm_teacher_qwen3_1p7b,Жарлық,319,54.55,0.744,106.3,203.1
+form,llm_teacher_qwen3_1p7b,Өкім,262,23.28,0.889,120.3,266.0
+form,llm_teacher_qwen3_1p7b,Заң,329,10.33,0.928,86.9,190.2
+form,llm_teacher_qwen3_1p7b,Қаулы,7215,9.97,0.916,158.2,203.3
+form,llm_teacher_qwen3_1p7b,Бұйрық,5648,8.78,0.923,167.2,270.1
+form,llm_teacher_qwen3_1p7b,Шешім,24668,1.98,0.986,147.1,171.9
 form,majority_dummy,Өкім,262,100.0,1.0,232.1,
 form,majority_dummy,Шешім,24668,100.0,1.0,171.4,
 form,majority_dummy,Заң,329,100.0,1.0,179.5,
@@ -1597,6 +1696,20 @@ form,tiny_transformer_4L_mlm_kd_a90_T2,Бұйрық,5648,5.56,0.939,214.1,263.9
 form,tiny_transformer_4L_mlm_kd_a90_T2,Қаулы,7215,4.7,0.968,166.5,200.4
 form,tiny_transformer_4L_mlm_kd_a90_T2,Заң,329,2.74,0.974,122.9,181.1
 form,tiny_transformer_4L_mlm_kd_a90_T2,Шешім,24668,2.06,0.994,136.0,172.1
+form,tiny_transformer_4L_mlm_kdrob_a50_T2,Басқа,26,73.08,0.935,214.2,109.4
+form,tiny_transformer_4L_mlm_kdrob_a50_T2,Жарлық,319,26.65,0.911,117.2,162.4
+form,tiny_transformer_4L_mlm_kdrob_a50_T2,Өкім,262,19.47,0.944,129.9,256.8
+form,tiny_transformer_4L_mlm_kdrob_a50_T2,Бұйрық,5648,5.28,0.953,200.9,264.5
+form,tiny_transformer_4L_mlm_kdrob_a50_T2,Қаулы,7215,4.98,0.973,161.1,200.7
+form,tiny_transformer_4L_mlm_kdrob_a50_T2,Заң,329,3.04,0.985,114.5,181.5
+form,tiny_transformer_4L_mlm_kdrob_a50_T2,Шешім,24668,2.32,0.995,139.8,172.1
+form,tiny_transformer_4L_mlm_kdrob_a90_T2,Басқа,26,73.08,0.961,214.2,109.4
+form,tiny_transformer_4L_mlm_kdrob_a90_T2,Жарлық,319,30.09,0.89,117.7,164.4
+form,tiny_transformer_4L_mlm_kdrob_a90_T2,Өкім,262,19.85,0.94,124.4,258.8
+form,tiny_transformer_4L_mlm_kdrob_a90_T2,Бұйрық,5648,6.32,0.952,228.2,263.3
+form,tiny_transformer_4L_mlm_kdrob_a90_T2,Қаулы,7215,4.91,0.974,141.0,201.7
+form,tiny_transformer_4L_mlm_kdrob_a90_T2,Заң,329,2.74,0.988,122.9,181.1
+form,tiny_transformer_4L_mlm_kdrob_a90_T2,Шешім,24668,2.38,0.996,139.1,172.2
 form,tiny_transformer_4L_recency_tau3,Басқа,26,92.31,0.851,191.3,122.5
 form,tiny_transformer_4L_recency_tau3,Жарлық,319,31.35,0.806,138.6,155.7
 form,tiny_transformer_4L_recency_tau3,Өкім,262,17.56,0.856,120.0,256.0

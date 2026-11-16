@@ -9,11 +9,16 @@ form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,11-20,10238,1379,0.1347
 form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,21-30,16603,846,0.051
 form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,31-50,5519,365,0.0661
 form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,51+,1082,139,0.1285
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,01-10,5025,440,0.0876
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,11-20,10238,607,0.0593
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,21-30,16603,244,0.0147
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,31-50,5519,97,0.0176
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,51+,1082,64,0.0591
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,01-10,5025,459,0.0913
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,11-20,10238,694,0.0678
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,21-30,16603,268,0.0161
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,31-50,5519,110,0.0199
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,51+,1082,76,0.0702
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,01-10,5025,414,0.0824
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,11-20,10238,572,0.0559
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,21-30,16603,206,0.0124
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,31-50,5519,70,0.0127
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,51+,1082,64,0.0591
 form,pretrained e5: e5_small_ft,e5_small_ft,01-10,5025,388,0.0772
 form,pretrained e5: e5_small_ft,e5_small_ft,11-20,10238,579,0.0566
 form,pretrained e5: e5_small_ft,e5_small_ft,21-30,16603,242,0.0146
@@ -39,11 +44,16 @@ area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,11-20,10219,2678,0.2621
 area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,21-30,16558,3854,0.2328
 area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,31-50,5505,1856,0.3371
 area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,51+,1081,405,0.3747
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,01-10,5014,735,0.1466
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,11-20,10219,2282,0.2233
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,21-30,16558,3474,0.2098
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,31-50,5505,1665,0.3025
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,51+,1081,336,0.3108
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,01-10,5014,784,0.1564
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,11-20,10219,2274,0.2225
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,21-30,16558,3507,0.2118
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,31-50,5505,1735,0.3152
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,51+,1081,338,0.3127
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,01-10,5014,694,0.1384
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,11-20,10219,2070,0.2026
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,21-30,16558,3304,0.1995
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,31-50,5505,1629,0.2959
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,51+,1081,348,0.3219
 area,pretrained e5: e5_small_ft,e5_small_ft,01-10,5014,678,0.1352
 area,pretrained e5: e5_small_ft,e5_small_ft,11-20,10219,2149,0.2103
 area,pretrained e5: e5_small_ft,e5_small_ft,21-30,16558,3324,0.2007

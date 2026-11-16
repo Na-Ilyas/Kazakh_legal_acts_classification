@@ -199,7 +199,8 @@ def selected_models(select: str) -> set[tuple[str, str]] | None:
     if select in ("main", "main_unmeasured"):
         from src import compare
         table = compare.mark_main(compare.build_table(compare.load_rows()))
-        main = table[table["table"].isin(["main", "reference", "refit"])]
+        main = table[table["table"].isin(["main", "reference", "refit"])
+                     & ~table["group"].isin(compare.REFERENCE_GROUPS)]   # never load a 1.7B teacher on CPU
         wanted = set(zip(main["task"], main["model_name"]))
         if select == "main_unmeasured":          # skip models already measured with this protocol
             from src import experiments_db

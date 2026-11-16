@@ -13,13 +13,20 @@ form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Заң,0.8773,0.8693,0.8733,32
 form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Шешім,0.9624,0.9568,0.9596,24668
 form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Қаулы,0.7436,0.8457,0.7914,7215
 form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Өкім,0.7909,0.6641,0.722,262
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Басқа,0.2857,0.1538,0.2,26
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Бұйрық,0.9506,0.9345,0.9425,5648
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Жарлық,0.8656,0.6865,0.7657,319
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Заң,0.963,0.9483,0.9556,329
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Шешім,0.9921,0.9783,0.9852,24668
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Қаулы,0.885,0.9502,0.9165,7215
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Өкім,0.8452,0.813,0.8288,262
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,Басқа,0.3889,0.2692,0.3182,26
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,Бұйрық,0.9526,0.9253,0.9387,5648
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,Жарлық,0.8476,0.7147,0.7755,319
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,Заң,0.929,0.9544,0.9415,329
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,Шешім,0.9942,0.9721,0.983,24668
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,Қаулы,0.864,0.9562,0.9078,7215
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,Өкім,0.824,0.7863,0.8047,262
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,Басқа,0.4286,0.2308,0.3,26
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,Бұйрық,0.9568,0.9444,0.9505,5648
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,Жарлық,0.8906,0.7398,0.8082,319
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,Заң,0.9726,0.9726,0.9726,329
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,Шешім,0.9935,0.9794,0.9864,24668
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,Қаулы,0.8899,0.953,0.9204,7215
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,Өкім,0.8787,0.8015,0.8383,262
 form,pretrained e5: e5_small_ft,e5_small_ft,Басқа,0.45,0.3462,0.3913,26
 form,pretrained e5: e5_small_ft,e5_small_ft,Бұйрық,0.9602,0.9409,0.9505,5648
 form,pretrained e5: e5_small_ft,e5_small_ft,Жарлық,0.8909,0.768,0.8249,319
@@ -107,39 +114,72 @@ area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Құрылыс,0.4502,0.406,0.
 area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.5478,0.6325,0.5871,634
 area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Әлеуметтік қамсыздандыру. Сақтандыру,0.7172,0.8051,0.7586,1991
 area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Өнеркәсіп,0.4723,0.4945,0.4831,362
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Азаматтық құқық,0.5566,0.4436,0.4937,133
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ауыл шаруашылығы,0.5422,0.6791,0.603,748
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Байланыс,0.6875,0.3929,0.5,56
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Басқа,0.1905,0.3077,0.2353,26
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Білім,0.731,0.8046,0.7661,875
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Денсаулық сақтау,0.7666,0.8135,0.7894,638
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.8696,0.9187,0.8935,283
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Еңбек,0.5933,0.648,0.6195,1128
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Жануарлар дүниесін қорғау және пайдалану,0.599,0.6302,0.6142,192
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Жер қойнауын пайдалану және қорғау,0.5159,0.5556,0.535,117
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Жерді пайдалану және қорғау,0.7186,0.7128,0.7157,860
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Кеден ісі,0.2453,0.8125,0.3768,16
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.7598,0.5392,0.6307,7304
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Көлік,0.6912,0.7747,0.7306,546
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Мемлекеттік наградалар,0.56,0.6,0.5793,70
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Мәдениет,0.6378,0.7578,0.6927,574
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ормандарды қорғау мен пайдалану,0.3671,0.8056,0.5043,36
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Сауда қызметі мен қоғамдық тамақтандыру,0.6151,0.6476,0.6309,227
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Сот. Әділет. Прокуратура,0.6089,0.7124,0.6566,153
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Суларды қорғау мен пайдалану,0.6646,0.773,0.7148,282
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Сыртқы экономикалық қызмет,0.125,0.25,0.1667,8
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.5806,0.5976,0.589,850
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Халықаралық қатынастар,0.8809,0.8679,0.8743,477
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Шаруашылық қызмет,0.4549,0.4052,0.4286,2115
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ғылым,0.56,0.3294,0.4148,85
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Қаржы,0.8991,0.9737,0.9349,16928
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Қоршаған ортаны қорғау,0.4286,0.1343,0.2045,67
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Қорғаныс,0.7762,0.6667,0.7173,333
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Қылмыстық құқық,0.25,0.1379,0.1778,29
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Құрылыс,0.4099,0.6026,0.4879,234
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.6364,0.6845,0.6596,634
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Әлеуметтік қамсыздандыру. Сақтандыру,0.7506,0.8252,0.7861,1991
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Өнеркәсіп,0.5641,0.4862,0.5223,362
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Азаматтық құқық,0.5196,0.3985,0.4511,133
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Ауыл шаруашылығы,0.5556,0.742,0.6354,748
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Байланыс,0.5745,0.4821,0.5243,56
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Басқа,0.2414,0.2692,0.2545,26
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Білім,0.7289,0.808,0.7664,875
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Денсаулық сақтау,0.7366,0.8589,0.7931,638
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.8355,0.9152,0.8735,283
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Еңбек,0.5561,0.6764,0.6104,1128
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Жануарлар дүниесін қорғау және пайдалану,0.5721,0.6615,0.6135,192
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Жер қойнауын пайдалану және қорғау,0.5207,0.5385,0.5294,117
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Жерді пайдалану және қорғау,0.7761,0.6733,0.721,860
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Кеден ісі,0.1884,0.8125,0.3059,16
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.7626,0.5157,0.6153,7304
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Көлік,0.6357,0.815,0.7143,546
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Мемлекеттік наградалар,0.5316,0.6,0.5638,70
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Мәдениет,0.6301,0.7805,0.6973,574
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Ормандарды қорғау мен пайдалану,0.5625,0.75,0.6429,36
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Сауда қызметі мен қоғамдық тамақтандыру,0.5921,0.5947,0.5934,227
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Сот. Әділет. Прокуратура,0.5402,0.7908,0.6419,153
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Суларды қорғау мен пайдалану,0.6837,0.7128,0.6979,282
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Сыртқы экономикалық қызмет,0.0,0.0,0.0,8
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.6031,0.5882,0.5956,850
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Халықаралық қатынастар,0.8729,0.8784,0.8757,477
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Шаруашылық қызмет,0.4579,0.3707,0.4097,2115
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Ғылым,0.6415,0.4,0.4928,85
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Қаржы,0.8978,0.9735,0.9342,16928
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Қоршаған ортаны қорғау,0.6111,0.1642,0.2588,67
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Қорғаныс,0.7625,0.5976,0.67,333
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Қылмыстық құқық,0.2105,0.2759,0.2388,29
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Құрылыс,0.3823,0.5897,0.4639,234
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.6092,0.6688,0.6376,634
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Әлеуметтік қамсыздандыру. Сақтандыру,0.746,0.8378,0.7892,1991
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,Өнеркәсіп,0.5282,0.5166,0.5223,362
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Азаматтық құқық,0.58,0.4361,0.4979,133
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Ауыл шаруашылығы,0.5632,0.8102,0.6645,748
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Байланыс,0.6122,0.5357,0.5714,56
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Басқа,0.0952,0.0769,0.0851,26
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Білім,0.7834,0.7771,0.7803,875
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Денсаулық сақтау,0.7852,0.8307,0.8073,638
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.8851,0.9258,0.905,283
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Еңбек,0.5881,0.695,0.6371,1128
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Жануарлар дүниесін қорғау және пайдалану,0.5546,0.6875,0.614,192
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Жер қойнауын пайдалану және қорғау,0.6458,0.5299,0.5822,117
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Жерді пайдалану және қорғау,0.7821,0.743,0.7621,860
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Кеден ісі,0.1833,0.6875,0.2895,16
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.8053,0.552,0.655,7304
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Көлік,0.6879,0.8114,0.7445,546
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Мемлекеттік наградалар,0.5361,0.7429,0.6228,70
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Мәдениет,0.6897,0.662,0.6756,574
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Ормандарды қорғау мен пайдалану,0.3939,0.7222,0.5098,36
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Сауда қызметі мен қоғамдық тамақтандыру,0.5692,0.6344,0.6,227
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Сот. Әділет. Прокуратура,0.6243,0.7712,0.6901,153
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Суларды қорғау мен пайдалану,0.6993,0.7589,0.7279,282
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Сыртқы экономикалық қызмет,0.087,0.25,0.129,8
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.5903,0.7306,0.653,850
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Халықаралық қатынастар,0.8942,0.9036,0.8989,477
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Шаруашылық қызмет,0.5044,0.3556,0.4171,2115
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Ғылым,0.6212,0.4824,0.543,85
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Қаржы,0.8989,0.9754,0.9355,16928
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Қоршаған ортаны қорғау,0.6471,0.1642,0.2619,67
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Қорғаныс,0.8196,0.6276,0.7109,333
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Қылмыстық құқық,0.2581,0.2759,0.2667,29
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Құрылыс,0.4226,0.5598,0.4816,234
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.6123,0.7224,0.6628,634
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Әлеуметтік қамсыздандыру. Сақтандыру,0.7291,0.88,0.7975,1991
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,Өнеркәсіп,0.5155,0.5525,0.5333,362
 area,pretrained e5: e5_small_ft,e5_small_ft,Азаматтық құқық,0.5532,0.391,0.4581,133
 area,pretrained e5: e5_small_ft,e5_small_ft,Ауыл шаруашылығы,0.55,0.8316,0.6621,748
 area,pretrained e5: e5_small_ft,e5_small_ft,Байланыс,0.6102,0.6429,0.6261,56

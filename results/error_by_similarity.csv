@@ -11,12 +11,18 @@ form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,3: 0.75-0.85,4914,530,0.1079
 form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,4: 0.85-0.90,4211,358,0.085
 form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,5: 0.90-0.95,6790,335,0.0493
 form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,6: >=0.95,14036,552,0.0393
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,1: <0.60,3388,657,0.1939
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,2: 0.60-0.75,5128,305,0.0595
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,3: 0.75-0.85,4914,195,0.0397
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,4: 0.85-0.90,4211,108,0.0256
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,5: 0.90-0.95,6790,67,0.0099
-form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,6: >=0.95,14036,120,0.0085
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,1: <0.60,3388,649,0.1916
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,2: 0.60-0.75,5128,353,0.0688
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,3: 0.75-0.85,4914,253,0.0515
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,4: 0.85-0.90,4211,117,0.0278
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,5: 0.90-0.95,6790,95,0.014
+form,tiny (from scratch): tiny_transformer_2L_d128,tiny_transformer_2L_d128,6: >=0.95,14036,140,0.01
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,1: <0.60,3388,613,0.1809
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,2: 0.60-0.75,5128,264,0.0515
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,3: 0.75-0.85,4914,164,0.0334
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,4: 0.85-0.90,4211,100,0.0237
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,5: 0.90-0.95,6790,70,0.0103
+form,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,6: >=0.95,14036,115,0.0082
 form,pretrained e5: e5_small_ft,e5_small_ft,1: <0.60,3388,595,0.1756
 form,pretrained e5: e5_small_ft,e5_small_ft,2: 0.60-0.75,5128,269,0.0525
 form,pretrained e5: e5_small_ft,e5_small_ft,3: 0.75-0.85,4914,192,0.0391
@@ -47,12 +53,18 @@ area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,3: 0.75-0.85,4899,1534,0.3131
 area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,4: 0.85-0.90,4191,1291,0.308
 area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,5: 0.90-0.95,6781,1967,0.2901
 area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,6: >=0.95,14011,1472,0.1051
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,1: <0.60,3378,1351,0.3999
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,2: 0.60-0.75,5117,1526,0.2982
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,3: 0.75-0.85,4899,1339,0.2733
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,4: 0.85-0.90,4191,1122,0.2677
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,5: 0.90-0.95,6781,1878,0.277
-area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,6: >=0.95,14011,1276,0.0911
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,1: <0.60,3378,1351,0.3999
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,2: 0.60-0.75,5117,1552,0.3033
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,3: 0.75-0.85,4899,1346,0.2747
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,4: 0.85-0.90,4191,1169,0.2789
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,5: 0.90-0.95,6781,1908,0.2814
+area,tiny (from scratch): tiny_transformer_4L_do30,tiny_transformer_4L_do30,6: >=0.95,14011,1312,0.0936
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,1: <0.60,3378,1223,0.362
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,2: 0.60-0.75,5117,1402,0.274
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,3: 0.75-0.85,4899,1222,0.2494
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,4: 0.85-0.90,4191,1103,0.2632
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,5: 0.90-0.95,6781,1871,0.2759
+area,tiny + MLM + KD (teacher e5): tiny_transformer_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,6: >=0.95,14011,1224,0.0874
 area,pretrained e5: e5_small_ft,e5_small_ft,1: <0.60,3378,1259,0.3727
 area,pretrained e5: e5_small_ft,e5_small_ft,2: 0.60-0.75,5117,1392,0.272
 area,pretrained e5: e5_small_ft,e5_small_ft,3: 0.75-0.85,4899,1241,0.2533

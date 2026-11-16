@@ -5,7 +5,14 @@
 **Team (AAI-2603M):** Ilyas Nagiyev, Beksultan Aliyev, Yernur Baimukhambetov
 **Dataset:** KazakhLawCorpus-clean (215,889 Kazakh legal acts, CC BY 4.0)
 
-<!-- ABSTRACT -->
+**Abstract.** We classify 215,889 Kazakh legal acts by **act form** (7 classes) and **regulation area** (33 classes) from their titles alone, under a temporal split (train ≤ 2021, validation 2022, test ≥ 2023). We also use a near-duplicate-free test subset, because 54 % of test titles are templated copies of earlier acts. We compare:
+
+- TF-IDF + logistic regression;
+- a transformer written and trained from scratch with our own BPE tokenizer (1.4–5.2M parameters);
+- compact pretrained encoders (multilingual-e5-small, kaz-roberta, KazBERT);
+- vocabulary pruning, seq2seq generation (mT5), knowledge distillation (including an LLM teacher), prior-shift correction and ensembles.
+
+The best models within the 120M budget are Kazakh encoders: macro-F1 0.860 (form, KazBERT) and 0.629 (area, kaz-roberta), 0.03–0.05 above TF-IDF. With MLM pretraining and distillation, the 5.2M-parameter tiny transformer ties TF-IDF on form (0.827) and beats it on area (0.598), matching the 118M e5-small at about 1/7 of its CPU latency. The data pipeline streams the 337 MB CSV into Parquet (−68 % memory). A normalized SQLite database with 17 analytic queries stores both the corpus and every experiment.
 
 ## 1. Task and research questions
 
@@ -233,11 +240,138 @@ Two improvements on top:
 
 ## 8. Results
 
-<!-- RESULTS -->
+The tables below are generated from the SQLite experiment table (`reports/fill_tables.py`). The full comparison, with every variant, accuracy, GPU latency and memory, is in `results/model_comparison.md` and `results/ablations.md`. Column notes:
+
+- **CPU latency:** end-to-end inference for 1000 test titles, measured with one protocol (`src/benchmark.py`: batch 64, 8 threads, median of 3 runs).
+- **CI:** paired bootstrap over test rows, 1000 resamples.
+- **Δ vs TF-IDF:** the difference to the TF-IDF baseline on the same rows. "tie" means its 95 % CI contains 0.
+
+### 8.1 Act form (7 classes)
+
+<!-- BEGIN:main_form -->
+| Model | Params | Size MB | CPU ms / 1000 | F1 val | F1 test [95 % CI] | Δ vs TF-IDF | F1 test_strict |
+|---|---|---|---|---|---|---|---|
+| Majority class | 0 | 0 | 0 | 0.047 | 0.045 [0.044, 0.046] | -0.775 (worse) | 0.063 |
+| char 1-NN (template matching) | 47.5M | 363 | 2,801 | 0.675 | 0.670 | – | 0.632 |
+| TF-IDF word+char + LR (baseline) | 1.5M | 15 | 193 | 0.858 | 0.820 [0.793, 0.847] | baseline | 0.825 |
+| Tiny transformer 4L, from scratch | 5.2M | 21 | 538 | 0.826 | 0.793 [0.765, 0.822] | -0.027 (worse) | 0.790 |
+| Tiny transformer 2L d128, from scratch | 1.4M | 6 | 156 | 0.840 | 0.810 [0.782, 0.838] | -0.010 (tie) | 0.809 |
+| Tiny 4L + MLM | 5.2M | 21 | 547 | 0.851 | 0.819 [0.792, 0.844] | -0.002 (tie) | 0.817 |
+| Tiny 4L + MLM + KD (e5 teacher) | 5.2M | 21 | 538 | 0.865 | 0.825 [0.799, 0.852] | +0.005 (tie) | 0.828 |
+| Tiny 4L + MLM + KD (kaz-roberta teacher) | 5.2M | 21 | 541 | 0.868 | 0.827 [0.801, 0.854] | +0.007 (tie) | 0.829 |
+| mT5-small seq2seq, vocab-pruned | 58.7M | 225 | 20,552 | 0.821 | 0.791 [0.761, 0.820] | -0.029 (tie) | 0.796 |
+| e5-small frozen + LR | 117.7M | 449 | 3,568 | 0.663 | 0.699 [0.675, 0.725] | -0.121 (worse) | 0.698 |
+| e5-small fine-tuned | 117.7M | 465 | 3,668 | 0.866 | 0.842 [0.813, 0.867] | +0.021 (better) | 0.846 |
+| e5-small fine-tuned, vocab-pruned | 25.5M | 98 | 8,555 | 0.863 | 0.845 [0.816, 0.874] | +0.025 (better) | 0.852 |
+| e5-small vocab-pruned + KD (kaz-roberta teacher) | 25.5M | 115 | 7,767 | 0.853 | 0.845 | – | 0.854 |
+| kaz-roberta fine-tuned | 83.5M | 324 | 9,708 | 0.883 | 0.853 [0.822, 0.881] | +0.033 (better) | 0.868 |
+| kaz-roberta, vocab-pruned | 61.6M | 240 | 9,756 | 0.884 | 0.849 [0.818, 0.878] | +0.029 (better) | 0.863 |
+| KazBERT fine-tuned | 110.6M | 423 | 25,676 | 0.879 | 0.860 [0.832, 0.886] | +0.040 (better) | 0.866 |
+<!-- END:main_form -->
+
+### 8.2 Regulation area (33 classes)
+
+<!-- BEGIN:main_area -->
+| Model | Params | Size MB | CPU ms / 1000 | F1 val | F1 test [95 % CI] | Δ vs TF-IDF | F1 test_strict |
+|---|---|---|---|---|---|---|---|
+| Majority class | 0 | 0 | 0 | 0.020 | 0.019 [0.018, 0.019] | -0.564 (worse) | 0.012 |
+| char 1-NN (template matching) | 47.5M | 363 | 2,801 | 0.555 | 0.536 | – | 0.488 |
+| TF-IDF word+char + LR (baseline) | 7.1M | 37 | 246 | 0.599 | 0.583 [0.570, 0.595] | baseline | 0.555 |
+| Tiny transformer 4L, from scratch | 5.2M | 21 | 538 | 0.589 | 0.584 [0.570, 0.595] | +0.001 (tie) | 0.564 |
+| Tiny transformer 2L, from scratch (dropout 0.3) | 3.7M | 15 | 300 | 0.584 | 0.594 | – | 0.568 |
+| Tiny 4L + MLM | 5.2M | 21 | 549 | 0.586 | 0.592 [0.579, 0.605] | +0.009 (tie) | 0.569 |
+| Tiny 4L + MLM + KD (e5 teacher) | 5.2M | 21 | 502 | 0.592 | 0.597 [0.584, 0.610] | +0.015 (better) | 0.580 |
+| Tiny 4L + MLM + KD (kaz-roberta teacher) | 5.2M | 21 | 516 | 0.597 | 0.598 [0.585, 0.610] | +0.015 (better) | 0.576 |
+| e5-small frozen + LR | 117.7M | 449 | 3,700 | 0.528 | 0.532 [0.519, 0.545] | -0.050 (worse) | 0.501 |
+| e5-small fine-tuned | 117.7M | 465 | 5,060 | 0.584 | 0.601 [0.588, 0.613] | +0.018 (better) | 0.579 |
+| e5-small fine-tuned, vocab-pruned | 25.5M | 98 | 8,051 | 0.580 | 0.600 [0.587, 0.612] | +0.017 (better) | 0.579 |
+| e5-small vocab-pruned + KD (kaz-roberta teacher) | 25.5M | 115 | 8,090 | 0.577 | 0.604 | – | 0.584 |
+| kaz-roberta fine-tuned | 83.5M | 324 | 9,693 | 0.601 | 0.622 [0.609, 0.635] | +0.040 (better) | 0.601 |
+| kaz-roberta + LLRD + recency (val-selected) | 83.5M | 324 | 9,776 | 0.616 | 0.629 [0.613, 0.642] | +0.046 (better) | 0.608 |
+| kaz-roberta, vocab-pruned | 61.6M | 240 | 9,631 | 0.600 | 0.621 [0.608, 0.634] | +0.038 (better) | 0.600 |
+| KazBERT fine-tuned | 110.6M | 423 | 23,375 | 0.624 | 0.620 [0.607, 0.632] | +0.037 (better) | 0.597 |
+<!-- END:main_area -->
+
+### 8.3 Reference rows
+
+These rows are not eligible as "the" model. They are refits without a held-out validation score, ensembles over the 120M budget, and the LLM teacher.
+
+**Form**
+
+<!-- BEGIN:ref_form -->
+| Model | Params | Size MB | CPU ms / 1000 | F1 val | F1 test [95 % CI] | Δ vs TF-IDF | F1 test_strict |
+|---|---|---|---|---|---|---|---|
+| Ensemble TF-IDF+tiny+e5+kaz-roberta (208M, >120M) | 207.9M | 825 | 14,330 | – | 0.850 [0.819, 0.880] | +0.029 (better) | 0.861 |
+| LLM teacher Qwen3-1.7B + LoRA (teacher only; latency on GPU) | 1727.0M | 3317 | 2,424 | 0.754 | 0.775 [0.743, 0.807] | -0.045 (worse) | 0.775 |
+<!-- END:ref_form -->
+
+**Area**
+
+<!-- BEGIN:ref_area -->
+| Model | Params | Size MB | CPU ms / 1000 | F1 val | F1 test [95 % CI] | Δ vs TF-IDF | F1 test_strict |
+|---|---|---|---|---|---|---|---|
+| kaz-roberta, refit on train+val | 83.5M | 324 | 9,841 | in-sample | 0.634 [0.620, 0.646] | +0.052 (better) | 0.616 |
+| Ensemble TF-IDF+tiny+e5+kaz-roberta (214M, >120M) | 213.5M | 846 | 13,960 | – | 0.622 [0.608, 0.633] | +0.039 (better) | 0.604 |
+| LLM teacher Qwen3-1.7B + LoRA (teacher only; latency on GPU) | 1727.1M | 3318 | 2,425 | 0.549 | 0.586 [0.571, 0.599] | +0.004 (tie) | 0.569 |
+<!-- END:ref_area -->
+
+![Macro-F1 versus CPU latency (bubble area = parameters)](figures/f1_vs_latency.png)
+
+### 8.4 Answers to the research questions
+
+**RQ1: tiny transformer vs baseline vs pretrained.**
+
+- **Plain from-scratch model (5.2M parameters):** on the form task it is significantly *worse* than TF-IDF + LR (0.793 vs 0.820). On the area task it is tied with TF-IDF.
+- **With MLM pretraining on train-period text and distillation from a fine-tuned encoder:** the same 5.2M model reaches 0.825–0.827 on form (tied with TF-IDF) and 0.597–0.598 on area. On area it is significantly better than TF-IDF (+0.015 [+0.002, +0.027]) and matches the 118M e5-small (0.601).
+- **Pretrained Kazakh encoders** are clearly best:
+  - Form: KazBERT 0.860 and kaz-roberta 0.853, both +0.03 to +0.04 over TF-IDF with CIs excluding 0.
+  - Area: kaz-roberta with layer-wise LR decay and recency weighting reaches 0.629, +0.046 over TF-IDF.
+- **Monolingual Kazakh beats multilingual.** The monolingual Kazakh encoders beat the multilingual e5-small, which is consistent with their lower tokenizer fertility (1.26–1.45 vs 1.73 tokens per word).
+- **Frozen e5 embeddings + LR** are far below TF-IDF on both tasks (form 0.699). For formulaic legal titles, sparse n-grams beat generic sentence embeddings, and fine-tuning is essential.
+
+**RQ2: what does quality cost?**
+
+| Model | Parameters | CPU latency per 1000 titles | Form F1 | Area F1 |
+|---|---|---|---|---|
+| TF-IDF | 1.5–7M | about 0.2 s | 0.820 | 0.583 |
+| Distilled tiny transformer | 5.2M (21 MB) | about 0.5 s | 0.827 | 0.598 |
+| e5-small | 118M | about 3.5 s | 0.842 | 0.601 |
+| kaz-roberta | 83M | about 9.7 s | 0.853 | 0.629 |
+
+- About +0.03 to +0.04 macro-F1 over the tiny model costs 16–23× the parameters and roughly 20× the CPU latency.
+- **Kazakh vocabulary pruning** removes 78 % of e5's parameters (118M → 25.5M, 465 → 98 MB) with no loss in F1 (form 0.845 vs 0.842). Embedding lookups are not the compute bottleneck, so CPU latency does not improve.
+
+**RQ3: dependence on the protocol.**
+
+- **Near-duplicates.** On `test_strict` (no templated near-duplicate in train), the ranking of models is unchanged. The scores barely move for the strong models (kaz-roberta form 0.853 → 0.868) but drop for template matching (char 1-NN: 0.670 → 0.632 on form, 0.536 → 0.488 on area). The fine-tuned models therefore do not rely on memorized templates.
+- **Temporal drift.** The best model's error rate grows every year, from 2.7 % in 2023 to 7.0 % in 2026 (Section 9).
+- **Validation is an imperfect selector.** Variants tuned toward the 2022 validation year can lose on 2023+ test data.
 
 ## 9. Error analysis
 
-<!-- ERRORS -->
+`src/error_analysis.py` analyzes the test predictions stored in SQLite, with JOINs of `predictions` against `acts`, `bodies` and the near-duplicate table. The analyzed model is the best single model on validation, kaz-roberta with LLRD and recency weighting. Full details are in `results/error_analysis.md`.
+
+![Normalized confusion matrix, act form](figures/confusion_form_kaz_roberta_llrd_rec.png)
+
+**Act form.**
+
+- **Most confused pairs.** Шешім → Қаулы (423 errors) and Бұйрық → Қаулы (334) dominate. Both are understandable:
+  - Local maslikhat *decisions* (Шешім) and akimat *resolutions* (Қаулы) regulate the same topics (waste norms, quotas, local budgets) with near-identical titles. The title rarely names the issuing body type, which actually determines the form.
+  - Ministerial orders (Бұйрық) and Government resolutions (Қаулы) both "approve rules" and "determine operators".
+- **Error rate by issuer.** It is highest for acts of the President (21 %) and akims (21 %), whose titles look like resolutions, and lowest for international acts (6.5 %).
+- **Per class.** Шешім (F1 0.99), Заң (0.98) and Бұйрық (0.95) are easy. The rare Басқа class is hard (F1 0.39 on 26 rows), followed by Жарлық (0.83) and Өкім (0.84).
+- **Title length.** Very short titles of 1–10 words have a 9.1 % error rate, against 1.3 % for 21–30 words.
+- **Temporal drift.** The error rate grows every year: 2.8 % (2023), 2.9 % (2024), 4.6 % (2025), 6.8 % (2026). The newest acts are the hardest, so periodic retraining is required in practice.
+- **Template dependence.** Test titles whose nearest training title has cosine < 0.6 have a 17 % error rate, against 0.8 % for titles at ≥ 0.95. In 90.6 % of test titles, the label of the nearest training title is correct. About half of all model errors (51–58 %) repeat the label of the nearest training title, so the models partly inherit template errors.
+- **Model agreement.** The fine-tuned models agree on about 98 % of titles. TF-IDF and kaz-roberta are both wrong on 973 titles, which is roughly 70 % of either model's errors. The hard cases are shared across families, which explains why ensembling gains little.
+- **Confidence.** 97 % of predictions have confidence ≥ 0.9 (accuracy 97.7 %). Below 0.9, accuracy drops to 57.5 %, so confidence is a useful flag for routing uncertain titles to manual review.
+
+**Regulation area.**
+
+- **Most confused pairs.** The largest confusion is "Constitutional order and public administration" → "Finance" (1,525 errors), followed by confusions between that broad section and "Labour" and "Economic activity". The section "Constitutional order and public administration" is a catch-all for administrative acts, and many budget-related administrative titles sit on the boundary.
+- **Small classes.** Rare classes such as Басқа (F1 0.20), criminal law (0.23, 29 rows) and foreign economic activity (0.27, 8 rows) are the main reason area macro-F1 stays around 0.6 while accuracy is about 0.80.
+
+![Per-class F1, regulation area](figures/per_class_f1_area.png)
 
 ## 10. Software implementation
 
@@ -285,7 +419,21 @@ The project is a Python 3.12 package (`src/`) with one module per concern. Each 
 
 ## 12. Conclusions
 
-<!-- CONCLUSIONS -->
+1. **The tiny transformer can match the classical baseline, but only with help.** Trained purely from scratch, the 5.2M-parameter model loses to TF-IDF + LR on act form (0.793 vs 0.820) and ties on area. MLM pretraining on train-period text plus knowledge distillation from a fine-tuned encoder lifts it to a tie on form (0.827) and a significant win on area (0.598 vs 0.583). There it equals the 23× larger e5-small, at about 0.5 s per 1000 titles on CPU.
+2. **Kazakh-specific pretrained encoders give the best quality** within the 120M budget: KazBERT (form 0.860) and kaz-roberta (area 0.629, or 0.634 after a train+val refit). They are 0.03–0.05 above TF-IDF, and the bootstrap CIs exclude 0. A monolingual vocabulary beats the multilingual e5 at a similar size.
+3. **Compression is cheap.** Pruning the vocabulary to Kazakh tokens shrinks e5-small by 78 % (118M → 25.5M) and kaz-roberta by 26 % with no loss in F1. A distilled 5M model keeps 93–97 % of the best model's macro-F1 at roughly 1/20 of its CPU latency.
+4. **More is not always better.** Several ideas did not help:
+   - seq2seq label generation (mT5);
+   - a 1.7B LLM teacher;
+   - Kazakh suffix stemming;
+   - deeper tiny models;
+   - recency weighting of the tiny model;
+   - ensembles, which gain little because all model families fail on the same hard titles.
+
+   Sherkala-8B, the strongest Kazakh LLM, was not usable without a HuggingFace access token.
+5. **The evaluation protocol matters.** 54 % of 2023+ test titles have a templated near-duplicate in the training years, and the error rate grows from 2.8 % in 2023 to 6.8 % in 2026. A temporal split, a near-duplicate-free test subset and confidence intervals are needed for honest numbers. With them, differences below about 0.02 macro-F1 are ties.
+
+**Recommendation.** For deployment on CPU, use the distilled tiny transformer (21 MB, about 0.5 s per 1000 titles) or TF-IDF + LR (about 0.2 s). Use a fine-tuned Kazakh encoder where accuracy matters most. Route predictions with confidence below 0.9 to manual review, and retrain yearly.
 
 ## 13. Team contributions
 

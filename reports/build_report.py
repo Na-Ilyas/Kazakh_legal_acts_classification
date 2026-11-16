@@ -68,7 +68,7 @@ def build() -> Path:
     i = 0
     while i < len(lines):
         line = lines[i]
-        if not line.strip():
+        if not line.strip() or line.strip().startswith("<!--"):   # blank line / HTML comment marker
             i += 1
             continue
         if line.startswith("|"):

@@ -32,23 +32,23 @@
     "label": "TF-IDF word+char + LR"
    },
    {
-    "model": "tiny_transformer_2L_do30",
-    "test": 0.8132,
-    "n_params": 3650311,
-    "size_mb": 14.71,
-    "latency": 304.7,
-    "test_strict": 0.8153,
-    "val": 0.8292,
-    "label": "Tiny transformer 2L (scratch)"
+    "model": "tiny_transformer_2L_d128",
+    "test": 0.8099,
+    "n_params": 1431943,
+    "size_mb": 6.25,
+    "latency": 146.3,
+    "test_strict": 0.809,
+    "val": 0.8405,
+    "label": "Tiny transformer, from scratch"
    },
    {
-    "model": "tiny_transformer_4L_mlm_kd_a90_T2",
-    "test": 0.8252,
+    "model": "tiny_transformer_4L_mlm_kdrob_a50_T2",
+    "test": 0.8273,
     "n_params": 5229831,
     "size_mb": 20.74,
-    "latency": 507.1,
-    "test_strict": 0.828,
-    "val": 0.8647,
+    "latency": 540.7,
+    "test_strict": 0.8286,
+    "val": 0.8683,
     "label": "Tiny 4L + MLM + KD"
    },
    {
@@ -82,6 +82,16 @@
     "label": "e5-small pruned (25.5M)"
    },
    {
+    "model": "kazbert_ft",
+    "test": 0.8601,
+    "n_params": 110622727,
+    "size_mb": 422.81,
+    "latency": 25676.2,
+    "test_strict": 0.8662,
+    "val": 0.8794,
+    "label": "KazBERT fine-tuned"
+   },
+   {
     "model": "kaz_roberta_ft",
     "test": 0.8528,
     "n_params": 83456263,
@@ -93,12 +103,12 @@
    },
    {
     "model": "ensemble_tfidf_tiny_e5_prioradj",
-    "test": 0.8552,
+    "test": 0.8624,
     "n_params": 124399301,
     "size_mb": 501.07,
     "latency": 4192.3,
-    "test_strict": 0.8704,
-    "val": 0.919,
+    "test_strict": 0.8792,
+    "val_half_b": 0.919,
     "label": "Ensemble + prior adj."
    }
   ],
@@ -134,23 +144,23 @@
     "label": "TF-IDF word+char + LR"
    },
    {
-    "model": "tiny_transformer_2L_do30",
-    "test": 0.5937,
-    "n_params": 3656993,
-    "size_mb": 14.74,
-    "latency": 302.4,
-    "test_strict": 0.5681,
-    "val": 0.5842,
-    "label": "Tiny transformer 2L (scratch)"
-   },
-   {
-    "model": "tiny_transformer_4L_mlm_kd_a50_T2",
-    "test": 0.5974,
+    "model": "tiny_transformer_4L_do30",
+    "test": 0.5798,
     "n_params": 5236513,
     "size_mb": 20.77,
-    "latency": 507.4,
-    "test_strict": 0.5797,
-    "val": 0.5922,
+    "latency": 493.7,
+    "test_strict": 0.5565,
+    "val": 0.5907,
+    "label": "Tiny transformer, from scratch"
+   },
+   {
+    "model": "tiny_transformer_4L_mlm_kdrob_a50_T2",
+    "test": 0.5979,
+    "n_params": 5236513,
+    "size_mb": 20.77,
+    "latency": 515.5,
+    "test_strict": 0.5759,
+    "val": 0.5967,
     "label": "Tiny 4L + MLM + KD"
    },
    {
@@ -172,6 +182,16 @@
     "test_strict": 0.579,
     "val": 0.5805,
     "label": "e5-small pruned (25.5M)"
+   },
+   {
+    "model": "kazbert_ft",
+    "test": 0.6201,
+    "n_params": 110642721,
+    "size_mb": 422.89,
+    "latency": 23375.2,
+    "test_strict": 0.5968,
+    "val": 0.6239,
+    "label": "KazBERT fine-tuned"
    },
    {
     "model": "kaz_roberta_llrd_rec",
@@ -198,9 +218,9 @@
     "test": 0.6215,
     "n_params": 213512020,
     "size_mb": 846.2,
-    "latency": 14356.6,
+    "latency": 13960.2,
     "test_strict": 0.6035,
-    "val": 0.6407,
+    "val_half_b": 0.6407,
     "label": "Ensemble (+kaz-roberta)"
    }
   ]
@@ -897,13 +917,13 @@
    "highlight": false
   },
   {
-   "label": "Tiny transformer 4L + MLM + KD (scratch)",
+   "label": "Tiny transformer 4L + MLM + KD (5.2M)",
    "n_params": 5229831,
    "size_mb": 20.74,
-   "latency": 507.1,
+   "latency": 540.7,
    "latency_source": "training-time",
-   "form": 0.828,
-   "area": 0.5797,
+   "form": 0.8286,
+   "area": 0.5759,
    "highlight": true
   },
   {
@@ -935,6 +955,51 @@
    "form": 0.8675,
    "area": 0.608,
    "highlight": false
+  },
+  {
+   "label": "KazBERT fine-tuned",
+   "n_params": 110622727,
+   "size_mb": 422.81,
+   "latency": 25676.2,
+   "latency_source": "training-time",
+   "form": 0.8662,
+   "area": 0.5968,
+   "highlight": false
   }
- ]
+ ],
+ "helped": [
+  "Kazakh pretrained encoders: KazBERT 0.860 form, kaz-roberta 0.629 area (+0.03 to +0.05 over TF-IDF, CI excludes 0)",
+  "MLM pretraining + distillation for the 5.2M tiny model: form 0.793 → 0.827, area 0.584 → 0.598",
+  "Kazakh vocabulary pruning: e5 118M → 25.5M (−78 %) at equal F1 (0.845 vs 0.842)",
+  "kaz-roberta with layer-wise LR decay + recency weighting: area 0.622 → 0.629; train+val refit 0.634",
+  "Word + char n-grams for TF-IDF: 0.820 vs 0.803 (word) / 0.778 (char)"
+ ],
+ "not_helped": [
+  "Kazakh suffix stemming: 0.783 vs 0.803 for word forms (suffixes carry signal)",
+  "Deeper tiny model: 4 vs 2 layers within seed noise (±0.012–0.019 std)",
+  "Seq2seq label generation (mT5, 58.7M): 0.791 form, below TF-IDF",
+  "LLM teacher Qwen3-1.7B: 0.775 form, weaker than every encoder; Sherkala-8B is gated",
+  "Stronger teacher for the tiny student (kaz-roberta vs e5): +0.002, within noise",
+  "Ensembles and prior-shift correction: all families fail on the same hard titles"
+ ],
+ "confusion_figure": "confusion_form_kaz_roberta_llrd_rec.png",
+ "error_points": [
+  "Шешім → Қаулы (423) and Бұйрық → Қаулы (334) dominate: same topics, the title rarely names the issuer type",
+  "Temporal drift: error rate 2.8 % (2023) → 4.6 % (2025) → 6.8 % (2026)",
+  "Titles far from any train title (cosine < 0.6): 17 % errors vs 0.8 % for near-duplicates",
+  "Very short titles (1–10 words): 9.1 % errors vs 1.3 % for 21–30 words",
+  "Confidence ≥ 0.9 covers 97 % of titles at 97.7 % accuracy → route the rest to manual review"
+ ],
+ "conclusions": [
+  "A 5.2M tiny transformer from scratch needs MLM + distillation to tie TF-IDF on form; then it beats it on area and matches the 118M e5-small at about 1/7 of the CPU latency",
+  "Kazakh encoders (KazBERT, kaz-roberta) are best within 120M: +0.03 to +0.05 macro-F1",
+  "Vocabulary pruning cuts e5 by 78 % for free; seq2seq and the LLM teacher did not pay off",
+  "54 % of test titles are templated near-duplicates and the error rate grows yearly, so temporal + strict evaluation and CIs are essential"
+ ],
+ "team": [
+  "Ilyas Nagiyev — [role]",
+  "Beksultan Aliyev — [role]",
+  "Yernur Baimukhambetov — [role]"
+ ],
+ "efficiency_note": "CPU latency: unified benchmark (batch 64, 8 threads, median of 3) on a shared machine; absolute values vary by about ±20 %. F1 = macro-F1 on test_strict."
 }
