@@ -126,11 +126,14 @@ def skip_training_benchmark() -> bool:
 
 
 def measure_subprocess(kind: str, path: str, name: str = "", task: str = "", quick: bool = False,
-                       timeout: int = 900) -> dict:
-    """Run `measure` in a fresh Python process and return its JSON result ({} on failure)."""
+                       timeout: int = 900, cpu_only: bool = False, force: bool = False) -> dict:
+    """Run `measure` in a fresh Python process and return its JSON result ({} on failure).
+
+    cpu_only=True hides the GPU from the subprocess (no CUDA latency; needs no GPU lock).
+    """
     from src import config
 
-    if skip_training_benchmark():
+    if skip_training_benchmark() and not force:
         print(f"[benchmark] skipped for {name or Path(path).name} (measured later by benchmark --all)")
         return {}
 
@@ -142,6 +145,8 @@ def measure_subprocess(kind: str, path: str, name: str = "", task: str = "", qui
         cmd += ["--n-texts", "200", "--repeats", "1"]
     env = {**os.environ, "OMP_NUM_THREADS": str(CPU_THREADS), "MKL_NUM_THREADS": str(CPU_THREADS),
            "OPENBLAS_NUM_THREADS": str(CPU_THREADS), "TOKENIZERS_PARALLELISM": "false"}
+    if cpu_only:
+        env["CUDA_VISIBLE_DEVICES"] = ""
     try:
         proc = subprocess.run(cmd, cwd=config.PROJECT_ROOT, env=env, capture_output=True,
                               text=True, timeout=timeout)
@@ -185,24 +190,49 @@ def update_experiment_rows(result: dict) -> None:
                          result.get("latency_cpu_ms_per_1000"), json.dumps(hp, ensure_ascii=False), exp_id))
 
 
-def run(tasks: tuple[str, ...] = ("form", "area"), quick: bool = False, update_db: bool = True) -> dict:
-    """Benchmark every model found on disk; save results/benchmark.csv and update SQLite."""
+def selected_models(select: str) -> set[tuple[str, str]] | None:
+    """(task, model_name) pairs to measure: 'main' = main-table models of src.compare,
+    'missing' = models whose test row has no latency yet, 'all' = None (everything)."""
+    if select == "all":
+        return None
+    if select == "main":
+        from src import compare
+        table = compare.mark_main(compare.build_table(compare.load_rows()))
+        main = table[table["table"] == "main"]
+        return set(zip(main["task"], main["model_name"]))
+    if select == "missing":
+        from src import experiments_db
+        with experiments_db.connect() as con:
+            rows = con.execute("SELECT task, model_name FROM experiments WHERE eval_split='test' "
+                               "AND latency_ms_per_1000 IS NULL").fetchall()
+        return {(t, m) for t, m in rows}
+    raise ValueError(f"unknown selection {select!r}")
+
+
+def run(tasks: tuple[str, ...] = ("form", "area"), quick: bool = False, update_db: bool = True,
+        select: str = "all", cpu_only: bool = False) -> dict:
+    """Benchmark the selected models found on disk; save results/benchmark[_<select>].csv, update SQLite."""
     import pandas as pd
     from src import config
     from src.inference import discover_models
 
+    wanted = None if quick else selected_models(select)
     rows = []
     for task in tasks:
         for spec in discover_models(task, include_quick=quick):
             if quick != spec.name.endswith("_quick"):
                 continue              # quick runs only touch _quick models (never the real rows)
-            res = measure_subprocess(spec.kind, spec.path, spec.name, spec.task, quick=quick)
+            if wanted is not None and (spec.task, spec.name) not in wanted:
+                continue
+            res = measure_subprocess(spec.kind, spec.path, spec.name, spec.task, quick=quick,
+                                     cpu_only=cpu_only, force=True)
             if res:
                 rows.append(res)
                 if update_db:
                     update_experiment_rows(res)
     df = pd.DataFrame(rows)
-    out = config.RESULTS_DIR / (BENCH_CSV_NAME if not quick else "benchmark_quick.csv")
+    out = config.RESULTS_DIR / ("benchmark_quick.csv" if quick else
+                                BENCH_CSV_NAME if select == "all" else f"benchmark_{select}.csv")
     if len(df):
         df.to_csv(out, index=False)
     return {"n_models": len(rows), "csv": str(out)}
@@ -218,9 +248,11 @@ def _cli() -> None:
     parser.add_argument("--repeats", type=int, default=REPEATS)
     parser.add_argument("--json-out")
     parser.add_argument("--all", action="store_true")
+    parser.add_argument("--select", choices=["all", "main", "missing"], default="all")
+    parser.add_argument("--cpu-only", action="store_true", help="hide the GPU (CPU latency only)")
     args = parser.parse_args()
     if args.all or not args.kind:
-        print(run())
+        print(run(select=args.select, cpu_only=args.cpu_only))
         return
     result = measure(args.kind, args.path, args.name, args.task, args.n_texts, args.repeats)
     if args.json_out:

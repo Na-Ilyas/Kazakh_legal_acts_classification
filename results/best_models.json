@@ -5,15 +5,35 @@
       "f1_val": 0.5555,
       "f1_test": 0.5363
     },
+    "posthoc": {
+      "model_name": "tiny_transformer_4L_recency_tau8_prioradj",
+      "f1_val": 0.6299,
+      "f1_test": 0.5832
+    },
+    "pretrained": {
+      "model_name": "kaz_roberta_llrd_rec",
+      "f1_val": 0.6162,
+      "f1_test": 0.6285
+    },
+    "pretrained_frozen": {
+      "model_name": "e5_frozen_lr",
+      "f1_val": 0.5277,
+      "f1_test": 0.5324
+    },
     "tfidf": {
-      "model_name": "tfidf_word_lr",
-      "f1_val": 0.5861,
-      "f1_test": 0.5915
+      "model_name": "tfidf_word_char_lr",
+      "f1_val": 0.5985,
+      "f1_test": 0.5827
+    },
+    "tiny_transformer": {
+      "model_name": "tiny_transformer_4L_recency_tau8",
+      "f1_val": 0.6003,
+      "f1_test": 0.5832
     },
     "_overall": {
-      "model_name": "tfidf_word_lr",
-      "f1_val": 0.5861,
-      "f1_test": 0.5915
+      "model_name": "tiny_transformer_4L_recency_tau8_prioradj",
+      "f1_val": 0.6299,
+      "f1_test": 0.5832
     }
   },
   "form": {
@@ -22,20 +42,40 @@
       "f1_val": 0.6747,
       "f1_test": 0.6697
     },
+    "posthoc": {
+      "model_name": "ensemble_tfidf_tiny_e5_prioradj",
+      "f1_val": 0.919,
+      "f1_test": 0.8552
+    },
     "pretrained": {
-      "model_name": "e5_small_ft",
-      "f1_val": 0.8656,
-      "f1_test": 0.8415
+      "model_name": "kaz_roberta_kkprune_ft",
+      "f1_val": 0.8843,
+      "f1_test": 0.8491
+    },
+    "pretrained_frozen": {
+      "model_name": "e5_frozen_lr",
+      "f1_val": 0.6634,
+      "f1_test": 0.6992
+    },
+    "seq2seq": {
+      "model_name": "mt5_small_kkprune_text",
+      "f1_val": 0.8213,
+      "f1_test": 0.791
     },
     "tfidf": {
       "model_name": "tfidf_word_char_lr",
-      "f1_val": 0.8405,
-      "f1_test": 0.8257
+      "f1_val": 0.8576,
+      "f1_test": 0.8202
+    },
+    "tiny_transformer": {
+      "model_name": "tiny_transformer_4L_kd_a90_T2",
+      "f1_val": 0.8716,
+      "f1_test": 0.7992
     },
     "_overall": {
-      "model_name": "e5_small_ft",
-      "f1_val": 0.8656,
-      "f1_test": 0.8415
+      "model_name": "ensemble_tfidf_tiny_e5_prioradj",
+      "f1_val": 0.919,
+      "f1_test": 0.8552
     }
   }
 }

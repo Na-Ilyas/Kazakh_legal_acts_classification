@@ -36,7 +36,7 @@ CANDIDATES = {   # model id -> (params, note); params from HF safetensors metada
 }
 FT_MODEL = "kz-transformers/kaz-roberta-conversational"
 PRUNED_ROWS = [("e5_small_kkprune_ft", "25.5M", "e5-small with Kazakh-pruned vocabulary (src.vocab_prune)"),
-               ("kaz_roberta_kkprune_ft", "see SQLite", "kaz-roberta with Kazakh-train-pruned vocabulary"),
+               ("kaz_roberta_kkprune_ft", "61.6M", "kaz-roberta with Kazakh-train-pruned vocabulary (52,000 -> 23,532 tokens)"),
                ("mt5_small_kkprune_text", "58.7M", "mT5-small seq2seq, pruned vocab, label-set scoring (src.seq2seq_mt5)")]
 FT_NAME = "kaz_roberta_ft"
 PRUNED_FT_NAME = "kaz_roberta_kkprune_ft"
@@ -172,8 +172,8 @@ def write_markdown(rows: list[dict], ft: dict | None) -> None:
     """results/model_survey.md"""
     lines = ["# Compact Kazakh-capable encoders - survey", "",
              "Tokenizer statistics on 3,000 seeded TRAIN titles (fertility = tokens per whitespace word; lower is "
-             "better). Params from HF metadata. F1 = macro-F1 on task `form` where the model was trained in this "
-             "project (see SQLite `experiments`).", "",
+             "better). Params from HF metadata. F1 = macro-F1 (val / test / test_strict, shared src.metrics) on the "
+             "tasks `form` and `area` where the model was trained in this project (see SQLite `experiments`).", "",
              "| model | params | <=120M | vocab | fertility | median tok/title | unk % | >128 tok % | note | form F1 val / test / strict | area F1 val / test / strict |",
              "|---|---|---|---|---|---|---|---|---|---|---|"]
     for r in rows:

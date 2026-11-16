@@ -30,8 +30,8 @@ from src.model_utils import (BPE_DIR, label_maps, load_probs, load_task, max_len
 from src.tiny_transformer import (MAIN_ARCH, arch_name, encode_splits, finalize, train_variant)
 from src.trainer import TrainConfig, get_device
 
-KD_GRID = [(0.5, 2.0), (0.5, 4.0), (0.9, 2.0), (0.9, 4.0)]     # (alpha, temperature)
-TAU_GRID = (2.0, 4.0, 8.0)                                      # recency weighting, in years
+KD_GRID = [(0.5, 2.0), (0.9, 2.0), (0.9, 4.0)]                 # (alpha, temperature)
+TAU_GRID = (3.0, 8.0)                                           # recency weighting, in years
 SUMMARY_CSV = config.RESULTS_DIR / "tiny_transformer_improvements.csv"
 
 

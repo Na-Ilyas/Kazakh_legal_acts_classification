@@ -61,6 +61,9 @@ STEPS["prep_ablation"] = ("src.prep_ablation", {}, {})
 STEPS["vocab_prune"] = ("src.vocab_prune", {}, {})
 STEPS["seq2seq"] = ("src.seq2seq_mt5", {}, {})
 STEPS["survey"] = ("src.model_survey", {}, {"finetune_model": False})
+# val-selected kaz-roberta improvements: LLRD, <=5 epochs + early stopping, class-weighted / smoothed CE,
+# recency weights, train+val refit (GPU, ~20 min per task)
+STEPS["roberta_tune"] = ("src.roberta_tune:run_all", {}, {})
 STEPS["sql_final"] = STEPS.pop("sql_final")      # keep the SQL refresh as the very last step
 # Outputs that let quick mode skip an expensive, already-completed data step.
 DONE_MARKERS = {

@@ -62,12 +62,14 @@ def connect(db_path=config.DB_PATH) -> sqlite3.Connection:
 
 
 @contextmanager
-def session(db_path=config.DB_PATH):
+def session(db_path=None):
     """Connection that commits on success, rolls back on error and is ALWAYS closed.
 
     (`with sqlite3.connect(...)` only commits/rolls back - it never closes.)
+    db_path=None defers to connect()'s default, so the KAZLAW_DB dev override applied by
+    src.model_utils (which patches connect's default) also reaches session().
     """
-    con = connect(db_path)
+    con = connect() if db_path is None else connect(db_path)
     try:
         with con:
             yield con

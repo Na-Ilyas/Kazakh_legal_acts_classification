@@ -1,0 +1,159 @@
+{
+  "kaz_roberta_area": {
+    "stem": "kaz_roberta",
+    "task": "area",
+    "prune": false,
+    "val_f1": {
+      "ep5": 0.6025,
+      "llrd": 0.6065,
+      "llrd_cw": 0.6066,
+      "llrd_ls": 0.6046,
+      "llrd_rec": 0.6162,
+      "combo": 0.6131
+    },
+    "selected": "kaz_roberta_llrd_rec",
+    "variants": {
+      "ep5": {
+        "name": "kaz_roberta_ep5",
+        "task": "area",
+        "f1_macro": {
+          "val": 0.6025,
+          "test": 0.6093,
+          "test_strict": 0.5861
+        },
+        "best_epoch": 5,
+        "epochs_run": 5,
+        "n_params": 83476257,
+        "size_mb": 323.6,
+        "latency_cpu_ms_per_1000": 10018.5,
+        "train_time_s": 119.5,
+        "path": "artifacts/models/kaz_roberta_ep5_area"
+      },
+      "llrd": {
+        "name": "kaz_roberta_llrd",
+        "task": "area",
+        "f1_macro": {
+          "val": 0.6065,
+          "test": 0.6216,
+          "test_strict": 0.6
+        },
+        "best_epoch": 4,
+        "epochs_run": 5,
+        "n_params": 83476257,
+        "size_mb": 323.6,
+        "latency_cpu_ms_per_1000": 10018.5,
+        "train_time_s": 119.57,
+        "path": "artifacts/models/kaz_roberta_llrd_area"
+      },
+      "llrd_cw": {
+        "name": "kaz_roberta_llrd_cw",
+        "task": "area",
+        "f1_macro": {
+          "val": 0.6066,
+          "test": 0.6193,
+          "test_strict": 0.598
+        },
+        "best_epoch": 5,
+        "epochs_run": 5,
+        "n_params": 83476257,
+        "size_mb": 323.6,
+        "latency_cpu_ms_per_1000": 10018.5,
+        "train_time_s": 120.26,
+        "path": "artifacts/models/kaz_roberta_llrd_cw_area"
+      },
+      "llrd_ls": {
+        "name": "kaz_roberta_llrd_ls",
+        "task": "area",
+        "f1_macro": {
+          "val": 0.6046,
+          "test": 0.6181,
+          "test_strict": 0.5946
+        },
+        "best_epoch": 3,
+        "epochs_run": 5,
+        "n_params": 83476257,
+        "size_mb": 323.6,
+        "latency_cpu_ms_per_1000": 10018.5,
+        "train_time_s": 123.63,
+        "path": "artifacts/models/kaz_roberta_llrd_ls_area"
+      },
+      "llrd_rec": {
+        "name": "kaz_roberta_llrd_rec",
+        "task": "area",
+        "f1_macro": {
+          "val": 0.6162,
+          "test": 0.6285,
+          "test_strict": 0.608
+        },
+        "best_epoch": 4,
+        "epochs_run": 5,
+        "n_params": 83476257,
+        "size_mb": 323.6,
+        "latency_cpu_ms_per_1000": 10018.5,
+        "train_time_s": 119.03,
+        "path": "artifacts/models/kaz_roberta_llrd_rec_area"
+      },
+      "combo": {
+        "name": "kaz_roberta_combo",
+        "task": "area",
+        "f1_macro": {
+          "val": 0.6131,
+          "test": 0.633,
+          "test_strict": 0.6135
+        },
+        "best_epoch": 5,
+        "epochs_run": 5,
+        "n_params": 83476257,
+        "size_mb": 323.6,
+        "latency_cpu_ms_per_1000": 10018.5,
+        "train_time_s": 116.18,
+        "path": "artifacts/models/kaz_roberta_combo_area"
+      }
+    },
+    "refit": {
+      "name": "kaz_roberta_llrd_rec_trainval",
+      "task": "area",
+      "f1_macro": {
+        "val": 0.8102,
+        "test": 0.6345,
+        "test_strict": 0.6163
+      },
+      "best_epoch": 4,
+      "epochs_run": 4,
+      "n_params": 83476257,
+      "size_mb": 323.6,
+      "latency_cpu_ms_per_1000": 10018.5,
+      "train_time_s": 101.69,
+      "path": "artifacts/models/kaz_roberta_llrd_rec_trainval_area"
+    },
+    "wall_time_s": 896.4
+  },
+  "kaz_roberta_form": {
+    "stem": "kaz_roberta",
+    "task": "form",
+    "prune": false,
+    "val_f1": {
+      "llrd_rec": 0.8978
+    },
+    "selected": "kaz_roberta_llrd_rec",
+    "variants": {
+      "llrd_rec": {
+        "name": "kaz_roberta_llrd_rec",
+        "task": "form",
+        "f1_macro": {
+          "val": 0.8978,
+          "test": 0.8414,
+          "test_strict": 0.8478
+        },
+        "best_epoch": 4,
+        "epochs_run": 5,
+        "n_params": 83456263,
+        "size_mb": 323.5,
+        "latency_cpu_ms_per_1000": 11949.6,
+        "train_time_s": 124.62,
+        "path": "artifacts/models/kaz_roberta_llrd_rec_form"
+      }
+    },
+    "wall_time_s": 188.2
+  }
+}

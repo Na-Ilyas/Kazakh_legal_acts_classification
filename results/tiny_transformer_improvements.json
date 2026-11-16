@@ -1,0 +1,7 @@
+{
+  "best_on_val": {
+    "area": "tiny_transformer_4L_recency_tau8",
+    "form": "tiny_transformer_4L_kd_a90_T2"
+  },
+  "time_s": 581.8
+}

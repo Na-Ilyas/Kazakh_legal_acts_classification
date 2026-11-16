@@ -1,7 +1,7 @@
 task,arch,loss,best_epoch,val_f1_macro,train_time_s,n_params
-form,4L,ce,3,0.8146,31.31,5229831
-form,4L,weighted,5,0.8142,41.41,5229831
-form,4L,smooth,3,0.8268,31.59,5229831
-area,4L,ce,2,0.5665,27.28,5236513
-area,4L,weighted,5,0.5582,44.04,5236513
-area,4L,smooth,4,0.5725,39.79,5236513
+form,4L,ce,6,0.8215,45.06,5229831
+form,4L,weighted,5,0.8154,40.03,5229831
+form,4L,smooth,5,0.8256,39.61,5229831
+area,4L,ce,2,0.5826,24.51,5236513
+area,4L,weighted,5,0.5741,39.93,5236513
+area,4L,smooth,4,0.589,34.72,5236513

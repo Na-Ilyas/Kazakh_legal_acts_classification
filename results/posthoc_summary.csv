@@ -1,0 +1,11 @@
+task,model_name,selected_lam,note,val,test,test_strict,weights
+form,tfidf_word_char_lr_prioradj,0.0,no gain on val half B -> not logged,,,,
+form,tiny_transformer_4L_kd_a90_T2_prioradj,0.0,no gain on val half B -> not logged,,,,
+form,e5_small_ft_prioradj,1.0,,0.9173,0.8538,0.8663,
+form,ensemble_tfidf_tiny_e5,,,0.9166,0.8531,0.8617,"[np.float64(0.3), np.float64(0.2), np.float64(0.5)]"
+form,ensemble_tfidf_tiny_e5_prioradj,0.25,,0.919,0.8552,0.8704,
+area,tfidf_word_char_lr_prioradj,0.0,no gain on val half B -> not logged,,,,
+area,tiny_transformer_4L_recency_tau8_prioradj,0.25,,0.6299,0.5832,0.557,
+area,e5_small_ft_prioradj,0.0,no gain on val half B -> not logged,,,,
+area,ensemble_tfidf_tiny_e5,,,0.618,0.604,0.5839,"[np.float64(0.6), np.float64(0.3), np.float64(0.1)]"
+area,ensemble_tfidf_tiny_e5_prioradj,0.5,,0.6248,0.5879,0.5615,

@@ -22,7 +22,7 @@ import numpy as np
 from src import config  # noqa: F401  (pins GPU 0 before torch)
 from src.model_utils import E5_MODEL_NAME, E5_PREFIX, dir_size_mb, load_json
 
-KINDS = ("baseline", "tiny", "e5_frozen_lr", "e5_ft", "posthoc")
+KINDS = ("baseline", "tiny", "e5_frozen_lr", "e5_ft", "posthoc", "external")
 _SHARED: dict = {}      # objects shared between predictors (frozen e5 encoder)
 
 
@@ -288,6 +288,39 @@ class PosthocPredictor(BasePredictor):
         return total / total.sum(axis=1, keepdims=True)
 
 
+class ExternalPredictor(BasePredictor):
+    """Adapter for models of other project modules whose meta.json names a `loader` class
+    (e.g. src.roberta_tune.RobertaPredictor for kaz-roberta / pruned e5 / mT5): the class is
+    built as Loader(model_dir, device) and must expose classes + predict_proba."""
+
+    def __init__(self, model_dir: str | Path, device: str = "cpu"):
+        import importlib
+        self.model_dir = Path(model_dir)
+        meta = load_json(self.model_dir / "meta.json")
+        module_name, _, cls_name = meta["loader"].rpartition(".")
+        self._cls = getattr(importlib.import_module(module_name), cls_name)
+        self._build(device)
+
+    def _build(self, device: str) -> None:
+        self.inner = self._cls(self.model_dir, device=device)
+        self.device = device
+        self.classes = [str(c) for c in self.inner.classes]
+        self.n_params = getattr(self.inner, "n_params", None)
+        self.size_mb = getattr(self.inner, "size_mb", None) or dir_size_mb(self.model_dir)
+
+    def to(self, device: str) -> "ExternalPredictor":
+        if device != self.device:
+            if hasattr(self.inner, "to"):
+                self.inner.to(device)
+                self.device = device
+            else:
+                self._build(device)
+        return self
+
+    def predict_proba(self, texts: list[str], batch_size: int = 64) -> np.ndarray:
+        return np.asarray(self.inner.predict_proba(list(texts), batch_size=batch_size))
+
+
 def _alias_main_symbols(module) -> None:
     """Models pickled while `module` ran as __main__ (python -m src.baseline) reference
     __main__.<name>; expose the module's own classes/functions there so they unpickle anywhere."""
@@ -353,6 +386,8 @@ def _build_predictor(spec: ModelSpec, device: str) -> BasePredictor:
         return BaselinePredictor(spec.name, spec.task, device)
     if spec.kind == "posthoc":
         return PosthocPredictor(spec.path, device)
+    if spec.kind == "external":
+        return ExternalPredictor(spec.path, device)
     raise ValueError(f"unknown model kind {spec.kind!r}")
 
 
@@ -374,8 +409,26 @@ def discover_models(task: str | None = None, include_quick: bool = False) -> lis
             continue
         specs.append(ModelSpec(kind, cfg.get("model_name") or _default_name(kind, d.name, cfg.get("task", "")),
                                cfg.get("task", ""), str(d)))
+    specs.extend(_external_specs(task, include_quick))
     specs.extend(_baseline_specs(task))
     return specs
+
+
+def _external_specs(task: str | None, include_quick: bool) -> list[ModelSpec]:
+    """Models of other modules that declare a `loader` in their meta.json."""
+    out = []
+    for meta_path in sorted(config.MODELS_DIR.glob("*/meta.json")):
+        try:
+            meta = load_json(meta_path)
+        except Exception:
+            continue
+        if "loader" not in meta or (task and meta.get("task") != task):
+            continue
+        name = str(meta.get("model_name") or meta_path.parent.name)
+        if name.endswith("_quick") and not include_quick:
+            continue
+        out.append(ModelSpec("external", name, str(meta.get("task", "")), str(meta_path.parent)))
+    return out
 
 
 def _default_name(kind: str, dir_name: str, task: str) -> str:

@@ -9,7 +9,8 @@
       "median_tokens_per_title": 30.5,
       "unk_pct": 0.0,
       "pct_titles_over_128_tokens": 0.3,
-      "f1": "0.8656 / 0.8415 / 0.8462"
+      "f1": "0.8656 / 0.8415 / 0.8462",
+      "f1_area": "0.5836 / 0.6010 / 0.5792"
     },
     {
       "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
@@ -20,7 +21,8 @@
       "median_tokens_per_title": 30.5,
       "unk_pct": 0.0,
       "pct_titles_over_128_tokens": 0.3,
-      "f1": ""
+      "f1": "",
+      "f1_area": ""
     },
     {
       "model": "kz-transformers/kaz-roberta-conversational",
@@ -31,7 +33,8 @@
       "median_tokens_per_title": 23.0,
       "unk_pct": 0.0,
       "pct_titles_over_128_tokens": 0.03,
-      "f1": "0.8830 / 0.8528 / 0.8675"
+      "f1": "0.8830 / 0.8528 / 0.8675",
+      "f1_area": "0.6013 / 0.6223 / 0.6011"
     },
     {
       "model": "Eraly-ml/KazBERT",
@@ -42,7 +45,8 @@
       "median_tokens_per_title": 26.0,
       "unk_pct": 0.0,
       "pct_titles_over_128_tokens": 0.07,
-      "f1": ""
+      "f1": "",
+      "f1_area": ""
     },
     {
       "model": "google/mt5-small",
@@ -53,7 +57,8 @@
       "median_tokens_per_title": 40.5,
       "unk_pct": 0.0,
       "pct_titles_over_128_tokens": 0.97,
-      "f1": "0.8213 / 0.7910 / 0.7956"
+      "f1": "",
+      "f1_area": ""
     },
     {
       "model": "FacebookAI/xlm-roberta-base",
@@ -64,19 +69,9 @@
       "median_tokens_per_title": 30.5,
       "unk_pct": 0.0,
       "pct_titles_over_128_tokens": 0.3,
-      "f1": ""
+      "f1": "",
+      "f1_area": ""
     }
   ],
-  "finetune": {
-    "f1_macro": {
-      "val": 0.883,
-      "test": 0.8528,
-      "test_strict": 0.8675
-    },
-    "n_params": 83456263,
-    "size_mb": 323.5,
-    "latency_cpu_ms_per_1000": 10217.7,
-    "train_time_s": 70.95,
-    "best_epoch": 2
-  }
+  "finetune": null
 }

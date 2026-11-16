@@ -52,8 +52,20 @@ def member_specs(task: str) -> dict[str, dict]:
         if len(part):
             name = part.sort_values("f1_macro", ascending=False).iloc[0]["model_name"]
             out[key] = {"name": name, "family": fam}
+    # Kazakh RoBERTa variants of the research module (loadable through their meta.json "loader")
+    rob = val[val["model_name"].str.startswith("kaz_roberta")].sort_values("f1_macro", ascending=False)
+    for name in rob["model_name"]:
+        d = config.MODELS_DIR / f"{name}_{task}"
+        try:
+            if "loader" in json.loads((d / "meta.json").read_text(encoding="utf-8")):
+                out["roberta"] = {"name": name, "family": "pretrained", "kind": "external", "path": str(d)}
+                break
+        except (OSError, ValueError):
+            continue
     for key, spec in out.items():
         name = spec["name"]
+        if key == "roberta":
+            continue
         if key == "tfidf":
             spec.update(kind="baseline", path=name)
         elif key == "tiny":
@@ -199,14 +211,37 @@ def save_and_log(task: str, model_name: str, members: list[dict], weights: np.nd
 # --------------------------------------------------------------------------
 # Main
 # --------------------------------------------------------------------------
+def purge_previous(task: str) -> None:
+    """Remove earlier posthoc outputs of this task (rows, configs, caches): the family is fully
+    regenerated on every run, so a changed member set can never leave stale variants behind."""
+    import shutil
+    from src.model_utils import prob_cache_dir, with_db_retry
+
+    def delete_rows():
+        with experiments_db.connect() as con:
+            con.execute("DELETE FROM experiments WHERE model_family=? AND task=?", (FAMILY, task))
+    with_db_retry(delete_rows)
+    for d in config.MODELS_DIR.glob(f"posthoc_*_{task}"):
+        shutil.rmtree(d, ignore_errors=True)
+        shutil.rmtree(prob_cache_dir(d.name), ignore_errors=True)
+
+
 def run_task(task: str) -> list[dict]:
     """Prior adjustment for each member + ensemble (+ adjustment) for one task."""
+    purge_previous(task)
     data = load_task(task)
     classes, _ = label_maps(data["train"]["label"])
     frames = {s: data[s] for s in ("val", "test")}
     specs = member_specs(task)
-    probs = {k: {s: aligned_probs(spec, task, s, frames[s], classes) for s in ("val", "test")}
-             for k, spec in specs.items()}
+    probs = {}
+    for k, spec in list(specs.items()):
+        try:
+            probs[k] = {s: aligned_probs(spec, task, s, frames[s], classes) for s in ("val", "test")}
+        except (FileNotFoundError, ValueError) as exc:
+            if k != "roberta":
+                raise
+            print(f"[posthoc] {task}: kaz-roberta member skipped ({exc}); run --cache-external first")
+            specs.pop(k)
     y_val = frames["val"]["label"].astype(str).to_numpy()
     half_a = val_halves(frames["val"]["law_id"])
     ratio = class_freq(y_val[half_a], classes) / class_freq(data["train"]["label"], classes)
@@ -235,8 +270,12 @@ def run_task(task: str) -> list[dict]:
                    f"{spec['name']}")
     # 2) ensemble of the three families: members calibrated by temperature (val NLL), then the
     #    mixing weights are gridded on full val macro-F1
-    if len(specs) >= 2:
-        keys = list(specs)
+    member_sets = [[k for k in ("tfidf", "tiny", "e5") if k in specs]]
+    if "roberta" in specs:
+        member_sets.append([k for k in ("tfidf", "tiny", "e5", "roberta") if k in specs])
+    for keys in member_sets:
+        if len(keys) < 2:
+            continue
         temps = {k: fit_temperature(probs[k]["val"], y_val, classes) for k in keys}
         cal = {k: {s: temper(probs[k][s], temps[k]) for s in ("val", "test")} for k in keys}
         print(f"[posthoc] {task} member temperatures (val NLL): {temps}", flush=True)
@@ -253,14 +292,39 @@ def run_task(task: str) -> list[dict]:
         hp = {"weights_selected_on": "full val", "weight_step": WEIGHT_STEP,
               "member_temperatures": {specs[k]["name"]: temps[k] for k in keys},
               "temperatures_selected_on": "val NLL"}
-        print(f"[posthoc] {task} {name}: weights {dict(zip(keys, w.round(2)))} val F1 {f1_val:.4f}", flush=True)
+        print(f"[posthoc] {task} {name}: weights {dict(zip(keys, [round(float(x), 2) for x in w]))} "
+              f"val F1 {f1_val:.4f}", flush=True)
         f1s = save_and_log(task, name, members, w, ratio, 0.0, classes, frames, ens, ~half_a, hp,
                            f"weighted average of member probabilities ({', '.join(m['name'] for m in members)}), "
-                           f"weights {list(w.round(2))} chosen on val (val row = half B, like all posthoc rows)",
+                           f"weights {[round(float(x), 2) for x in w]} chosen on val (val row = half B, like all posthoc rows)",
                            len(data["train"]))
-        rows.append({"task": task, "model_name": name, "weights": list(w.round(2)), **f1s})
+        rows.append({"task": task, "model_name": name, "weights": [round(float(x), 2) for x in w], **f1s})
         try_adjust(name, members, w, ens, hp, "ensemble")
     return rows
+
+
+def cache_external_probs(tasks: tuple[str, ...] = ("form", "area")) -> dict:
+    """One GPU inference pass: cache val/test probabilities of the kaz-roberta member
+    (run inside the shared GPU lock: flock .gpu.lock python -m src.posthoc --cache-external)."""
+    import torch
+    from src.inference import ModelSpec, load_predictor
+
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    done = {}
+    for task in tasks:
+        spec = member_specs(task).get("roberta")
+        if spec is None:
+            continue
+        data = load_task(task)
+        pred = load_predictor(ModelSpec("external", spec["name"], task, spec["path"]), device)
+        for split in ("val", "test"):
+            frame = data[split]
+            probs = pred.predict_proba(frame["title"].tolist(), batch_size=256)
+            save_probs(Path(spec["path"]).name, split, probs, frame["law_id"], pred.classes)
+        done[task] = spec["name"]
+        del pred
+        torch.cuda.empty_cache()
+    return done
 
 
 def run(tasks: tuple[str, ...] = ("form", "area"), quick: bool = False) -> dict:
@@ -280,5 +344,10 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Prior-shift adjustment and ensembles")
     parser.add_argument("--tasks", default="form,area")
+    parser.add_argument("--cache-external", action="store_true",
+                        help="GPU pass caching kaz-roberta probabilities (run under the GPU lock)")
     args = parser.parse_args()
-    print(run(tuple(args.tasks.split(","))))
+    if args.cache_external:
+        print(cache_external_probs(tuple(args.tasks.split(","))))
+    else:
+        print(run(tuple(args.tasks.split(","))))

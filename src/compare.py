@@ -171,7 +171,10 @@ def to_markdown(table: pd.DataFrame) -> str:
     return "\n".join(lines)
 
 
-MAIN_REFERENCE = {"tiny_transformer_4L", "majority_dummy"}   # always in the main table
+# always in the main table: from-scratch tiny reference, majority floor, the required e5 fine-tune and
+# the research agent's compact pretrained models (Kazakh RoBERTa, vocabulary-pruned e5/RoBERTa, mT5)
+MAIN_REFERENCE = {"tiny_transformer_4L", "majority_dummy", "e5_small_ft", "kaz_roberta_ft",
+                  "kaz_roberta_kkprune_ft", "e5_small_kkprune_ft", "mt5_small_kkprune_text"}
 REFIT_SUFFIX = "_trainval"    # refits on train+val: their val score is not held-out -> never selected on it
 
 

@@ -25,11 +25,16 @@ EXAMPLES = [
 ]
 
 
+# Families shown in the demo (one model each: the best on validation). Frozen-e5, char-1NN and mT5
+# are left out to keep RAM low on the shared machine; all_models=True shows everything.
+DEMO_FAMILIES = ("tfidf", "tiny_transformer", "pretrained", "posthoc")
+
+
 def _selected_names(task: str) -> set[str] | None:
-    """Names of the best model per family (by val F1) or None if compare has not run."""
+    """Names of the best model per demo family (by val F1) or None if compare has not run."""
     try:
         best = load_json(config.RESULTS_DIR / "best_models.json").get(task, {})
-        return {v["model_name"] for k, v in best.items() if not k.startswith("_")}
+        return {v["model_name"] for k, v in best.items() if k in DEMO_FAMILIES}
     except (FileNotFoundError, ValueError):
         return None
 
@@ -55,7 +60,7 @@ def get_predictors(task: str, device: str = "cpu", all_models: bool = False) -> 
         except Exception as exc:          # missing file, missing dependency, corrupt artifact...
             _FAILED.add(ident)
             print(f"  ! skipping {spec.name} [{task}]: {type(exc).__name__}: {exc}")
-    order = {"baseline": 0, "tiny": 1, "e5_frozen_lr": 2, "e5_ft": 3}
+    order = {"baseline": 0, "tiny": 1, "e5_frozen_lr": 2, "e5_ft": 3, "external": 4, "posthoc": 5}
     loaded.sort(key=lambda sp: (order.get(sp[0].kind, 9), sp[0].name))
     _CACHE[key] = loaded
     return loaded
