@@ -30,6 +30,7 @@ from src import config
 
 # step name -> (module, kwargs for a full run, kwargs for a quick run)
 STEPS: dict[str, tuple[str, dict, dict]] = {
+    # --- data side -------------------------------------------------------------------------
     "data": ("src.data_io", {}, {"benchmark": False}),
     "audit": ("src.audit", {}, {}),
     "sql": ("src.database", {}, {"rebuild": False}),
@@ -37,34 +38,38 @@ STEPS: dict[str, tuple[str, dict, dict]] = {
     "leakage": ("src.leakage", {}, {}),
     "text_prep": ("src.text_prep", {}, {}),
     "baseline": ("src.baseline", {}, {}),
+    # --- own tokenizer + tiny transformer, e5 ----------------------------------------------
     "tokenizer": ("src.bpe_tokenizer", {}, {}),
-    "tiny": ("src.tiny_transformer", {}, {}),
-    "e5": ("src.finetune_e5", {}, {}),
+    "tiny": ("src.tiny_transformer", {}, {}),     # loss search, 2L/4L x d128/d256, dropout, 4k vocab
     "seeds": ("src.tiny_transformer:run_seed_study", {}, {}),   # 3-seed variance of the tiny model
-    "mlm": ("src.mlm_pretrain", {}, {}),          # optional extension: MLM-pretrained tiny transformer
+    "mlm": ("src.mlm_pretrain", {}, {}),          # MLM-pretrained tiny transformer
+    "e5": ("src.finetune_e5", {}, {}),            # frozen e5 + LR, e5 fine-tuning (= KD teacher)
     "distill": ("src.distill", {}, {}),           # KD e5 -> tiny transformer, recency weighting
-    "e5_variants": ("src.finetune_e5:run_5ep", {}, {}),   # e5 up to 5 epochs + early stopping
-    "refit": ("src.distill:run_refits", {}, {}),          # train+val refit of the val-best tiny model
-    "refit_e5": ("src.finetune_e5:refit_trainval", {}, {}),  # ... and of the val-best e5 variant
-    "posthoc": ("src.posthoc", {}, {}),           # prior-shift adjustment + ensembles (full runs only)
-    "benchmark": ("src.benchmark", {}, {}),
+    "refit": ("src.distill:run_refits", {}, {}),  # train+val refit of the val-best tiny model
+    # --- research modules: vocabulary pruning, mT5 seq2seq, model survey, Kazakh RoBERTa -----
+    "prep_ablation": ("src.prep_ablation", {}, {}),
+    "vocab_prune": ("src.vocab_prune", {}, {}),
+    "seq2seq": ("src.seq2seq_mt5", {}, {}),
+    "survey": ("src.model_survey", {}, {"finetune_model": False}),
+    # val-selected kaz-roberta improvements: LLRD, <=5 epochs + early stopping, class-weighted / smoothed CE,
+    # recency weights, train+val refit (GPU, ~20 min per task)
+    "roberta_tune": ("src.roberta_tune:run_all", {}, {}),
+    # KazBERT fine-tune (kaz-roberta recipe) + kaz-roberta as KD teacher for the tiny transformer and
+    # the vocabulary-pruned e5-small (GPU, ~25 min; needs the kaz-roberta teachers; skipped in --quick)
+    "distill_roberta": ("src.distill_roberta", {}, {}),
+    # LLM teacher feasibility (Qwen3-1.7B-Base + LoRA; Sherkala-8B is gated): LoRA teacher + val/test
+    # logging only - it lost to kaz-roberta on val, so KD was not run (GPU ~13 min per task, ~4 GB
+    # download; skipped in --quick)
+    "llm_teacher": ("src.llm_teacher", {"tasks": ("form", "area"), "stage": "teacher"}, {}),
+    # --- post-hoc, measurement, reporting ----------------------------------------------------
+    "posthoc": ("src.posthoc", {}, {}),           # prior-shift adjustment + ensembles (needs kaz-roberta cache)
+    "benchmark": ("src.benchmark", {"select": "main"}, {}),   # same protocol, main-table models only
     "compare": ("src.compare", {}, {}),
     "errors": ("src.error_analysis", {}, {}),
     "predict": ("src.predict", {}, {}),
     # refresh results/sql/*.csv so the SQL query outputs include the final experiment tables
     "sql_final": ("src.database:run_queries", {}, {}),
 }
-# Research track (data agent), appended: preprocessing ablation, Kazakh vocabulary pruning
-# of e5-small, mT5-small seq2seq label generation, Kazakh encoder survey. GPU steps should be
-# run under the shared lock: flock .gpu.lock .venv/bin/python run_pipeline.py --steps ...
-STEPS["prep_ablation"] = ("src.prep_ablation", {}, {})
-STEPS["vocab_prune"] = ("src.vocab_prune", {}, {})
-STEPS["seq2seq"] = ("src.seq2seq_mt5", {}, {})
-STEPS["survey"] = ("src.model_survey", {}, {"finetune_model": False})
-# val-selected kaz-roberta improvements: LLRD, <=5 epochs + early stopping, class-weighted / smoothed CE,
-# recency weights, train+val refit (GPU, ~20 min per task)
-STEPS["roberta_tune"] = ("src.roberta_tune:run_all", {}, {})
-STEPS["sql_final"] = STEPS.pop("sql_final")      # keep the SQL refresh as the very last step
 # Outputs that let quick mode skip an expensive, already-completed data step.
 DONE_MARKERS = {
     "data": config.PROCESSED_DIR / "READY",
@@ -93,6 +98,7 @@ def redirect_outputs(quick_dir: Path) -> None:
         setattr(config, attr, target)
     config.DB_PATH = quick_dir / "kazlaw_quick.db"
     os.environ["KAZLAW_DB"] = str(config.DB_PATH)          # read by src.model_utils
+    os.environ["KAZLAW_RUNS_DIR"] = str(quick_dir / "runs")  # TensorBoard logs of quick runs
     for name in ("test_strict_ids.csv", "token_lengths.json", "tiny_transformer_loss_search.csv"):
         if (real_results / name).exists():
             shutil.copy(real_results / name, config.RESULTS_DIR / name)

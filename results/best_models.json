@@ -1,81 +1,168 @@
 {
   "area": {
-    "baseline": {
-      "model_name": "char_1nn",
-      "f1_val": 0.5555,
-      "f1_test": 0.5363
+    "baseline/tfidf": {
+      "model_name": "tfidf_word_char_lr",
+      "f1_val": 0.5985,
+      "val_split": "val",
+      "f1_test": 0.5827
     },
-    "posthoc": {
+    "ensemble": {
       "model_name": "ensemble_tfidf_tiny_e5_roberta",
       "f1_val": 0.6407,
+      "val_split": "val_half_b",
       "f1_test": 0.6215
     },
-    "pretrained": {
+    "posthoc": {
+      "model_name": "tiny_transformer_4L_recency_tau8_prioradj",
+      "f1_val": 0.6386,
+      "val_split": "val_half_b",
+      "f1_test": 0.5836
+    },
+    "pretrained e5": {
+      "model_name": "e5_small_ft",
+      "f1_val": 0.5836,
+      "val_split": "val",
+      "f1_test": 0.601
+    },
+    "pretrained kaz-roberta": {
       "model_name": "kaz_roberta_llrd_rec",
       "f1_val": 0.6162,
+      "val_split": "val",
       "f1_test": 0.6285
     },
     "pretrained_frozen": {
       "model_name": "e5_frozen_lr",
       "f1_val": 0.5277,
+      "val_split": "val",
       "f1_test": 0.5324
     },
-    "tfidf": {
-      "model_name": "tfidf_word_char_lr",
-      "f1_val": 0.5985,
-      "f1_test": 0.5827
+    "tiny (from scratch)": {
+      "model_name": "tiny_transformer_4L_do30",
+      "f1_val": 0.5907,
+      "val_split": "val",
+      "f1_test": 0.5798
     },
-    "tiny_transformer": {
+    "tiny + KD (kaz-roberta teacher)": {
+      "model_name": "tiny_transformer_4L_mlm_kdrob_a50_T2",
+      "f1_val": 0.5967,
+      "val_split": "val",
+      "f1_test": 0.5979
+    },
+    "tiny + KD (teacher e5)": {
+      "model_name": "tiny_transformer_4L_kd_a50_T2",
+      "f1_val": 0.5975,
+      "val_split": "val",
+      "f1_test": 0.581
+    },
+    "tiny + MLM": {
+      "model_name": "tiny_transformer_4L_mlm",
+      "f1_val": 0.5857,
+      "val_split": "val",
+      "f1_test": 0.5921
+    },
+    "tiny + MLM + KD (teacher e5)": {
+      "model_name": "tiny_transformer_4L_mlm_kd_a50_T2",
+      "f1_val": 0.5922,
+      "val_split": "val",
+      "f1_test": 0.5974
+    },
+    "tiny + recency weighting": {
       "model_name": "tiny_transformer_4L_recency_tau8",
       "f1_val": 0.6003,
+      "val_split": "val",
       "f1_test": 0.5832
     },
     "_overall": {
-      "model_name": "ensemble_tfidf_tiny_e5_roberta",
-      "f1_val": 0.6407,
-      "f1_test": 0.6215
+      "model_name": "kaz_roberta_llrd_rec",
+      "f1_val": 0.6162,
+      "val_split": "val",
+      "f1_test": 0.6285
     }
   },
   "form": {
-    "baseline": {
-      "model_name": "char_1nn",
-      "f1_val": 0.6747,
-      "f1_test": 0.6697
+    "baseline/tfidf": {
+      "model_name": "tfidf_word_char_lr",
+      "f1_val": 0.8576,
+      "val_split": "val",
+      "f1_test": 0.8202
     },
-    "posthoc": {
-      "model_name": "kaz_roberta_llrd_rec_prioradj",
-      "f1_val": 0.9342,
-      "f1_test": 0.8434
+    "ensemble": {
+      "model_name": "ensemble_tfidf_tiny_e5_roberta",
+      "f1_val": 0.9314,
+      "val_split": "val_half_b",
+      "f1_test": 0.8497
     },
-    "pretrained": {
+    "pretrained e5": {
+      "model_name": "e5_small_ft",
+      "f1_val": 0.8656,
+      "val_split": "val",
+      "f1_test": 0.8415
+    },
+    "pretrained kaz-roberta": {
       "model_name": "kaz_roberta_llrd_rec",
       "f1_val": 0.8978,
+      "val_split": "val",
       "f1_test": 0.8414
     },
     "pretrained_frozen": {
       "model_name": "e5_frozen_lr",
       "f1_val": 0.6634,
+      "val_split": "val",
       "f1_test": 0.6992
     },
     "seq2seq": {
       "model_name": "mt5_small_kkprune_text",
       "f1_val": 0.8213,
+      "val_split": "val",
       "f1_test": 0.791
     },
-    "tfidf": {
-      "model_name": "tfidf_word_char_lr",
-      "f1_val": 0.8576,
-      "f1_test": 0.8202
+    "tiny (from scratch)": {
+      "model_name": "tiny_transformer_2L_d128",
+      "f1_val": 0.8405,
+      "val_split": "val",
+      "f1_test": 0.8099
     },
-    "tiny_transformer": {
+    "tiny + KD (kaz-roberta teacher)": {
+      "model_name": "tiny_transformer_4L_mlm_kdrob_a50_T2",
+      "f1_val": 0.8683,
+      "val_split": "val",
+      "f1_test": 0.8273
+    },
+    "tiny + KD (teacher e5)": {
       "model_name": "tiny_transformer_4L_kd_a90_T2",
       "f1_val": 0.8716,
+      "val_split": "val",
       "f1_test": 0.7992
     },
+    "tiny + MLM": {
+      "model_name": "tiny_transformer_4L_mlm",
+      "f1_val": 0.8514,
+      "val_split": "val",
+      "f1_test": 0.8188
+    },
+    "tiny + MLM + KD (teacher e5)": {
+      "model_name": "tiny_transformer_4L_mlm_kd_a90_T2",
+      "f1_val": 0.8647,
+      "val_split": "val",
+      "f1_test": 0.8252
+    },
+    "tiny + recency weighting": {
+      "model_name": "tiny_transformer_4L_recency_tau8",
+      "f1_val": 0.8443,
+      "val_split": "val",
+      "f1_test": 0.7921
+    },
+    "tiny tokenizer ablation": {
+      "model_name": "tiny_transformer_4L_bpe4k",
+      "f1_val": 0.8511,
+      "val_split": "val",
+      "f1_test": 0.7799
+    },
     "_overall": {
-      "model_name": "kaz_roberta_llrd_rec_prioradj",
-      "f1_val": 0.9342,
-      "f1_test": 0.8434
+      "model_name": "kaz_roberta_llrd_rec",
+      "f1_val": 0.8978,
+      "val_split": "val",
+      "f1_test": 0.8414
     }
   }
 }

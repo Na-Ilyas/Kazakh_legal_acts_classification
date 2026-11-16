@@ -28,6 +28,9 @@ REPORT_MD = config.RESULTS_DIR / "error_analysis.md"
 NN_SIM_PARQUET = config.PROCESSED_DIR / "nn_similarity.parquet"   # max char-ngram cosine to train (src.leakage)
 PER_CLASS_CSV = config.RESULTS_DIR / "per_class_metrics.csv"
 FAMILY_ORDER = ["baseline", "tfidf", "pretrained_frozen", "tiny_transformer", "pretrained", "posthoc"]
+# Comparison groups analysed (same grouping as the main table of src.compare): the val-best model of each.
+ANALYSED_GROUPS = ["baseline/tfidf", "pretrained_frozen", "tiny (from scratch)", "tiny + MLM + KD (teacher e5)",
+                   "pretrained e5", "pretrained kaz-roberta", "ensemble"]
 FAMILY_LABEL = {"baseline": "baseline", "tfidf": "TF-IDF+LR", "pretrained_frozen": "e5 frozen+LR",
                 "tiny_transformer": "tiny transformer", "pretrained": "e5-small fine-tuned",
                 "posthoc": "ensemble / prior-adjusted"}
@@ -165,21 +168,26 @@ def has_table(con: sqlite3.Connection, name: str) -> bool:
 
 
 def select_models(con: sqlite3.Connection, quick: bool = False) -> pd.DataFrame:
-    """Best model (by VAL macro-F1) per task and family, with the exp_id of its test row."""
+    """Best model (by VAL macro-F1) per task and comparison group, with the exp_id of its test row."""
+    from src.compare import model_group
     exps = pd.read_sql_query("SELECT exp_id, model_name, model_family, task, eval_split, f1_macro "
                              "FROM experiments", con)
     exps = exps[~exps["model_name"].str.endswith("_trainval")]   # refits trained on val: not selectable
     is_quick = exps["model_name"].str.endswith(QUICK_SUFFIX)
     exps = exps[is_quick | exps["model_family"].isin(["baseline", "tfidf"])] if quick else exps[~is_quick]
-    val = exps[exps["eval_split"] == "val"]
+    # single models: full val; ensembles / post-hoc: their only val score is on val half B, which is
+    # used to pick the best variant inside their own group only (never compared with singles)
+    val = exps[exps["eval_split"].isin(["val", "val_half_b"])].copy()
+    val["group"] = [model_group(m, f) for m, f in zip(val["model_name"], val["model_family"])]
+    val = val[val["group"].isin(ANALYSED_GROUPS) & (val["model_name"] != "majority_dummy")]
     test = exps[exps["eval_split"] == "test"][["model_name", "task", "exp_id", "f1_macro"]]
     test = test.rename(columns={"f1_macro": "f1_test", "exp_id": "test_exp_id"})
-    best = (val.sort_values("f1_macro", ascending=False).groupby(["task", "model_family"]).head(1)
+    best = (val.sort_values("f1_macro", ascending=False).groupby(["task", "group"]).head(1)
             .rename(columns={"f1_macro": "f1_val"}).merge(test, on=["model_name", "task"]))
     n_preds = pd.read_sql_query("SELECT exp_id AS test_exp_id, COUNT(*) AS n_pred FROM predictions "
                                 "GROUP BY exp_id", con)
     best = best.merge(n_preds, on="test_exp_id")
-    best["family_rank"] = best["model_family"].map({f: i for i, f in enumerate(FAMILY_ORDER)}).fillna(99)
+    best["family_rank"] = best["group"].map({g: i for i, g in enumerate(ANALYSED_GROUPS)}).fillna(99)
     return best.sort_values(["task", "family_rank"]).reset_index(drop=True)
 
 
@@ -356,11 +364,14 @@ def analyse_task(con, task: str, models: pd.DataFrame, md: list[str], sfx: str =
     part = models[models["task"] == task]
     if part.empty:
         return {}
-    overall = part.sort_values("f1_val", ascending=False).iloc[0]
+    # ensemble/posthoc val scores are on val half B only -> not comparable with full-val scores
+    single = part[~part["group"].isin(["ensemble", "posthoc"])]
+    overall = (single if len(single) else part).sort_values("f1_val", ascending=False).iloc[0]
     md += [f"## Task `{task}`", "",
-           "Models analysed (best of each family, chosen on validation macro-F1):", ""]
-    md += _md_table(part[["model_family", "model_name", "f1_val", "f1_test"]].round(4))
-    md += ["", f"Overall best on validation: **{overall.model_name}** "
+           "Models analysed (val-best model of each comparison group, as in the main table):", ""]
+    md += _md_table(part[["group", "model_name", "f1_val", "f1_test"]].round(4))
+    md += ["", f"Overall best single model on validation (ensembles excluded: their val score is on "
+               f"val half B): **{overall.model_name}** "
                f"(val {overall.f1_val:.4f}, test {overall.f1_test:.4f}).", ""]
 
     preds_by_model = {r.model_name: load_preds(con, r.test_exp_id) for r in part.itertuples()}
@@ -368,7 +379,7 @@ def analyse_task(con, task: str, models: pd.DataFrame, md: list[str], sfx: str =
     per_class_rows, year_rows, len_rows, body_rows, sim_rows, neighbour_rows = [], [], [], [], [], []
     for r in part.itertuples():
         preds = preds_by_model[r.model_name]
-        fam = f"{FAMILY_LABEL.get(r.model_family, r.model_family)}: {r.model_name}"   # unique series label
+        fam = f"{r.group}: {r.model_name}"          # unique series label (comparison group + model)
         plot_confusion(preds, f"Task '{task}' - {r.model_name} ({fam}): normalised confusion matrix (test)",
                        config.FIGURES_DIR / f"confusion_{task}_{r.model_name}{sfx}.png", classes)
         pc = per_class_table(preds, classes)
@@ -491,7 +502,7 @@ def analyse_task(con, task: str, models: pd.DataFrame, md: list[str], sfx: str =
     tfidf = part[part["model_family"] == "tfidf"]
     if tfidf.empty:
         tfidf = part[part["model_family"] == "baseline"]
-    tiny = part[part["model_family"] == "tiny_transformer"]
+    tiny = part[part["group"] == "tiny (from scratch)"]
     if len(tfidf) and len(tiny):
         a, b = tfidf.iloc[0], tiny.iloc[0]
         ag = agreement(con, a, b, n_examples=4)

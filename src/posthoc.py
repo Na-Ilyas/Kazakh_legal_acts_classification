@@ -30,6 +30,10 @@ from src.model_utils import (compute_metrics, display_path, label_maps, load_pro
                              log_all_splits, save_json, save_probs)
 
 LAMBDAS = (0.0, 0.25, 0.5, 0.75, 1.0)
+PRIOR_PSEUDO_COUNT = 100        # shrink the half-A label distribution toward the train prior
+RATIO_CLIP = (0.5, 2.0)         # never down-/up-weight a class by more than 2x (rare classes!)
+MIN_GAIN = 0.002                # keep an adjusted variant only if it gains this much on val half B
+PARAM_BUDGET = 120_000_000      # course limit for the compact pretrained model
 TEMPERATURES = (0.5, 0.75, 1.0, 1.5, 2.0, 3.0)   # calibration of each ensemble member (val NLL)
 WEIGHT_STEP = 0.1
 FAMILY = "posthoc"
@@ -119,6 +123,17 @@ def class_freq(labels, classes: list[str]) -> np.ndarray:
     return freq / freq.sum()
 
 
+def prior_ratio(y_a, y_train, classes: list[str]) -> np.ndarray:
+    """p_target / p_train with p_target = half-A label counts shrunk toward the train prior
+    (pseudo-count PRIOR_PSEUDO_COUNT), clipped to RATIO_CLIP. A class with no half-A rows keeps
+    ratio ~1 instead of being suppressed (bug M2 of the review: ratio 0.029 zeroed a class)."""
+    p_train = class_freq(y_train, classes)
+    counts = pd.Series(list(map(str, y_a))).value_counts()
+    n_a = np.array([counts.get(c, 0) for c in classes], dtype=float)
+    p_target = (n_a + PRIOR_PSEUDO_COUNT * p_train) / (n_a.sum() + PRIOR_PSEUDO_COUNT)
+    return np.clip(p_target / p_train, *RATIO_CLIP)
+
+
 def adjust(probs: np.ndarray, ratio: np.ndarray, lam: float) -> np.ndarray:
     """p * ratio**lam, renormalised (lam = 0 -> unchanged)."""
     q = probs * ratio[None, :] ** lam
@@ -193,10 +208,13 @@ def save_and_log(task: str, model_name: str, members: list[dict], weights: np.nd
     for split in ("val", "test"):
         frame, p = frames[split], probs[split]
         save_probs(out_dir.name, split, p, frame["law_id"], classes)
-        if split == "val" and val_mask is not None:
-            frame, p = frame[val_mask], p[val_mask]
+        key = split
+        if split == "val":
+            # Only val half B is (partly) held out, and it is in-sample for lam / weights:
+            # logged as eval_split='val_half_b', never compared with full-val scores of single models.
+            frame, p, key = frame[val_mask], p[val_mask], "val_half_b"
         pred_idx = p.argmax(1)
-        preds[split] = pd.DataFrame({"law_id": frame["law_id"].astype(str).to_numpy(),
+        preds[key] = pd.DataFrame({"law_id": frame["law_id"].astype(str).to_numpy(),
                                      "y_true": frame["label"].astype(str).to_numpy(),
                                      "y_pred": np.array(classes)[pred_idx], "confidence": p.max(1)})
     costs = member_costs(task, [m["name"] for m in members])
@@ -204,6 +222,9 @@ def save_and_log(task: str, model_name: str, members: list[dict], weights: np.nd
           "lam": lam, "latency_cuda_ms_per_1000": costs.pop("latency_cuda_sum"),
           "model_dir": display_path(out_dir)}
     common = {**costs, "peak_mem_mb": None, "n_train": n_train}
+    if costs["n_params"] > PARAM_BUDGET:
+        notes = f"OUTSIDE the 120M parameter budget ({costs['n_params'] / 1e6:.0f}M) - reference only; " + notes
+        hp["outside_param_budget"] = True
     logged = log_all_splits(model_name, FAMILY, task, preds, common, hp, notes=notes)
     return {s: round(v["f1_macro"], 4) for s, v in logged.items()}
 
@@ -244,24 +265,31 @@ def run_task(task: str) -> list[dict]:
             specs.pop(k)
     y_val = frames["val"]["label"].astype(str).to_numpy()
     half_a = val_halves(frames["val"]["law_id"])
-    ratio = class_freq(y_val[half_a], classes) / class_freq(data["train"]["label"], classes)
+    ratio = prior_ratio(y_val[half_a], data["train"]["label"], classes)
     rows = []
+
+    def f1_b(p: np.ndarray) -> float:
+        """macro-F1 on val half B of a probability matrix over full val."""
+        return round(macro_f1(y_val[~half_a], np.array(classes)[p[~half_a].argmax(1)]), 4)
 
     def try_adjust(name: str, members: list[dict], weights: np.ndarray, p: dict, base_hp: dict, what: str):
         lam, search = pick_lambda(p["val"][~half_a], y_val[~half_a], ratio, classes)
-        base_b = macro_f1(y_val[~half_a], np.array(classes)[p["val"][~half_a].argmax(1)])
-        print(f"[posthoc] {task} {name}: lam={lam} (val-B F1 {base_b:.4f} -> "
-              f"{max(r['val_b_f1'] for r in search):.4f})", flush=True)
-        if lam == 0.0:
-            rows.append({"task": task, "model_name": f"{name}_prioradj", "selected_lam": 0.0,
-                         "note": "no gain on val half B -> not logged"})
+        base_b = f1_b(p["val"])
+        best_b = max(r["val_b_f1"] for r in search)
+        print(f"[posthoc] {task} {name}: lam={lam} (val-B F1 {base_b:.4f} -> {best_b:.4f})", flush=True)
+        if lam == 0.0 or best_b - base_b < MIN_GAIN:
+            rows.append({"task": task, "model_name": f"{name}_prioradj", "selected_lam": lam,
+                         "note": f"val-B gain {best_b - base_b:+.4f} < {MIN_GAIN} -> not logged"})
             return
         adj = {s: adjust(p[s], ratio, lam) for s in ("val", "test")}
         f1s = save_and_log(task, f"{name}_prioradj", members, weights, ratio, lam, classes, frames, adj,
                            ~half_a, {**base_hp, "prior_search": search, "prior_estimated_on": "val half A",
-                                     "lam_selected_on": "val half B"},
-                           f"{what} + prior-shift adjustment p*(p_val/p_train)^lam; p_val from val half A, "
-                           f"lam={lam} chosen on val half B (val row = half B only)", len(data["train"]))
+                                     "lam_selected_on": "val half B", "base_val_half_b_f1": base_b,
+                                     "prior_pseudo_count": PRIOR_PSEUDO_COUNT, "ratio_clip": list(RATIO_CLIP)},
+                           f"{what} + prior-shift adjustment p*(p_val/p_train)^lam (p_val from val half A, "
+                           f"shrunk to the train prior, ratio clipped to {list(RATIO_CLIP)}); lam={lam} chosen "
+                           f"on val half B (val_half_b row is in-sample for lam; base model there: {base_b})",
+                           len(data["train"]))
         rows.append({"task": task, "model_name": f"{name}_prioradj", "selected_lam": lam, **f1s})
 
     # 1) prior adjustment of each single model
@@ -290,13 +318,14 @@ def run_task(task: str) -> list[dict]:
         ens = {s: sum(wi * cal[k][s] for wi, k in zip(w, keys)) for s in ("val", "test")}
         name = "ensemble_" + "_".join(keys)
         hp = {"weights_selected_on": "full val", "weight_step": WEIGHT_STEP,
+              "members_val_half_b_f1": {specs[k]["name"]: f1_b(probs[k]["val"]) for k in keys},
               "member_temperatures": {specs[k]["name"]: temps[k] for k in keys},
               "temperatures_selected_on": "val NLL"}
         print(f"[posthoc] {task} {name}: weights {dict(zip(keys, [round(float(x), 2) for x in w]))} "
               f"val F1 {f1_val:.4f}", flush=True)
         f1s = save_and_log(task, name, members, w, ratio, 0.0, classes, frames, ens, ~half_a, hp,
                            f"weighted average of member probabilities ({', '.join(m['name'] for m in members)}), "
-                           f"weights {[round(float(x), 2) for x in w]} chosen on val (val row = half B, like all posthoc rows)",
+                           f"weights {[round(float(x), 2) for x in w]} chosen on full val (val_half_b row is in-sample for the weights; not comparable with single-model val)",
                            len(data["train"]))
         rows.append({"task": task, "model_name": name, "weights": [round(float(x), 2) for x in w], **f1s})
         try_adjust(name, members, w, ens, hp, "ensemble")

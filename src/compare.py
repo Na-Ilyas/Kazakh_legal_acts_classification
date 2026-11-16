@@ -25,7 +25,8 @@ COMPARISON_CSV = config.RESULTS_DIR / "model_comparison.csv"
 COMPARISON_MD = config.RESULTS_DIR / "model_comparison.md"
 BEST_JSON = config.RESULTS_DIR / "best_models.json"
 FAMILY_COLORS = {"baseline": "#b0b0b0", "tfidf": "#4d4d4d", "tiny_transformer": "#2a6fdb",
-                 "pretrained": "#d62728", "pretrained_frozen": "#e07b39", "posthoc": "#7b3fbf"}
+                 "pretrained": "#d62728", "pretrained_frozen": "#e07b39", "posthoc": "#7b3fbf",
+                 "seq2seq": "#2ca02c"}
 
 RANK_SQL = """
 WITH test_rows AS (
@@ -113,12 +114,14 @@ def build_table(rows: pd.DataFrame) -> pd.DataFrame:
     meta = (rows.assign(_o=rows["eval_split"].map(order).fillna(9)).sort_values("_o")
             .groupby(["task", "model_name"]).first())
     meta = meta[["model_family", "n_params", "size_mb", "latency_ms_per_1000", "peak_mem_mb",
-                 "train_time_s", "n_train", "hyperparams"]]
+                 "train_time_s", "n_train", "hyperparams", "exp_id"]]
     table = meta.join(f1).join(acc).reset_index()
     table["latency_cuda_ms_per_1000"] = table["hyperparams"].map(lambda h: _hp(h, "latency_cuda_ms_per_1000"))
     table["infer_ram_mb"] = table["hyperparams"].map(lambda h: _hp(h, "infer_ram_mb"))
     table = table.drop(columns="hyperparams")
-    cols = ["task", "model_name", "model_family", "f1_val", "f1_test", "f1_test_strict", "acc_test",
+    table = table.rename(columns={"exp_id": "any_exp_id"})
+    cols = ["task", "model_name", "model_family", "f1_val", "f1_val_half_b", "f1_test", "f1_test_strict",
+            "acc_test",
             "n_params", "size_mb", "latency_ms_per_1000", "latency_cuda_ms_per_1000", "peak_mem_mb",
             "infer_ram_mb", "train_time_s", "n_train"]
     for c in cols:
@@ -128,9 +131,11 @@ def build_table(rows: pd.DataFrame) -> pd.DataFrame:
     return table.reset_index(drop=True)
 
 
-def to_markdown(table: pd.DataFrame) -> str:
-    """GitHub markdown, one section per task (no extra dependency)."""
-    show = {"model_name": "model", "model_family": "family", "f1_val": "F1 val", "f1_test": "F1 test",
+def to_markdown(table: pd.DataFrame, kinds: tuple[str, ...] = ("main", "reference", "refit"),
+                header: bool = True) -> str:
+    """GitHub markdown, one section per task and table kind (no extra dependency)."""
+    show = {"model_name": "model", "group": "group", "f1_val": "F1 val", "f1_val_half_b": "F1 val½B",
+            "f1_test": "F1 test", "test_ci": "test 95% CI", "delta_tfidf": "Δ vs TF-IDF [95% CI]",
             "f1_test_strict": "F1 test_strict", "acc_test": "acc test", "n_params": "params",
             "size_mb": "size MB", "latency_ms_per_1000": "CPU ms/1000", "latency_cuda_ms_per_1000": "GPU ms/1000",
             "peak_mem_mb": "train peak MB", "infer_ram_mb": "infer RAM MB", "train_time_s": "train s"}
@@ -143,20 +148,32 @@ def to_markdown(table: pd.DataFrame) -> str:
              "adjustment): F1 val is measured on val half B only (half A estimated the class prior), and "
              "latency/size/params cover all member models. `*_trainval` = refit on train+val with the "
              "val-selected config: its F1 val is NOT a held-out score and it is never selected on val. "
-             "Main table = best model of each family on validation (+ the from-scratch tiny_transformer_4L "
-             "and the majority floor); every other variant is listed in the ablation table.", ""]
-    groups = [(task, kind, part) for (task, kind), part in
-              table.groupby(["task", "table"], sort=False)] if "table" in table else \
-        [(task, "main", part) for task, part in table.groupby("task", sort=False)]
-    for task, kind, part in sorted(groups, key=lambda g: (g[0], g[1] != "main")):
-        title = (f"## Task `{task}`: main models" if kind == "main" else
-                 f"### Task `{task}`: ablations and other variants")
+             "Main table = the val-best variant of every group (baseline/tfidf, tiny transformer, "
+             "e5, kaz-roberta, other pretrained, frozen e5, seq2seq, ensemble, posthoc) + fixed "
+             "references (tiny_transformer_4L, majority floor, e5_small_ft, pruned models, mT5); "
+             "every other variant is in `results/ablations.md`. CIs: paired bootstrap over test rows "
+             f"({N_BOOT} resamples); Δ = macro-F1 minus the val-best TF-IDF model of the task, `tie` when "
+             "its 95% CI contains 0. Ensembles / prior-adjusted models are listed separately as reference: "
+             "their only val score is on val half B, which is in-sample for their weights/λ, so they are "
+             "never ranked against single models on validation.", ""] if header else []
+    titles = {"main": "## Task `{t}`: main models (val-best variant per group)",
+              "reference": "### Task `{t}`: ensembles and post-hoc adjustment - REFERENCE ONLY (no held-out "
+                           "val: F1 val½B is in-sample for weights/λ; ensembles exceed the 120M budget)",
+              "refit": "### Task `{t}`: refits on train+val (no held-out val score, never selected on val)",
+              "ablation": "## Task `{t}`: ablations and other variants"}
+    groups = [(task, kind, part) for (task, kind), part in table.groupby(["task", "table"], sort=False)
+              if kind in kinds]
+    for task, kind, part in sorted(groups, key=lambda g: (g[0], kinds.index(g[1]))):
+        part = part.sort_values("f1_test", ascending=False)
+        title = titles[kind].format(t=task)
         lines += [title, "", "| " + " | ".join(show.values()) + " |", "|" + "---|" * len(show)]
         for _, r in part.iterrows():
             cells = []
             for col in show:
-                v = r[col]
-                if isinstance(v, float) and np.isnan(v) or v is None:
+                v = r[col] if col in r else None
+                if col == "model_name" and r.get("n_params", 0) and r["n_params"] > PARAM_BUDGET:
+                    v = f"{v} (>120M, reference)"
+                if v is None or isinstance(v, float) and np.isnan(v):
                     cells.append("–")
                 elif col.startswith(("f1", "acc")):
                     cells.append(f"{v:.4f}")
@@ -172,26 +189,145 @@ def to_markdown(table: pd.DataFrame) -> str:
 
 
 # always in the main table: from-scratch tiny reference, majority floor, the required e5 fine-tune and
-# the research agent's compact pretrained models (Kazakh RoBERTa, vocabulary-pruned e5/RoBERTa, mT5)
+# the compact pretrained models of the research module (Kazakh RoBERTa, vocabulary-pruned e5/RoBERTa, mT5)
 MAIN_REFERENCE = {"tiny_transformer_4L", "majority_dummy", "e5_small_ft", "kaz_roberta_ft",
                   "kaz_roberta_kkprune_ft", "e5_small_kkprune_ft", "mt5_small_kkprune_text"}
 REFIT_SUFFIX = "_trainval"    # refits on train+val: their val score is not held-out -> never selected on it
+ABLATIONS_MD = config.RESULTS_DIR / "ablations.md"
+POSTHOC_GROUPS = ("ensemble", "posthoc")       # val only on half B (in-sample for weights/lam)
+NON_MAIN_GROUPS = ("tiny tokenizer ablation",)  # always listed with the ablations
+PARAM_BUDGET = 120_000_000
+
+
+def model_group(name: str, family: str) -> str:
+    """Comparison group = family, except: baseline+tfidf form one group, 'pretrained' is split by
+    backbone (e5 / kaz-roberta / kazbert / other) and 'posthoc' into ensembles vs. adjusted singles.
+    Families logged later by other modules automatically become their own group."""
+    n = str(name).lower()
+    if family in ("baseline", "tfidf"):
+        return "baseline/tfidf"
+    if family == "tiny_transformer":            # headline from-scratch row vs. teacher / MLM variants
+        if "kdllm" in n:
+            return "tiny + KD (LLM teacher)"
+        if "kdrob" in n:
+            return "tiny + KD (kaz-roberta teacher)"
+        if "_mlm" in n and "_kd" in n:
+            return "tiny + MLM + KD (teacher e5)"
+        if "_kd" in n:
+            return "tiny + KD (teacher e5)"
+        if "_mlm" in n:
+            return "tiny + MLM"
+        if "recency" in n:
+            return "tiny + recency weighting"
+        if "_bpe" in n:
+            return "tiny tokenizer ablation"
+        return "tiny (from scratch)"
+    if family == "pretrained":
+        if "roberta" in n:
+            return "pretrained kaz-roberta"
+        if "kazbert" in n:
+            return "pretrained kazbert"
+        if n.startswith("e5"):
+            return "pretrained e5"
+        return "pretrained other"
+    if family == "posthoc":
+        return "ensemble" if n.startswith("ensemble") else "posthoc"
+    return str(family)
 
 
 def mark_main(table: pd.DataFrame) -> pd.DataFrame:
-    """Column `table` = 'main' for the best model of each family on VAL (plus the from-scratch
-    tiny_transformer_4L reference and the majority floor), 'ablation' for every other variant."""
+    """Columns `group` and `table`: 'main' = the val-best variant of every group per task (+ the
+    references above), 'refit' = *_trainval rows (no held-out val score, never selected on val),
+    'ablation' = every other variant."""
     table = table.copy()
-    selectable = table[~table["model_name"].str.endswith(REFIT_SUFFIX)]     # refits saw val
-    best = (selectable.dropna(subset=["f1_val"]).sort_values("f1_val", ascending=False)
-            .groupby(["task", "model_family"]).head(1))
+    table["group"] = [model_group(m, f) for m, f in zip(table["model_name"], table["model_family"])]
+    is_refit = table["model_name"].str.endswith(REFIT_SUFFIX)
+    is_post = table["group"].isin(POSTHOC_GROUPS)
+    # selection score: full-val F1 for single models; for posthoc/ensembles (no held-out val) the
+    # val-half-B F1, used ONLY to pick the best variant inside their own group
+    table["select_score"] = np.where(is_post, table["f1_val_half_b"], table["f1_val"])
+    selectable = table[~is_refit & ~table["group"].isin(NON_MAIN_GROUPS)].dropna(subset=["select_score"])
+    best = selectable.sort_values("select_score", ascending=False).groupby(["task", "group"]).head(1)
     main_keys = set(zip(best["task"], best["model_name"]))
-    # a train+val refit of a main model is shown next to it in the main table
-    main_keys |= {(t, m) for t, m in zip(table["task"], table["model_name"])
-                  if m.endswith(REFIT_SUFFIX) and (t, m[:-len(REFIT_SUFFIX)]) in main_keys}
-    table["table"] = [("main" if (t, m) in main_keys or m in MAIN_REFERENCE else "ablation")
-                      for t, m in zip(table["task"], table["model_name"])]
+    kinds = []
+    for t, m, r, post in zip(table["task"], table["model_name"], is_refit, is_post):
+        if r:
+            kinds.append("refit")
+        elif (t, m) in main_keys or m in MAIN_REFERENCE:
+            kinds.append("reference" if post else "main")
+        else:
+            kinds.append("ablation")
+    table["table"] = kinds
     return table
+
+
+# --------------------------------------------------------------------------
+# Paired bootstrap confidence intervals (test split)
+# --------------------------------------------------------------------------
+N_BOOT = 1000
+
+
+def _weighted_macro_f1(yt: np.ndarray, yp: np.ndarray, w: np.ndarray, n_cls: int) -> float:
+    """Macro-F1 over the classes present (weight > 0) in y_true, with per-row weights (bootstrap counts)."""
+    correct = yt == yp
+    tp = np.bincount(yt[correct], weights=w[correct], minlength=n_cls)
+    support = np.bincount(yt, weights=w, minlength=n_cls)
+    pred = np.bincount(yp, weights=w, minlength=n_cls + 1)[:n_cls]
+    denom = 2 * tp + (pred - tp) + (support - tp)
+    f1 = np.where(denom > 0, 2 * tp / np.maximum(denom, 1e-12), 0.0)
+    present = support > 0
+    return float(f1[present].mean())
+
+
+def bootstrap_cis(table: pd.DataFrame, n_boot: int = N_BOOT) -> pd.DataFrame:
+    """95% CIs of test macro-F1 for the main / reference / refit models and of their difference to
+    the val-best TF-IDF model of the task (paired: the same resampled test rows for every model)."""
+    rng = np.random.default_rng(config.SEED)
+    shown = table[table["table"].isin(["main", "reference", "refit"])]
+    out = []
+    with experiments_db.connect() as con:
+        for task, part in shown.groupby("task"):
+            base_rows = part[(part["group"] == "baseline/tfidf") & (part["model_name"] != "majority_dummy")]
+            if base_rows.empty:
+                continue
+            base = base_rows.sort_values("select_score", ascending=False).iloc[0]["model_name"]
+            preds = {}
+            for name in part["model_name"]:
+                df = pd.read_sql_query(
+                    "SELECT p.law_id, p.y_true, p.y_pred FROM predictions p JOIN experiments e "
+                    "ON e.exp_id = p.exp_id WHERE e.model_name=? AND e.task=? AND e.eval_split='test'",
+                    con, params=(name, task))
+                if len(df):
+                    preds[name] = df.set_index("law_id")
+            if base not in preds:
+                continue
+            common = preds[base].index
+            for df in preds.values():
+                common = common.intersection(df.index)
+            y_true = preds[base].loc[common, "y_true"].astype(str)
+            classes = sorted(set(y_true))
+            idx = {c: i for i, c in enumerate(classes)}
+            yt = y_true.map(idx).to_numpy()
+            yps = {m: df.loc[common, "y_pred"].astype(str).map(lambda c: idx.get(c, len(classes))).to_numpy()
+                   for m, df in preds.items()}
+            n, k = len(common), len(classes)
+            point = {m: _weighted_macro_f1(yt, yp, np.ones(n), k) for m, yp in yps.items()}
+            boots = {m: np.empty(n_boot) for m in yps}
+            for b in range(n_boot):
+                w = np.bincount(rng.integers(0, n, n), minlength=n).astype(float)
+                for m, yp in yps.items():
+                    boots[m][b] = _weighted_macro_f1(yt, yp, w, k)
+            for m in yps:
+                d = boots[m] - boots[base]
+                lo, hi = np.percentile(boots[m], [2.5, 97.5])
+                dlo, dhi = np.percentile(d, [2.5, 97.5])
+                out.append({"task": task, "model_name": m, "baseline": base, "n_test_common": n,
+                            "f1_test_boot": round(point[m], 4), "ci_low": round(lo, 4), "ci_high": round(hi, 4),
+                            "delta_vs_tfidf": round(point[m] - point[base], 4), "delta_ci_low": round(dlo, 4),
+                            "delta_ci_high": round(dhi, 4),
+                            "verdict": ("baseline" if m == base else "tie" if dlo <= 0 <= dhi
+                                        else "better" if dlo > 0 else "worse")})
+    return pd.DataFrame(out)
 
 
 def seed_section() -> list[str]:
@@ -216,16 +352,20 @@ def seed_section() -> list[str]:
 
 
 def best_models(table: pd.DataFrame) -> dict:
-    """Best model per task and family, selected on VALIDATION macro-F1 (never on test)."""
+    """Best model per task and comparison group, selected on VALIDATION macro-F1 (never on test)."""
     out: dict = {}
     table = table[~table["model_name"].str.endswith(REFIT_SUFFIX)]
-    for (task, fam), part in table.dropna(subset=["f1_val"]).groupby(["task", "model_family"]):
-        best = part.sort_values("f1_val", ascending=False).iloc[0]
-        out.setdefault(task, {})[fam] = {"model_name": best["model_name"], "f1_val": round(best["f1_val"], 4),
+    if "group" not in table:
+        table = mark_main(table)
+    for (task, fam), part in table.dropna(subset=["select_score"]).groupby(["task", "group"]):
+        best = part.sort_values("select_score", ascending=False).iloc[0]
+        out.setdefault(task, {})[fam] = {"model_name": best["model_name"],
+                                         "f1_val": round(best["select_score"], 4),
+                                         "val_split": "val_half_b" if fam in POSTHOC_GROUPS else "val",
                                          "f1_test": None if pd.isna(best["f1_test"]) else round(best["f1_test"], 4)}
-    for task, fams in out.items():
-        overall = max(fams.values(), key=lambda d: d["f1_val"])
-        out[task]["_overall"] = overall
+    for task, fams in out.items():           # overall best single model (half-B scores not comparable)
+        singles = [d for d in fams.values() if d["val_split"] == "val"]
+        out[task]["_overall"] = max(singles or list(fams.values()), key=lambda d: d["f1_val"])
     return out
 
 
@@ -239,7 +379,7 @@ def _plt():
     return plt
 
 
-HIGHLIGHT_EXTRA = {"tiny_transformer_2L_d128", "tfidf_word_lr"}   # smallest tiny / fastest TF-IDF
+BUBBLE_TINY_GROUPS = ("tiny (from scratch)", "tiny + MLM + KD (teacher e5)")   # labelled tiny rows
 
 
 def short_name(name: str) -> str:
@@ -261,8 +401,14 @@ def plot_bubble(table: pd.DataFrame, path) -> None:
         part = table[(table["task"] == task) & table["latency_ms_per_1000"].notna()
                      & ~table["model_name"].str.contains("dummy")].sort_values("latency_ms_per_1000")
         # Label only the informative points; other ablation variants are faint context dots.
-        best = part.sort_values("f1_val", ascending=False).groupby("model_family").head(1)["model_name"]
-        highlight = set(best) | HIGHLIGHT_EXTRA
+        highlight = (set(part.loc[part["table"] == "main", "model_name"]) if "table" in part
+                     else set(part["model_name"]))
+        highlight -= {"majority_dummy"}
+        if "group" in part:               # readability: only the two headline tiny rows get a label
+            tiny = part[part["group"].str.startswith("tiny") & part["model_name"].isin(highlight)]
+            keep = set(tiny[tiny["group"].isin(BUBBLE_TINY_GROUPS)].sort_values("select_score", ascending=False)
+                       .groupby("group").head(1)["model_name"])
+            highlight -= set(tiny["model_name"]) - keep
         others = part[~part["model_name"].isin(highlight)]
         ax.scatter(others["latency_ms_per_1000"], others["f1_test"], s=25, alpha=0.25,
                    color=[FAMILY_COLORS.get(f, "#555555") for f in others["model_family"]])
@@ -281,7 +427,7 @@ def plot_bubble(table: pd.DataFrame, path) -> None:
         ax.set_xlabel("CPU latency, ms per 1000 titles (log scale, 8 threads, batch 64)")
         ax.set_ylabel("macro-F1 on test (>=2023)")
         ax.set_title(f"Task '{task}': quality vs speed (bubble area ~ #params)\n"
-                     "labelled: best per family on val + smallest tiny + fastest TF-IDF; faint = other variants",
+                     "labelled: main-table models (tiny: from-scratch + MLM+KD student only); faint = others",
                      fontsize=10)
         ax.grid(alpha=0.3, which="both")
         if len(part):
@@ -358,9 +504,28 @@ def run(quick: bool = False, force_strict: bool = False) -> dict:
         return {"n_models": 0}
     table = mark_main(build_table(rows))
     try:
+        cis = bootstrap_cis(table) if not quick else pd.DataFrame()
+    except Exception as exc:                   # CIs are an add-on: never block the comparison
+        print(f"[compare] bootstrap CIs skipped: {exc}")
+        cis = pd.DataFrame()
+    if len(cis):
+        cis.to_csv(config.RESULTS_DIR / "bootstrap_ci.csv", index=False)
+        ci = cis.set_index(["task", "model_name"])
+        key = list(zip(table["task"], table["model_name"]))
+        table["test_ci"] = [f"[{ci.loc[k, 'ci_low']:.3f}, {ci.loc[k, 'ci_high']:.3f}]" if k in ci.index else None
+                            for k in key]
+        table["delta_tfidf"] = [
+            (f"{ci.loc[k, 'delta_vs_tfidf']:+.3f} [{ci.loc[k, 'delta_ci_low']:+.3f}, {ci.loc[k, 'delta_ci_high']:+.3f}]"
+             f" {ci.loc[k, 'verdict']}") if k in ci.index else None for k in key]
+    try:
         table.to_csv(COMPARISON_CSV.with_name(f"model_comparison{sfx}.csv"), index=False)
         md = to_markdown(table) + "\n" + "\n".join(seed_section() if not quick else [])
         COMPARISON_MD.with_name(f"model_comparison{sfx}.md").write_text(md, encoding="utf-8")
+        abl = ("# Ablations and other variants\n\nEvery logged variant that is not the val-best of its "
+               "group (see `results/model_comparison.md` for the main table). Columns as in the main table; "
+               "latency of ablations = measured at training time with the same protocol.\n\n"
+               + to_markdown(table, kinds=("ablation",), header=False))
+        ABLATIONS_MD.with_name(f"ablations{sfx}.md").write_text(abl, encoding="utf-8")
         with experiments_db.connect() as con:
             ranking = pd.read_sql_query(RANK_SQL, con)
         keep = ranking["model_name"].isin(set(table["model_name"]))

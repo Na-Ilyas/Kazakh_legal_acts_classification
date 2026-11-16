@@ -241,11 +241,47 @@ Two improvements on top:
 
 ## 10. Software implementation
 
-<!-- SOFTWARE -->
+The project is a Python 3.12 package (`src/`) with one module per concern. Each module exposes `run()` and can be run on its own with `python -m src.<module>`. The two entry points are an interactive console menu (`main.py`) and a non-interactive pipeline runner (`run_pipeline.py --steps all`, plus a `--quick` smoke-test mode that writes to a temporary folder).
+
+| # | Course requirement | Implementation |
+|---|---|---|
+| 1 | ≥ 5 functions | every module is split into small documented functions (e.g. `labels.normalize_title`, `labels.primary_form`, `labels.assign_split`, `metrics.compute_metrics`, `experiments_db.log_experiment`) |
+| 2 | lists / dicts | label maps, menu registry (`MENU` dict), pipeline step registry (`STEPS` dict), per-model result dicts |
+| 3 | if / elif / else | label hierarchy, menu dispatch, early stopping, input validation |
+| 4 | loops | chunked CSV streaming, training loops, the menu `while` loop, the prediction loop |
+| 5 | file I/O | CSV, Parquet, JSON results, SQLite, model checkpoints |
+| 6 | try / except | user input (`main.py`), downloads and Parquet writes (`data_io.py`), model loading (`inference.py`), SQLite access |
+| 7 | user interface | console menu with 13 actions, including "classify your own title" |
+| 8 | modularity | about 30 modules in `src/`, standard library `pathlib`, `json`, `datetime`, `os`, `argparse`, `sqlite3` |
+| 9 | comparison of approaches | baseline vs TF-IDF vs tiny transformer vs pretrained models; CSV vs Parquet; word vs stem vs char n-grams; quality, time and memory measured |
+| 10 | SQLite + SQL | normalized schema, ER diagram, 17 queries (Section 3) |
+| 11 | large data | chunked reading, dtype optimization with memory measurement, Parquet (Section 2.2) |
+
+**Engineering practices:**
+
+- Shared contract modules (`config.py`, `labels.py`, `metrics.py`, `experiments_db.py`) guarantee that every model uses the same splits, labels and metric.
+- All experiment results live in one SQLite table, so the comparison tables and figures are regenerated from the database, never typed by hand.
+- Fixed seed (42).
+- The development history is preserved in git.
 
 ## 11. Limitations
 
-<!-- LIMITS -->
+- **Validation is a weak proxy for the test years.** The 2022 validation year sits between train and test in its class mix, so variants that win on val sometimes lose on test. Example: kaz-roberta with layer-wise LR decay and recency weighting has the best form val score (0.898) but a lower test score than the plain fine-tune. We kept the val-selection rule and report the variants side by side instead of picking winners on test.
+- **Small classes make macro-F1 noisy.** The form class Басқа has 26 test titles, and several area classes have fewer than 20. One prediction can move macro-F1 by several tenths of a point. A paired bootstrap over test rows (300 resamples) gives the following:
+  - Per-model 95 % CIs of about ±0.027 on the form task (e5-small fine-tuned: [0.814, 0.867]).
+  - kaz-roberta beats e5-small by +0.011 [+0.001, +0.022], which is barely significant.
+  - On the area task, TF-IDF and the 4-layer tiny transformer are statistically tied: −0.0005 [−0.014, +0.012].
+
+  We therefore read differences below about 0.01–0.02 as ties.
+- **Seed variance.** Most configurations were trained once (seed 42). A 3-seed study of the tiny transformer (`results/tiny_transformer_seed_study.csv`) shows a substantial spread across seeds 1–3:
+  - 4-layer, form: test macro-F1 0.779–0.802.
+  - 2-layer, form: test macro-F1 0.775–0.800.
+  - 4-layer, area: test macro-F1 0.572–0.576.
+
+  Differences of about 0.02 between tiny-transformer variants on the form task are therefore within seed noise. The gap to the pretrained encoders (0.03–0.05) is larger than this spread.
+- **Latency was measured on a shared, busy machine**, with 8 CPU threads and batch 64. Absolute values vary by ±20 %; the ranking between model families is stable.
+- **Titles only.** The `description` field mentions the act form explicitly (for example "... бұйрығы"), so using it would make the form task trivial. It is used only for unsupervised MLM pretraining on train-period acts.
+- **Label definitions.** The form label is our hierarchy-based reduction of a multi-valued tag field, and area is the curated `database_section`. Other reasonable definitions exist, such as multi-label classification over `legal_relation_area`.
 
 ## 12. Conclusions
 
@@ -253,7 +289,18 @@ Two improvements on top:
 
 ## 13. Team contributions
 
-<!-- TEAM -->
+| Work package | Modules | Team member(s) |
+|---|---|---|
+| Data engineering: chunked loading, Parquet, memory optimization, audit | `data_io.py`, `audit.py` | **[fill in]** |
+| Relational database: schema, ER diagram, SQL queries | `database.py`, `sql/` | **[fill in]** |
+| EDA, Kazakh text preprocessing, leakage analysis | `eda.py`, `text_prep.py`, `leakage.py` | **[fill in]** |
+| Baselines (TF-IDF + LR) | `baseline.py` | **[fill in]** |
+| Tiny transformer, BPE tokenizer, MLM, distillation | `bpe_tokenizer.py`, `tiny_transformer.py`, `mlm_pretrain.py`, `distill*.py` | **[fill in]** |
+| Pretrained models, vocab pruning, seq2seq, model survey | `finetune_e5.py`, `roberta_tune.py`, `vocab_prune.py`, `seq2seq_mt5.py`, `model_survey.py` | **[fill in]** |
+| Evaluation, benchmark, error analysis, console app | `benchmark.py`, `compare.py`, `error_analysis.py`, `main.py` | **[fill in]** |
+| Report and presentation | `reports/` | **[fill in]** |
+
+Every member can explain every part of the code (required for the defense).
 
 ## References
 

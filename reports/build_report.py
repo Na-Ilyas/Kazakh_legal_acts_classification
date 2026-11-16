@@ -98,8 +98,13 @@ def build() -> Path:
                 doc.add_heading(text, level=0)
             else:
                 doc.add_heading(text, level=min(level - 1, 3))
-        elif line.startswith("- "):
-            add_inline(doc.add_paragraph(style="List Bullet"), line[2:])
+        elif line.lstrip().startswith("- "):
+            nested = line.startswith(" ")
+            add_inline(doc.add_paragraph(style="List Bullet 2" if nested else "List Bullet"), line.lstrip()[2:])
+        elif line.startswith("  "):                     # continuation paragraph of a list item
+            par = doc.add_paragraph()
+            par.paragraph_format.left_indent = Inches(0.25)
+            add_inline(par, line.strip())
         elif re.match(r"^\d+\. ", line):
             add_inline(doc.add_paragraph(style="List Number"), re.sub(r"^\d+\. ", "", line))
         else:

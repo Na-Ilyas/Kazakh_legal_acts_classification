@@ -11,6 +11,7 @@ Contents
 Environment overrides (used only for development / smoke tests):
     KAZLAW_DATASET   path to an alternative dataset parquet (e.g. a sample)
     KAZLAW_DB        path to an alternative SQLite file for experiment logs
+    KAZLAW_RUNS_DIR  folder for TensorBoard logs (quick runs write outside the project)
 """
 from __future__ import annotations
 
@@ -34,7 +35,7 @@ TOKEN_STATS_JSON = config.RESULTS_DIR / "token_lengths.json"
 BPE_DIR = config.MODELS_DIR / "bpe_tokenizer"
 E5_MODEL_NAME = "intfloat/multilingual-e5-small"
 E5_PREFIX = "query: "          # e5 convention for classification / symmetric tasks
-RUNS_DIR = config.PROJECT_ROOT / "runs"   # TensorBoard logs
+RUNS_DIR = Path(os.environ.get("KAZLAW_RUNS_DIR", config.PROJECT_ROOT / "runs"))   # TensorBoard logs
 QUICK_SUFFIX = "_quick"        # quick (smoke-test) runs never overwrite full-run results
 
 # Dev override of the experiments DB: experiments_db.connect() binds its

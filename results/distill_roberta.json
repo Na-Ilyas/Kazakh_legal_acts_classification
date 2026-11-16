@@ -1,0 +1,86 @@
+{
+  "tiny_rob_form": [
+    {
+      "task": "form",
+      "model_name": "tiny_transformer_4L_mlm_kdrob_a50_T2",
+      "val_f1": 0.8683,
+      "val": 0.8683,
+      "test": 0.8273,
+      "test_strict": 0.8286,
+      "best_epoch": 5,
+      "train_time_s": 39.21,
+      "kd_alpha": 0.5,
+      "kd_temperature": 2.0,
+      "teacher": "kaz_roberta_ft",
+      "init": "MLM-pretrained encoder",
+      "lr": 0.0003,
+      "loss_selected_on_val": "smooth"
+    },
+    {
+      "task": "form",
+      "model_name": "tiny_transformer_4L_mlm_kdrob_a90_T2",
+      "val_f1": 0.8569,
+      "val": 0.8569,
+      "test": 0.8237,
+      "test_strict": 0.8252,
+      "best_epoch": 4,
+      "train_time_s": 33.95,
+      "kd_alpha": 0.9,
+      "kd_temperature": 2.0,
+      "teacher": "kaz_roberta_ft",
+      "init": "MLM-pretrained encoder",
+      "lr": 0.0003,
+      "loss_selected_on_val": "smooth"
+    }
+  ],
+  "tiny_rob_area": [
+    {
+      "task": "area",
+      "model_name": "tiny_transformer_4L_mlm_kdrob_a50_T2",
+      "val_f1": 0.5967,
+      "val": 0.5967,
+      "test": 0.5979,
+      "test_strict": 0.5759,
+      "best_epoch": 4,
+      "train_time_s": 33.98,
+      "kd_alpha": 0.5,
+      "kd_temperature": 2.0,
+      "teacher": "kaz_roberta_llrd_rec",
+      "init": "MLM-pretrained encoder",
+      "lr": 0.0003,
+      "loss_selected_on_val": "smooth"
+    },
+    {
+      "task": "area",
+      "model_name": "tiny_transformer_4L_mlm_kdrob_a90_T2",
+      "val_f1": 0.5934,
+      "val": 0.5934,
+      "test": 0.6032,
+      "test_strict": 0.5801,
+      "best_epoch": 6,
+      "train_time_s": 44.03,
+      "kd_alpha": 0.9,
+      "kd_temperature": 2.0,
+      "teacher": "kaz_roberta_llrd_rec",
+      "init": "MLM-pretrained encoder",
+      "lr": 0.0003,
+      "loss_selected_on_val": "smooth"
+    }
+  ],
+  "kazbert_form": {
+    "name": "kazbert_ft",
+    "task": "form",
+    "f1_macro": {
+      "val": 0.8794,
+      "test": 0.8601,
+      "test_strict": 0.8662
+    },
+    "best_epoch": 2,
+    "epochs_run": 3,
+    "n_params": 110622727,
+    "size_mb": 422.8,
+    "latency_cpu_ms_per_1000": 23422.1,
+    "train_time_s": 125.87,
+    "path": "artifacts/models/kazbert_ft_form"
+  }
+}

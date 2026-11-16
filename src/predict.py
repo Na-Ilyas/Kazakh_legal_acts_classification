@@ -25,21 +25,18 @@ EXAMPLES = [
 ]
 
 
-# Families shown in the demo (one model each: the best on validation). Frozen-e5, char-1NN and mT5
-# are left out to keep RAM low on the shared machine; all_models=True shows everything.
-DEMO_FAMILIES = ("tfidf", "tiny_transformer", "pretrained", "posthoc")
-
-
-# Strongest single model per task for the demo (Kazakh RoBERTa from src.roberta_tune; the area one
-# is the train+val refit, which is fine for deployment but never used for val-based selection).
+# Comparison groups shown in the demo (one model each: the best on validation, see
+# results/best_models.json written by src.compare). Frozen-e5, char-1NN, mT5 and the
+# prior-adjusted singles are left out to keep RAM low; all_models=True shows everything.
+DEMO_GROUPS = ("baseline/tfidf", "tiny (from scratch)", "tiny + MLM + KD (teacher e5)", "ensemble")
+# Strongest single model per task for the demo (Kazakh RoBERTa from src.roberta_tune, loaded through
+# its meta.json loader; the area one is the train+val refit - fine for deployment, never val-selected).
 DEMO_PRETRAINED = {"form": "kaz_roberta_ft", "area": "kaz_roberta_llrd_rec_trainval"}
-
-
 def _selected_names(task: str) -> set[str] | None:
     """Best model per demo family (by val F1) + the demo RoBERTa, or None if compare has not run."""
     try:
         best = load_json(config.RESULTS_DIR / "best_models.json").get(task, {})
-        names = {v["model_name"] for k, v in best.items() if k in DEMO_FAMILIES and k != "pretrained"}
+        names = {v["model_name"] for k, v in best.items() if k in DEMO_GROUPS}
         return names | ({DEMO_PRETRAINED[task]} if task in DEMO_PRETRAINED else set())
     except (FileNotFoundError, ValueError):
         return None
@@ -100,7 +97,7 @@ def format_results(task: str, results: list[dict]) -> str:
     for r in results:
         top = ", ".join(f"{lab} {p:.2f}" for lab, p in r["top3"])
         lat = "-" if r["latency_ms"] is None else f"{r['latency_ms']:.1f} ms"
-        lines.append(f"    {r['model']:<28} -> {r['label']:<30} | top3: {top} | {lat}")
+        lines.append(f"    {r['model']:<34} -> {r['label']:<30} | top3: {top} | {lat}")
     return "\n".join(lines)
 
 

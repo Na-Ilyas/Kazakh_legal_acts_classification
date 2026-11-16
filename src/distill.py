@@ -88,6 +88,12 @@ def _run_variant(task: str, name_suffix: str, data: dict, tensors: dict, classes
                         quick_name(f"tiny_{task}{name_suffix}", quick), tok_dir=tok_dir, init_from=init_from,
                         teacher_logp=teacher, sample_weight=weights)
     model_name = quick_name(f"tiny_transformer_{label}{name_suffix}", quick)
+    try:                                   # persist the variant settings (refits need e.g. recency_tau)
+        from src.model_utils import load_json
+        cfg_json = load_json(out_dir / "config.json")
+        save_json({**cfg_json, "extra": extra_hp}, out_dir / "config.json")
+    except (FileNotFoundError, ValueError):
+        pass
     f1s = finalize(task, model_name, out_dir, res, len(data["train"]), quick, extra_hp)
     _set_notes(model_name, task, notes)
     row = {"task": task, "model_name": model_name, "val_f1": round(res["best_val_f1"], 4), **f1s,
@@ -161,6 +167,19 @@ def run_task(task: str, quick: bool = False, do_kd: bool = True, do_recency: boo
     return rows
 
 
+def _hp_from_db(task: str, model_name: str, key: str):
+    """One hyperparameter of a logged model (val row), or None."""
+    import json
+    from src import experiments_db
+    with experiments_db.connect() as con:
+        row = con.execute("SELECT hyperparams FROM experiments WHERE task=? AND model_name=? AND "
+                          "eval_split='val'", (task, model_name)).fetchone()
+    try:
+        return json.loads(row[0] or "{}").get(key) if row else None
+    except ValueError:
+        return None
+
+
 def best_tiny_on_val(task: str) -> str | None:
     """Best tiny-transformer model on VAL macro-F1 (refits excluded)."""
     from src import experiments_db
@@ -205,12 +224,15 @@ def refit_trainval(task: str, model_name: str | None = None) -> dict:
         logp = np.log(np.clip(probs[order.to_numpy().astype(int)][:, col], 1e-6, 1.0))
         teacher = torch.from_numpy(logp.astype(np.float16)).to(device)
     init = MLM_DIR / "encoder.pt" if "_mlm" in model_name else None
+    tau = (cfg_json.get("extra") or {}).get("recency_tau") or _hp_from_db(task, model_name, "recency_tau")
+    weights = recency_weights(data["train"]["year"].to_numpy(), float(tau), device) if tau else None
     label = model_name[len("tiny_transformer_"):]
     return _run_variant(task, "_trainval", data, tensors, classes, cfg, max_len, tok.get_vocab_size(), False,
                         {"refit_of": model_name, "epochs_fixed": epochs, "trainval": True,
-                         "kd_alpha": cfg.kd_alpha, "kd_temperature": cfg.kd_temperature},
-                        f"REFIT of {model_name} on train+val for {epochs} epochs (same config; "
-                        f"val row is not held-out)", init_from=init, teacher=teacher, arch=arch, label=label,
+                         "kd_alpha": cfg.kd_alpha, "kd_temperature": cfg.kd_temperature, "recency_tau": tau},
+                        f"REFIT of {model_name} on train+val for {epochs} epochs (same config"
+                        f"{f', recency weights tau={tau}' if tau else ''}; val row is not held-out)",
+                        init_from=init, teacher=teacher, weights=weights, arch=arch, label=label,
                         tok_dir=tok_dir)
 
 

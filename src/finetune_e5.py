@@ -228,6 +228,7 @@ def finetune_task(task: str, quick: bool = False, lr: float = 5e-5, epochs: int 
     set_seed(config.SEED)                       # reproducible head init
     model = E5Classifier(encoder, len(classes)).to(device)
     n_params = sum(p.numel() for p in model.parameters())
+    assert n_params <= 120_000_000, f"{n_params:,} params exceeds the 120M budget for the pretrained model"
     print(f"[e5_ft] task={task}: {n_params:,} parameters, {len(classes)} classes, "
           f"train={len(data['train']):,}, max_len={max_len}, device={device}")
     cfg = TrainConfig(epochs=1 if quick else epochs, batch_size=batch_size, lr=lr, weight_decay=0.01,

@@ -28,3 +28,6 @@ safetensors==0.8.0
 # Plots and training-curve logging (TensorBoard is optional: torch.utils.tensorboard -> runs/)
 matplotlib==3.11.2
 tensorboard==2.21.0
+# LoRA adapters for the LLM-teacher experiments (src.llm_teacher); device_map loading needs accelerate
+peft==0.21.3
+accelerate==1.15.0

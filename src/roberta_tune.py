@@ -155,6 +155,7 @@ def train_variant(ctx: Context, name: str, cfg: TrainConfig, decay: float | None
     sw = torch.from_numpy(recency_weights(years)).to(device) if recency else None
     model = build_model(ctx, device)
     n_params = int(sum(p.numel() for p in model.parameters()))
+    assert n_params <= 120_000_000, f"{n_params:,} params exceeds the 120M budget for the pretrained model"
     out_dir = config.MODELS_DIR / f"{name}_{ctx.task}"
     out_dir.mkdir(parents=True, exist_ok=True)
     with patched_param_groups(decay, cfg.lr):

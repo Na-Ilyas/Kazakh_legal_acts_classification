@@ -108,6 +108,7 @@ def finetune(task: str = "form", model_id: str = FT_MODEL, lr: float = 5e-5, epo
     set_seed(config.SEED)
     model = E5Classifier(encoder, len(classes)).to(device)
     n_params = int(sum(p.numel() for p in model.parameters()))
+    assert n_params <= 120_000_000, f"{n_params:,} params exceeds the 120M budget for the pretrained model"
     cfg = TrainConfig(epochs=epochs, batch_size=batch_size, lr=lr, weight_decay=0.01, warmup_ratio=0.06,
                       loss="ce", patience=epochs, eval_batch_size=512, bucket=True)
     out_dir = config.MODELS_DIR / f"{name}_{task}"
@@ -218,7 +219,8 @@ def run(finetune_model: bool = True, tasks: tuple[str, ...] = ("form", "area")) 
     ft = None
     for task in (tasks if finetune_model else ()):
         ft = finetune(task)
-    logged_as = {"intfloat/multilingual-e5-small": "e5_small_ft", FT_MODEL: FT_NAME}
+    logged_as = {"intfloat/multilingual-e5-small": "e5_small_ft", FT_MODEL: FT_NAME,
+                 "Eraly-ml/KazBERT": "kazbert_ft"}   # fine-tuned by src.distill_roberta (kaz-roberta recipe)
     for r in rows:
         r["f1"] = existing_f1(logged_as.get(r["model"], "-"), "form")
         r["f1_area"] = existing_f1(logged_as.get(r["model"], "-"), "area")

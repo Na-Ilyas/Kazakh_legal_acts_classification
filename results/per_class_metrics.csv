@@ -1,248 +1,241 @@
 task,family_label,model_name,class,precision,recall,f1,support
-form,baseline: char_1nn,char_1nn,Басқа,0.1163,0.1923,0.1449,26
-form,baseline: char_1nn,char_1nn,Бұйрық,0.8605,0.8268,0.8433,5648
-form,baseline: char_1nn,char_1nn,Жарлық,0.5843,0.6301,0.6063,319
-form,baseline: char_1nn,char_1nn,Заң,0.4756,0.7416,0.5796,329
-form,baseline: char_1nn,char_1nn,Шешім,0.9886,0.9341,0.9606,24668
-form,baseline: char_1nn,char_1nn,Қаулы,0.7617,0.9017,0.8258,7215
-form,baseline: char_1nn,char_1nn,Өкім,0.6907,0.7672,0.7269,262
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Басқа,0.35,0.2692,0.3043,26
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Бұйрық,0.9447,0.9428,0.9437,5648
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Жарлық,0.8782,0.7461,0.8068,319
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Заң,0.9461,0.9605,0.9532,329
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Шешім,0.992,0.9773,0.9846,24668
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Қаулы,0.8898,0.9408,0.9146,7215
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Өкім,0.8145,0.855,0.8343,262
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Басқа,0.25,0.1154,0.1579,26
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Бұйрық,0.9355,0.8325,0.881,5648
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Жарлық,0.7895,0.3762,0.5096,319
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Заң,0.8773,0.8693,0.8733,329
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Шешім,0.9624,0.9568,0.9596,24668
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Қаулы,0.7436,0.8457,0.7914,7215
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Өкім,0.7909,0.6641,0.722,262
-form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Басқа,0.2857,0.1538,0.2,26
-form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Бұйрық,0.9506,0.9345,0.9425,5648
-form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Жарлық,0.8656,0.6865,0.7657,319
-form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Заң,0.963,0.9483,0.9556,329
-form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Шешім,0.9921,0.9783,0.9852,24668
-form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Қаулы,0.885,0.9502,0.9165,7215
-form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Өкім,0.8452,0.813,0.8288,262
-form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Басқа,0.5333,0.3077,0.3902,26
-form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Бұйрық,0.9608,0.9364,0.9484,5648
-form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Жарлық,0.875,0.79,0.8303,319
-form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Заң,0.9875,0.9635,0.9754,329
-form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Шешім,0.9922,0.9793,0.9857,24668
-form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Қаулы,0.8904,0.9516,0.92,7215
-form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Өкім,0.8114,0.8702,0.8398,262
-form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Басқа,0.5714,0.3077,0.4,26
-form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Бұйрық,0.9596,0.9419,0.9507,5648
-form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Жарлық,0.8724,0.7931,0.8309,319
-form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Заң,0.9906,0.9605,0.9753,329
-form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Шешім,0.9914,0.9803,0.9858,24668
-form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Қаулы,0.8965,0.9482,0.9216,7215
-form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Өкім,0.8136,0.8664,0.8392,262
-form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Басқа,0.4444,0.1538,0.2286,26
-form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Бұйрық,0.942,0.9317,0.9368,5648
-form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Жарлық,0.7936,0.6991,0.7433,319
-form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Заң,0.947,0.924,0.9354,329
-form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Шешім,0.9885,0.9784,0.9834,24668
-form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Қаулы,0.8802,0.929,0.904,7215
-form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Өкім,0.8481,0.7672,0.8056,262
-area,baseline: char_1nn,char_1nn,Азаматтық құқық,0.4576,0.406,0.4303,133
-area,baseline: char_1nn,char_1nn,Ауыл шаруашылығы,0.5603,0.6337,0.5947,748
-area,baseline: char_1nn,char_1nn,Байланыс,0.5185,0.5,0.5091,56
-area,baseline: char_1nn,char_1nn,Басқа,0.2667,0.3077,0.2857,26
-area,baseline: char_1nn,char_1nn,Білім,0.6963,0.7886,0.7395,875
-area,baseline: char_1nn,char_1nn,Денсаулық сақтау,0.728,0.7132,0.7205,638
-area,baseline: char_1nn,char_1nn,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.9228,0.9293,0.9261,283
-area,baseline: char_1nn,char_1nn,Еңбек,0.5247,0.4982,0.5111,1128
-area,baseline: char_1nn,char_1nn,Жануарлар дүниесін қорғау және пайдалану,0.511,0.6042,0.5537,192
-area,baseline: char_1nn,char_1nn,Жер қойнауын пайдалану және қорғау,0.5481,0.4872,0.5158,117
-area,baseline: char_1nn,char_1nn,Жерді пайдалану және қорғау,0.7302,0.664,0.6955,860
-area,baseline: char_1nn,char_1nn,Кеден ісі,0.2558,0.6875,0.3729,16
-area,baseline: char_1nn,char_1nn,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.6653,0.5001,0.571,7304
-area,baseline: char_1nn,char_1nn,Көлік,0.6378,0.7161,0.6747,546
-area,baseline: char_1nn,char_1nn,Мемлекеттік наградалар,0.5435,0.7143,0.6173,70
-area,baseline: char_1nn,char_1nn,Мәдениет,0.6131,0.6376,0.6251,574
-area,baseline: char_1nn,char_1nn,Ормандарды қорғау мен пайдалану,0.3387,0.5833,0.4286,36
-area,baseline: char_1nn,char_1nn,Сауда қызметі мен қоғамдық тамақтандыру,0.5893,0.5815,0.5854,227
-area,baseline: char_1nn,char_1nn,Сот. Әділет. Прокуратура,0.4444,0.6536,0.5291,153
-area,baseline: char_1nn,char_1nn,Суларды қорғау мен пайдалану,0.6606,0.6418,0.6511,282
-area,baseline: char_1nn,char_1nn,Сыртқы экономикалық қызмет,0.0,0.0,0.0,8
-area,baseline: char_1nn,char_1nn,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.5613,0.4847,0.5202,850
-area,baseline: char_1nn,char_1nn,Халықаралық қатынастар,0.8323,0.8637,0.8477,477
-area,baseline: char_1nn,char_1nn,Шаруашылық қызмет,0.3877,0.3584,0.3725,2115
-area,baseline: char_1nn,char_1nn,Ғылым,0.5143,0.4235,0.4645,85
-area,baseline: char_1nn,char_1nn,Қаржы,0.8796,0.9517,0.9142,16928
-area,baseline: char_1nn,char_1nn,Қоршаған ортаны қорғау,0.1262,0.194,0.1529,67
-area,baseline: char_1nn,char_1nn,Қорғаныс,0.4701,0.5676,0.5143,333
-area,baseline: char_1nn,char_1nn,Қылмыстық құқық,0.1875,0.3103,0.2338,29
-area,baseline: char_1nn,char_1nn,Құрылыс,0.3473,0.5299,0.4196,234
-area,baseline: char_1nn,char_1nn,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.5632,0.6672,0.6108,634
-area,baseline: char_1nn,char_1nn,Әлеуметтік қамсыздандыру. Сақтандыру,0.7468,0.769,0.7577,1991
-area,baseline: char_1nn,char_1nn,Өнеркәсіп,0.3814,0.3287,0.3531,362
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Азаматтық құқық,0.5405,0.4511,0.4918,133
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Ауыл шаруашылығы,0.5691,0.6444,0.6044,748
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Байланыс,0.6327,0.5536,0.5905,56
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Басқа,0.1562,0.1923,0.1724,26
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Білім,0.8192,0.7406,0.7779,875
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Денсаулық сақтау,0.7632,0.8135,0.7876,638
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.901,0.9329,0.9167,283
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Еңбек,0.5903,0.6693,0.6273,1128
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Жануарлар дүниесін қорғау және пайдалану,0.583,0.6771,0.6265,192
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Жер қойнауын пайдалану және қорғау,0.6129,0.4872,0.5429,117
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Жерді пайдалану және қорғау,0.7314,0.7093,0.7202,860
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Кеден ісі,0.2973,0.6875,0.4151,16
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.7395,0.5512,0.6316,7304
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Көлік,0.6973,0.793,0.7421,546
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Мемлекеттік наградалар,0.5714,0.6857,0.6234,70
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Мәдениет,0.6455,0.5139,0.5723,574
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Ормандарды қорғау мен пайдалану,0.3889,0.7778,0.5185,36
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Сауда қызметі мен қоғамдық тамақтандыру,0.5848,0.4405,0.5025,227
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Сот. Әділет. Прокуратура,0.6846,0.6667,0.6755,153
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Суларды қорғау мен пайдалану,0.7021,0.727,0.7143,282
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Сыртқы экономикалық қызмет,0.0,0.0,0.0,8
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.662,0.6082,0.634,850
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Халықаралық қатынастар,0.8771,0.8679,0.8725,477
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Шаруашылық қызмет,0.4796,0.4175,0.4464,2115
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Ғылым,0.6667,0.4941,0.5676,85
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Қаржы,0.8919,0.9782,0.9331,16928
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Қоршаған ортаны қорғау,0.4074,0.1642,0.234,67
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Қорғаныс,0.7782,0.5796,0.6644,333
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Қылмыстық құқық,0.2,0.1724,0.1852,29
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Құрылыс,0.4024,0.5812,0.4755,234
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.6015,0.7429,0.6648,634
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Әлеуметтік қамсыздандыру. Сақтандыру,0.7366,0.8624,0.7945,1991
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Өнеркәсіп,0.5254,0.4862,0.505,362
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Азаматтық құқық,0.5341,0.3534,0.4253,133
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Ауыл шаруашылығы,0.5013,0.7727,0.6081,748
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Байланыс,0.5273,0.5179,0.5225,56
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Басқа,0.1045,0.2692,0.1505,26
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Білім,0.7542,0.7646,0.7594,875
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Денсаулық сақтау,0.8092,0.7712,0.7897,638
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.7286,0.8728,0.7942,283
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Еңбек,0.5527,0.5532,0.5529,1128
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Жануарлар дүниесін қорғау және пайдалану,0.6012,0.526,0.5611,192
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Жер қойнауын пайдалану және қорғау,0.5889,0.453,0.5121,117
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Жерді пайдалану және қорғау,0.7378,0.5465,0.6279,860
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Кеден ісі,0.25,0.5,0.3333,16
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.697,0.5229,0.5975,7304
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Көлік,0.654,0.7271,0.6886,546
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Мемлекеттік наградалар,0.4697,0.4429,0.4559,70
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Мәдениет,0.5217,0.23,0.3192,574
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Ормандарды қорғау мен пайдалану,0.525,0.5833,0.5526,36
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Сауда қызметі мен қоғамдық тамақтандыру,0.533,0.4273,0.4743,227
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Сот. Әділет. Прокуратура,0.5761,0.6928,0.6291,153
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Суларды қорғау мен пайдалану,0.7276,0.6915,0.7091,282
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Сыртқы экономикалық қызмет,0.0,0.0,0.0,8
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.5461,0.5506,0.5483,850
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Халықаралық қатынастар,0.762,0.8323,0.7956,477
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Шаруашылық қызмет,0.3892,0.3229,0.353,2115
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Ғылым,0.5128,0.4706,0.4908,85
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Қаржы,0.8725,0.976,0.9213,16928
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Қоршаған ортаны қорғау,0.4444,0.1791,0.2553,67
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Қорғаныс,0.7296,0.5916,0.6534,333
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Қылмыстық құқық,0.2258,0.2414,0.2333,29
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Құрылыс,0.4502,0.406,0.427,234
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.5478,0.6325,0.5871,634
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Әлеуметтік қамсыздандыру. Сақтандыру,0.7172,0.8051,0.7586,1991
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Өнеркәсіп,0.4723,0.4945,0.4831,362
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Азаматтық құқық,0.5566,0.4436,0.4937,133
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ауыл шаруашылығы,0.5422,0.6791,0.603,748
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Байланыс,0.6875,0.3929,0.5,56
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Басқа,0.1905,0.3077,0.2353,26
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Білім,0.731,0.8046,0.7661,875
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Денсаулық сақтау,0.7666,0.8135,0.7894,638
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.8696,0.9187,0.8935,283
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Еңбек,0.5933,0.648,0.6195,1128
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Жануарлар дүниесін қорғау және пайдалану,0.599,0.6302,0.6142,192
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Жер қойнауын пайдалану және қорғау,0.5159,0.5556,0.535,117
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Жерді пайдалану және қорғау,0.7186,0.7128,0.7157,860
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Кеден ісі,0.2453,0.8125,0.3768,16
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.7598,0.5392,0.6307,7304
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Көлік,0.6912,0.7747,0.7306,546
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Мемлекеттік наградалар,0.56,0.6,0.5793,70
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Мәдениет,0.6378,0.7578,0.6927,574
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ормандарды қорғау мен пайдалану,0.3671,0.8056,0.5043,36
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Сауда қызметі мен қоғамдық тамақтандыру,0.6151,0.6476,0.6309,227
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Сот. Әділет. Прокуратура,0.6089,0.7124,0.6566,153
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Суларды қорғау мен пайдалану,0.6646,0.773,0.7148,282
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Сыртқы экономикалық қызмет,0.125,0.25,0.1667,8
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.5806,0.5976,0.589,850
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Халықаралық қатынастар,0.8809,0.8679,0.8743,477
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Шаруашылық қызмет,0.4549,0.4052,0.4286,2115
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ғылым,0.56,0.3294,0.4148,85
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Қаржы,0.8991,0.9737,0.9349,16928
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Қоршаған ортаны қорғау,0.4286,0.1343,0.2045,67
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Қорғаныс,0.7762,0.6667,0.7173,333
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Қылмыстық құқық,0.25,0.1379,0.1778,29
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Құрылыс,0.4099,0.6026,0.4879,234
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.6364,0.6845,0.6596,634
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Әлеуметтік қамсыздандыру. Сақтандыру,0.7506,0.8252,0.7861,1991
-area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Өнеркәсіп,0.5641,0.4862,0.5223,362
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Азаматтық құқық,0.6747,0.4211,0.5185,133
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Ауыл шаруашылығы,0.615,0.7901,0.6916,748
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Байланыс,0.6444,0.5179,0.5743,56
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Басқа,0.1765,0.2308,0.2,26
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Білім,0.8074,0.7714,0.789,875
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Денсаулық сақтау,0.8107,0.8323,0.8213,638
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.9286,0.9647,0.9463,283
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Еңбек,0.6258,0.6746,0.6493,1128
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Жануарлар дүниесін қорғау және пайдалану,0.5923,0.7188,0.6494,192
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Жер қойнауын пайдалану және қорғау,0.6429,0.5385,0.586,117
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Жерді пайдалану және қорғау,0.7865,0.8012,0.7938,860
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Кеден ісі,0.303,0.625,0.4082,16
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.7784,0.5702,0.6582,7304
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Көлік,0.7404,0.8095,0.7734,546
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Мемлекеттік наградалар,0.5506,0.7,0.6164,70
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Мәдениет,0.6882,0.7038,0.696,574
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Ормандарды қорғау мен пайдалану,0.6098,0.6944,0.6494,36
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Сауда қызметі мен қоғамдық тамақтандыру,0.6385,0.5991,0.6182,227
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Сот. Әділет. Прокуратура,0.6222,0.732,0.6727,153
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Суларды қорғау мен пайдалану,0.7029,0.7801,0.7395,282
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Сыртқы экономикалық қызмет,0.2143,0.375,0.2727,8
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.6212,0.7235,0.6685,850
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Халықаралық қатынастар,0.8894,0.8931,0.8912,477
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Шаруашылық қызмет,0.5142,0.4714,0.4919,2115
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Ғылым,0.6949,0.4824,0.5694,85
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Қаржы,0.8996,0.9774,0.9369,16928
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Қоршаған ортаны қорғау,0.4468,0.3134,0.3684,67
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Қорғаныс,0.7985,0.6426,0.7121,333
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Қылмыстық құқық,0.25,0.2069,0.2264,29
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Құрылыс,0.4603,0.594,0.5187,234
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.6462,0.7461,0.6925,634
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Әлеуметтік қамсыздандыру. Сақтандыру,0.7833,0.8081,0.7956,1991
-area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Өнеркәсіп,0.5614,0.5304,0.5455,362
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Азаматтық құқық,0.6531,0.4812,0.5541,133
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Ауыл шаруашылығы,0.6054,0.8021,0.6901,748
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Байланыс,0.6596,0.5536,0.6019,56
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Басқа,0.1379,0.1538,0.1455,26
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Білім,0.8091,0.7703,0.7892,875
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Денсаулық сақтау,0.8153,0.837,0.826,638
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.9317,0.9647,0.9479,283
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Еңбек,0.6255,0.6826,0.6528,1128
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Жануарлар дүниесін қорғау және пайдалану,0.6094,0.7396,0.6682,192
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Жер қойнауын пайдалану және қорғау,0.6465,0.547,0.5926,117
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Жерді пайдалану және қорғау,0.7892,0.8012,0.7952,860
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Кеден ісі,0.3448,0.625,0.4444,16
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.7957,0.5648,0.6606,7304
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Көлік,0.7105,0.8315,0.7662,546
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Мемлекеттік наградалар,0.5474,0.7429,0.6303,70
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Мәдениет,0.6678,0.7143,0.6902,574
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Ормандарды қорғау мен пайдалану,0.4615,0.8333,0.5941,36
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Сауда қызметі мен қоғамдық тамақтандыру,0.6415,0.5991,0.6196,227
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Сот. Әділет. Прокуратура,0.645,0.7124,0.677,153
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Суларды қорғау мен пайдалану,0.6867,0.7695,0.7258,282
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Сыртқы экономикалық қызмет,0.0,0.0,0.0,8
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.6521,0.7188,0.6838,850
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Халықаралық қатынастар,0.9021,0.9078,0.9049,477
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Шаруашылық қызмет,0.5402,0.4506,0.4914,2115
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Ғылым,0.7188,0.5412,0.6174,85
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Қаржы,0.9007,0.979,0.9382,16928
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Қоршаған ортаны қорғау,0.5152,0.2537,0.34,67
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Қорғаныс,0.8083,0.6456,0.7179,333
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Қылмыстық құқық,0.2174,0.1724,0.1923,29
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Құрылыс,0.4312,0.6026,0.5027,234
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.6319,0.7555,0.6882,634
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Әлеуметтік қамсыздандыру. Сақтандыру,0.7597,0.8624,0.8078,1991
-area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Өнеркәсіп,0.5625,0.547,0.5546,362
+form,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Басқа,0.35,0.2692,0.3043,26
+form,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Бұйрық,0.9447,0.9428,0.9437,5648
+form,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Жарлық,0.8782,0.7461,0.8068,319
+form,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Заң,0.9461,0.9605,0.9532,329
+form,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Шешім,0.992,0.9773,0.9846,24668
+form,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Қаулы,0.8898,0.9408,0.9146,7215
+form,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Өкім,0.8145,0.855,0.8343,262
+form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Басқа,0.25,0.1154,0.1579,26
+form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Бұйрық,0.9355,0.8325,0.881,5648
+form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Жарлық,0.7895,0.3762,0.5096,319
+form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Заң,0.8773,0.8693,0.8733,329
+form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Шешім,0.9624,0.9568,0.9596,24668
+form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Қаулы,0.7436,0.8457,0.7914,7215
+form,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Өкім,0.7909,0.6641,0.722,262
+form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Басқа,0.2857,0.1538,0.2,26
+form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Бұйрық,0.9506,0.9345,0.9425,5648
+form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Жарлық,0.8656,0.6865,0.7657,319
+form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Заң,0.963,0.9483,0.9556,329
+form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Шешім,0.9921,0.9783,0.9852,24668
+form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Қаулы,0.885,0.9502,0.9165,7215
+form,tiny_transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Өкім,0.8452,0.813,0.8288,262
+form,pretrained e5: e5_small_ft,e5_small_ft,Басқа,0.45,0.3462,0.3913,26
+form,pretrained e5: e5_small_ft,e5_small_ft,Бұйрық,0.9602,0.9409,0.9505,5648
+form,pretrained e5: e5_small_ft,e5_small_ft,Жарлық,0.8909,0.768,0.8249,319
+form,pretrained e5: e5_small_ft,e5_small_ft,Заң,0.9726,0.9696,0.9711,329
+form,pretrained e5: e5_small_ft,e5_small_ft,Шешім,0.9941,0.9771,0.9855,24668
+form,pretrained e5: e5_small_ft,e5_small_ft,Қаулы,0.886,0.9584,0.9208,7215
+form,pretrained e5: e5_small_ft,e5_small_ft,Өкім,0.85,0.8435,0.8467,262
+form,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Басқа,0.5333,0.3077,0.3902,26
+form,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Бұйрық,0.9608,0.9364,0.9484,5648
+form,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Жарлық,0.875,0.79,0.8303,319
+form,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Заң,0.9875,0.9635,0.9754,329
+form,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Шешім,0.9922,0.9793,0.9857,24668
+form,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Қаулы,0.8904,0.9516,0.92,7215
+form,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Өкім,0.8114,0.8702,0.8398,262
+form,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Басқа,0.6667,0.3077,0.4211,26
+form,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Бұйрық,0.9647,0.9471,0.9558,5648
+form,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Жарлық,0.8972,0.7931,0.8419,319
+form,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Заң,0.9938,0.9757,0.9847,329
+form,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Шешім,0.9929,0.9792,0.986,24668
+form,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Қаулы,0.8966,0.9569,0.9258,7215
+form,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Өкім,0.8116,0.855,0.8327,262
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Азаматтық құқық,0.5405,0.4511,0.4918,133
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Ауыл шаруашылығы,0.5691,0.6444,0.6044,748
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Байланыс,0.6327,0.5536,0.5905,56
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Басқа,0.1562,0.1923,0.1724,26
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Білім,0.8192,0.7406,0.7779,875
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Денсаулық сақтау,0.7632,0.8135,0.7876,638
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.901,0.9329,0.9167,283
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Еңбек,0.5903,0.6693,0.6273,1128
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Жануарлар дүниесін қорғау және пайдалану,0.583,0.6771,0.6265,192
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Жер қойнауын пайдалану және қорғау,0.6129,0.4872,0.5429,117
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Жерді пайдалану және қорғау,0.7314,0.7093,0.7202,860
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Кеден ісі,0.2973,0.6875,0.4151,16
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.7395,0.5512,0.6316,7304
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Көлік,0.6973,0.793,0.7421,546
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Мемлекеттік наградалар,0.5714,0.6857,0.6234,70
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Мәдениет,0.6455,0.5139,0.5723,574
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Ормандарды қорғау мен пайдалану,0.3889,0.7778,0.5185,36
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Сауда қызметі мен қоғамдық тамақтандыру,0.5848,0.4405,0.5025,227
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Сот. Әділет. Прокуратура,0.6846,0.6667,0.6755,153
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Суларды қорғау мен пайдалану,0.7021,0.727,0.7143,282
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Сыртқы экономикалық қызмет,0.0,0.0,0.0,8
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.662,0.6082,0.634,850
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Халықаралық қатынастар,0.8771,0.8679,0.8725,477
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Шаруашылық қызмет,0.4796,0.4175,0.4464,2115
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Ғылым,0.6667,0.4941,0.5676,85
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Қаржы,0.8919,0.9782,0.9331,16928
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Қоршаған ортаны қорғау,0.4074,0.1642,0.234,67
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Қорғаныс,0.7782,0.5796,0.6644,333
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Қылмыстық құқық,0.2,0.1724,0.1852,29
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Құрылыс,0.4024,0.5812,0.4755,234
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.6015,0.7429,0.6648,634
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Әлеуметтік қамсыздандыру. Сақтандыру,0.7366,0.8624,0.7945,1991
+area,baseline/tfidf: tfidf_word_char_lr,tfidf_word_char_lr,Өнеркәсіп,0.5254,0.4862,0.505,362
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Азаматтық құқық,0.5341,0.3534,0.4253,133
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Ауыл шаруашылығы,0.5013,0.7727,0.6081,748
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Байланыс,0.5273,0.5179,0.5225,56
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Басқа,0.1045,0.2692,0.1505,26
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Білім,0.7542,0.7646,0.7594,875
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Денсаулық сақтау,0.8092,0.7712,0.7897,638
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.7286,0.8728,0.7942,283
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Еңбек,0.5527,0.5532,0.5529,1128
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Жануарлар дүниесін қорғау және пайдалану,0.6012,0.526,0.5611,192
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Жер қойнауын пайдалану және қорғау,0.5889,0.453,0.5121,117
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Жерді пайдалану және қорғау,0.7378,0.5465,0.6279,860
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Кеден ісі,0.25,0.5,0.3333,16
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.697,0.5229,0.5975,7304
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Көлік,0.654,0.7271,0.6886,546
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Мемлекеттік наградалар,0.4697,0.4429,0.4559,70
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Мәдениет,0.5217,0.23,0.3192,574
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Ормандарды қорғау мен пайдалану,0.525,0.5833,0.5526,36
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Сауда қызметі мен қоғамдық тамақтандыру,0.533,0.4273,0.4743,227
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Сот. Әділет. Прокуратура,0.5761,0.6928,0.6291,153
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Суларды қорғау мен пайдалану,0.7276,0.6915,0.7091,282
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Сыртқы экономикалық қызмет,0.0,0.0,0.0,8
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.5461,0.5506,0.5483,850
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Халықаралық қатынастар,0.762,0.8323,0.7956,477
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Шаруашылық қызмет,0.3892,0.3229,0.353,2115
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Ғылым,0.5128,0.4706,0.4908,85
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Қаржы,0.8725,0.976,0.9213,16928
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Қоршаған ортаны қорғау,0.4444,0.1791,0.2553,67
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Қорғаныс,0.7296,0.5916,0.6534,333
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Қылмыстық құқық,0.2258,0.2414,0.2333,29
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Құрылыс,0.4502,0.406,0.427,234
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.5478,0.6325,0.5871,634
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Әлеуметтік қамсыздандыру. Сақтандыру,0.7172,0.8051,0.7586,1991
+area,pretrained_frozen: e5_frozen_lr,e5_frozen_lr,Өнеркәсіп,0.4723,0.4945,0.4831,362
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Азаматтық құқық,0.5566,0.4436,0.4937,133
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ауыл шаруашылығы,0.5422,0.6791,0.603,748
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Байланыс,0.6875,0.3929,0.5,56
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Басқа,0.1905,0.3077,0.2353,26
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Білім,0.731,0.8046,0.7661,875
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Денсаулық сақтау,0.7666,0.8135,0.7894,638
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.8696,0.9187,0.8935,283
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Еңбек,0.5933,0.648,0.6195,1128
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Жануарлар дүниесін қорғау және пайдалану,0.599,0.6302,0.6142,192
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Жер қойнауын пайдалану және қорғау,0.5159,0.5556,0.535,117
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Жерді пайдалану және қорғау,0.7186,0.7128,0.7157,860
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Кеден ісі,0.2453,0.8125,0.3768,16
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.7598,0.5392,0.6307,7304
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Көлік,0.6912,0.7747,0.7306,546
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Мемлекеттік наградалар,0.56,0.6,0.5793,70
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Мәдениет,0.6378,0.7578,0.6927,574
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ормандарды қорғау мен пайдалану,0.3671,0.8056,0.5043,36
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Сауда қызметі мен қоғамдық тамақтандыру,0.6151,0.6476,0.6309,227
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Сот. Әділет. Прокуратура,0.6089,0.7124,0.6566,153
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Суларды қорғау мен пайдалану,0.6646,0.773,0.7148,282
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Сыртқы экономикалық қызмет,0.125,0.25,0.1667,8
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.5806,0.5976,0.589,850
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Халықаралық қатынастар,0.8809,0.8679,0.8743,477
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Шаруашылық қызмет,0.4549,0.4052,0.4286,2115
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ғылым,0.56,0.3294,0.4148,85
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Қаржы,0.8991,0.9737,0.9349,16928
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Қоршаған ортаны қорғау,0.4286,0.1343,0.2045,67
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Қорғаныс,0.7762,0.6667,0.7173,333
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Қылмыстық құқық,0.25,0.1379,0.1778,29
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Құрылыс,0.4099,0.6026,0.4879,234
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.6364,0.6845,0.6596,634
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Әлеуметтік қамсыздандыру. Сақтандыру,0.7506,0.8252,0.7861,1991
+area,tiny_transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Өнеркәсіп,0.5641,0.4862,0.5223,362
+area,pretrained e5: e5_small_ft,e5_small_ft,Азаматтық құқық,0.5532,0.391,0.4581,133
+area,pretrained e5: e5_small_ft,e5_small_ft,Ауыл шаруашылығы,0.55,0.8316,0.6621,748
+area,pretrained e5: e5_small_ft,e5_small_ft,Байланыс,0.6102,0.6429,0.6261,56
+area,pretrained e5: e5_small_ft,e5_small_ft,Басқа,0.3125,0.1923,0.2381,26
+area,pretrained e5: e5_small_ft,e5_small_ft,Білім,0.7827,0.7737,0.7782,875
+area,pretrained e5: e5_small_ft,e5_small_ft,Денсаулық сақтау,0.8195,0.8182,0.8188,638
+area,pretrained e5: e5_small_ft,e5_small_ft,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.8881,0.8975,0.8928,283
+area,pretrained e5: e5_small_ft,e5_small_ft,Еңбек,0.5844,0.6631,0.6213,1128
+area,pretrained e5: e5_small_ft,e5_small_ft,Жануарлар дүниесін қорғау және пайдалану,0.5923,0.7188,0.6494,192
+area,pretrained e5: e5_small_ft,e5_small_ft,Жер қойнауын пайдалану және қорғау,0.6139,0.5299,0.5688,117
+area,pretrained e5: e5_small_ft,e5_small_ft,Жерді пайдалану және қорғау,0.7733,0.7733,0.7733,860
+area,pretrained e5: e5_small_ft,e5_small_ft,Кеден ісі,0.1778,0.5,0.2623,16
+area,pretrained e5: e5_small_ft,e5_small_ft,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.8081,0.5392,0.6468,7304
+area,pretrained e5: e5_small_ft,e5_small_ft,Көлік,0.6914,0.837,0.7572,546
+area,pretrained e5: e5_small_ft,e5_small_ft,Мемлекеттік наградалар,0.537,0.8286,0.6517,70
+area,pretrained e5: e5_small_ft,e5_small_ft,Мәдениет,0.6261,0.6098,0.6178,574
+area,pretrained e5: e5_small_ft,e5_small_ft,Ормандарды қорғау мен пайдалану,0.6222,0.7778,0.6914,36
+area,pretrained e5: e5_small_ft,e5_small_ft,Сауда қызметі мен қоғамдық тамақтандыру,0.5345,0.6476,0.5857,227
+area,pretrained e5: e5_small_ft,e5_small_ft,Сот. Әділет. Прокуратура,0.5805,0.7778,0.6648,153
+area,pretrained e5: e5_small_ft,e5_small_ft,Суларды қорғау мен пайдалану,0.6755,0.8121,0.7375,282
+area,pretrained e5: e5_small_ft,e5_small_ft,Сыртқы экономикалық қызмет,0.0,0.0,0.0,8
+area,pretrained e5: e5_small_ft,e5_small_ft,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.5909,0.7035,0.6423,850
+area,pretrained e5: e5_small_ft,e5_small_ft,Халықаралық қатынастар,0.8871,0.9224,0.9044,477
+area,pretrained e5: e5_small_ft,e5_small_ft,Шаруашылық қызмет,0.4948,0.3381,0.4017,2115
+area,pretrained e5: e5_small_ft,e5_small_ft,Ғылым,0.6526,0.7294,0.6889,85
+area,pretrained e5: e5_small_ft,e5_small_ft,Қаржы,0.8964,0.9776,0.9353,16928
+area,pretrained e5: e5_small_ft,e5_small_ft,Қоршаған ортаны қорғау,0.6667,0.0597,0.1096,67
+area,pretrained e5: e5_small_ft,e5_small_ft,Қорғаныс,0.7993,0.6456,0.7143,333
+area,pretrained e5: e5_small_ft,e5_small_ft,Қылмыстық құқық,0.25,0.2414,0.2456,29
+area,pretrained e5: e5_small_ft,e5_small_ft,Құрылыс,0.3904,0.594,0.4712,234
+area,pretrained e5: e5_small_ft,e5_small_ft,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.6123,0.7397,0.67,634
+area,pretrained e5: e5_small_ft,e5_small_ft,Әлеуметтік қамсыздандыру. Сақтандыру,0.7307,0.8669,0.793,1991
+area,pretrained e5: e5_small_ft,e5_small_ft,Өнеркәсіп,0.5261,0.5856,0.5542,362
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Азаматтық құқық,0.6747,0.4211,0.5185,133
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Ауыл шаруашылығы,0.615,0.7901,0.6916,748
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Байланыс,0.6444,0.5179,0.5743,56
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Басқа,0.1765,0.2308,0.2,26
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Білім,0.8074,0.7714,0.789,875
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Денсаулық сақтау,0.8107,0.8323,0.8213,638
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.9286,0.9647,0.9463,283
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Еңбек,0.6258,0.6746,0.6493,1128
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Жануарлар дүниесін қорғау және пайдалану,0.5923,0.7188,0.6494,192
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Жер қойнауын пайдалану және қорғау,0.6429,0.5385,0.586,117
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Жерді пайдалану және қорғау,0.7865,0.8012,0.7938,860
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Кеден ісі,0.303,0.625,0.4082,16
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.7784,0.5702,0.6582,7304
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Көлік,0.7404,0.8095,0.7734,546
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Мемлекеттік наградалар,0.5506,0.7,0.6164,70
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Мәдениет,0.6882,0.7038,0.696,574
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Ормандарды қорғау мен пайдалану,0.6098,0.6944,0.6494,36
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Сауда қызметі мен қоғамдық тамақтандыру,0.6385,0.5991,0.6182,227
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Сот. Әділет. Прокуратура,0.6222,0.732,0.6727,153
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Суларды қорғау мен пайдалану,0.7029,0.7801,0.7395,282
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Сыртқы экономикалық қызмет,0.2143,0.375,0.2727,8
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.6212,0.7235,0.6685,850
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Халықаралық қатынастар,0.8894,0.8931,0.8912,477
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Шаруашылық қызмет,0.5142,0.4714,0.4919,2115
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Ғылым,0.6949,0.4824,0.5694,85
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Қаржы,0.8996,0.9774,0.9369,16928
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Қоршаған ортаны қорғау,0.4468,0.3134,0.3684,67
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Қорғаныс,0.7985,0.6426,0.7121,333
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Қылмыстық құқық,0.25,0.2069,0.2264,29
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Құрылыс,0.4603,0.594,0.5187,234
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.6462,0.7461,0.6925,634
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Әлеуметтік қамсыздандыру. Сақтандыру,0.7833,0.8081,0.7956,1991
+area,pretrained kaz-roberta: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Өнеркәсіп,0.5614,0.5304,0.5455,362
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Азаматтық құқық,0.6531,0.4812,0.5541,133
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Ауыл шаруашылығы,0.6054,0.8021,0.6901,748
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Байланыс,0.6596,0.5536,0.6019,56
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Басқа,0.1379,0.1538,0.1455,26
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Білім,0.8091,0.7703,0.7892,875
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Денсаулық сақтау,0.8153,0.837,0.826,638
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,ЕурАзЭҚ. Кедендік одақ. ЕАЭО,0.9317,0.9647,0.9479,283
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Еңбек,0.6255,0.6826,0.6528,1128
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Жануарлар дүниесін қорғау және пайдалану,0.6094,0.7396,0.6682,192
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Жер қойнауын пайдалану және қорғау,0.6465,0.547,0.5926,117
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Жерді пайдалану және қорғау,0.7892,0.8012,0.7952,860
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Кеден ісі,0.3448,0.625,0.4444,16
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Конституциялық құрылыс және мемлекеттік басқару негіздері,0.7957,0.5648,0.6606,7304
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Көлік,0.7105,0.8315,0.7662,546
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Мемлекеттік наградалар,0.5474,0.7429,0.6303,70
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Мәдениет,0.6678,0.7143,0.6902,574
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Ормандарды қорғау мен пайдалану,0.4615,0.8333,0.5941,36
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Сауда қызметі мен қоғамдық тамақтандыру,0.6415,0.5991,0.6196,227
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Сот. Әділет. Прокуратура,0.645,0.7124,0.677,153
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Суларды қорғау мен пайдалану,0.6867,0.7695,0.7258,282
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Сыртқы экономикалық қызмет,0.0,0.0,0.0,8
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету,0.6521,0.7188,0.6838,850
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Халықаралық қатынастар,0.9021,0.9078,0.9049,477
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Шаруашылық қызмет,0.5402,0.4506,0.4914,2115
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Ғылым,0.7188,0.5412,0.6174,85
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Қаржы,0.9007,0.979,0.9382,16928
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Қоршаған ортаны қорғау,0.5152,0.2537,0.34,67
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Қорғаныс,0.8083,0.6456,0.7179,333
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Қылмыстық құқық,0.2174,0.1724,0.1923,29
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Құрылыс,0.4312,0.6026,0.5027,234
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау,0.6319,0.7555,0.6882,634
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Әлеуметтік қамсыздандыру. Сақтандыру,0.7597,0.8624,0.8078,1991
+area,ensemble: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Өнеркәсіп,0.5625,0.547,0.5546,362

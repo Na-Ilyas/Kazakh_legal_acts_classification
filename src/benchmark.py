@@ -191,15 +191,24 @@ def update_experiment_rows(result: dict) -> None:
 
 
 def selected_models(select: str) -> set[tuple[str, str]] | None:
-    """(task, model_name) pairs to measure: 'main' = main-table models of src.compare,
+    """(task, model_name) pairs to measure: 'main' = main-table + refit models of src.compare,
+    'main_unmeasured' = those not yet measured with this protocol,
     'missing' = models whose test row has no latency yet, 'all' = None (everything)."""
     if select == "all":
         return None
-    if select == "main":
+    if select in ("main", "main_unmeasured"):
         from src import compare
         table = compare.mark_main(compare.build_table(compare.load_rows()))
-        main = table[table["table"] == "main"]
-        return set(zip(main["task"], main["model_name"]))
+        main = table[table["table"].isin(["main", "reference", "refit"])]
+        wanted = set(zip(main["task"], main["model_name"]))
+        if select == "main_unmeasured":          # skip models already measured with this protocol
+            from src import experiments_db
+            with experiments_db.connect() as con:
+                done = {(t, m) for t, m, hp in con.execute(
+                    "SELECT task, model_name, hyperparams FROM experiments WHERE eval_split='test'")
+                    if "benchmark_protocol" in (hp or "")}
+            wanted -= done
+        return wanted
     if select == "missing":
         from src import experiments_db
         with experiments_db.connect() as con:
@@ -248,7 +257,7 @@ def _cli() -> None:
     parser.add_argument("--repeats", type=int, default=REPEATS)
     parser.add_argument("--json-out")
     parser.add_argument("--all", action="store_true")
-    parser.add_argument("--select", choices=["all", "main", "missing"], default="all")
+    parser.add_argument("--select", choices=["all", "main", "main_unmeasured", "missing"], default="all")
     parser.add_argument("--cpu-only", action="store_true", help="hide the GPU (CPU latency only)")
     args = parser.parse_args()
     if args.all or not args.kind:

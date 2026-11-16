@@ -1,0 +1,940 @@
+{
+ "tasks": {
+  "form": [
+   {
+    "model": "majority_dummy",
+    "test": 0.0451,
+    "n_params": 0,
+    "size_mb": 0.0,
+    "latency": 0.3,
+    "test_strict": 0.0625,
+    "val": 0.0471,
+    "label": "Majority class"
+   },
+   {
+    "model": "char_1nn",
+    "test": 0.6697,
+    "n_params": 47530713,
+    "size_mb": 362.89,
+    "latency": 2801.2,
+    "test_strict": 0.6322,
+    "val": 0.6747,
+    "label": "char 1-NN"
+   },
+   {
+    "model": "tfidf_word_char_lr",
+    "test": 0.8202,
+    "n_params": 1513015,
+    "size_mb": 15.19,
+    "latency": 189.6,
+    "test_strict": 0.8253,
+    "val": 0.8576,
+    "label": "TF-IDF word+char + LR"
+   },
+   {
+    "model": "tiny_transformer_2L_do30",
+    "test": 0.8132,
+    "n_params": 3650311,
+    "size_mb": 14.71,
+    "latency": 304.7,
+    "test_strict": 0.8153,
+    "val": 0.8292,
+    "label": "Tiny transformer 2L (scratch)"
+   },
+   {
+    "model": "tiny_transformer_4L_mlm_kd_a90_T2",
+    "test": 0.8252,
+    "n_params": 5229831,
+    "size_mb": 20.74,
+    "latency": 507.1,
+    "test_strict": 0.828,
+    "val": 0.8647,
+    "label": "Tiny 4L + MLM + KD"
+   },
+   {
+    "model": "mt5_small_kkprune_text",
+    "test": 0.791,
+    "n_params": 58726784,
+    "size_mb": 225.01,
+    "latency": 20552.0,
+    "test_strict": 0.7956,
+    "val": 0.8213,
+    "label": "mT5-small seq2seq (pruned)"
+   },
+   {
+    "model": "e5_small_ft",
+    "test": 0.8415,
+    "n_params": 117656455,
+    "size_mb": 465.14,
+    "latency": 3471.0,
+    "test_strict": 0.8462,
+    "val": 0.8656,
+    "label": "e5-small fine-tuned"
+   },
+   {
+    "model": "e5_small_kkprune_ft",
+    "test": 0.8448,
+    "n_params": 25517191,
+    "size_mb": 98.32,
+    "latency": 8554.8,
+    "test_strict": 0.8521,
+    "val": 0.8628,
+    "label": "e5-small pruned (25.5M)"
+   },
+   {
+    "model": "kaz_roberta_ft",
+    "test": 0.8528,
+    "n_params": 83456263,
+    "size_mb": 323.53,
+    "latency": 9707.8,
+    "test_strict": 0.8675,
+    "val": 0.883,
+    "label": "kaz-roberta fine-tuned"
+   },
+   {
+    "model": "ensemble_tfidf_tiny_e5_prioradj",
+    "test": 0.8552,
+    "n_params": 124399301,
+    "size_mb": 501.07,
+    "latency": 4192.3,
+    "test_strict": 0.8704,
+    "val": 0.919,
+    "label": "Ensemble + prior adj."
+   }
+  ],
+  "area": [
+   {
+    "model": "majority_dummy",
+    "test": 0.0186,
+    "n_params": 0,
+    "size_mb": 0.0,
+    "latency": 0.3,
+    "test_strict": 0.0116,
+    "val": 0.0197,
+    "label": "Majority class"
+   },
+   {
+    "model": "char_1nn",
+    "test": 0.5363,
+    "n_params": 47530713,
+    "size_mb": 362.89,
+    "latency": 2801.2,
+    "test_strict": 0.4875,
+    "val": 0.5555,
+    "label": "char 1-NN"
+   },
+   {
+    "model": "tfidf_word_char_lr",
+    "test": 0.5827,
+    "n_params": 7132785,
+    "size_mb": 36.64,
+    "latency": 234.6,
+    "test_strict": 0.5555,
+    "val": 0.5985,
+    "label": "TF-IDF word+char + LR"
+   },
+   {
+    "model": "tiny_transformer_2L_do30",
+    "test": 0.5937,
+    "n_params": 3656993,
+    "size_mb": 14.74,
+    "latency": 302.4,
+    "test_strict": 0.5681,
+    "val": 0.5842,
+    "label": "Tiny transformer 2L (scratch)"
+   },
+   {
+    "model": "tiny_transformer_4L_mlm_kd_a50_T2",
+    "test": 0.5974,
+    "n_params": 5236513,
+    "size_mb": 20.77,
+    "latency": 507.4,
+    "test_strict": 0.5797,
+    "val": 0.5922,
+    "label": "Tiny 4L + MLM + KD"
+   },
+   {
+    "model": "e5_small_ft",
+    "test": 0.601,
+    "n_params": 117666465,
+    "size_mb": 465.18,
+    "latency": 3506.4,
+    "test_strict": 0.5792,
+    "val": 0.5836,
+    "label": "e5-small fine-tuned"
+   },
+   {
+    "model": "e5_small_kkprune_ft",
+    "test": 0.5997,
+    "n_params": 25529121,
+    "size_mb": 98.37,
+    "latency": 8051.2,
+    "test_strict": 0.579,
+    "val": 0.5805,
+    "label": "e5-small pruned (25.5M)"
+   },
+   {
+    "model": "kaz_roberta_llrd_rec",
+    "test": 0.6285,
+    "n_params": 83476257,
+    "size_mb": 323.61,
+    "latency": 9775.9,
+    "test_strict": 0.608,
+    "val": 0.6162,
+    "label": "kaz-roberta LLRD+recency"
+   },
+   {
+    "model": "kaz_roberta_llrd_rec_trainval",
+    "test": 0.6345,
+    "n_params": 83476257,
+    "size_mb": 323.61,
+    "latency": 9841.1,
+    "test_strict": 0.6163,
+    "val": 0.8102,
+    "label": "kaz-roberta refit train+val"
+   },
+   {
+    "model": "ensemble_tfidf_tiny_e5_roberta",
+    "test": 0.6215,
+    "n_params": 213512020,
+    "size_mb": 846.2,
+    "latency": 14356.6,
+    "test_strict": 0.6035,
+    "val": 0.6407,
+    "label": "Ensemble (+kaz-roberta)"
+   }
+  ]
+ },
+ "io_benchmark": {
+  "csv_size_mb": 321.16,
+  "parquet_size_mb": 25.78,
+  "size_ratio_csv_over_parquet": 12.46,
+  "subset_columns": [
+   "law_id",
+   "title",
+   "date_adopted",
+   "act_form",
+   "database_section"
+  ],
+  "repeats": 3,
+  "notes": "csv = pd.read_csv with pandas-3 default dtype inference (Arrow-backed str); csv_chunked = streamed with chunksize, frame never fully materialised; parquet = optimised dtypes (category/bool/datetime). Each case runs in a fresh spawned process; peak_rss_delta = VmHWM (reset via /proc/self/clear_refs before every read) minus RSS just before the read, max over repeats.",
+  "cases": [
+   {
+    "format": "csv",
+    "columns": "full",
+    "read_time_s_median": 0.439,
+    "read_times_s": [
+     0.479,
+     0.439,
+     0.423
+    ],
+    "peak_rss_mb": 1178.24,
+    "peak_rss_delta_mb": 720.27,
+    "frame_mem_mb": 353.51,
+    "rows": 215889,
+    "cols": 25
+   },
+   {
+    "format": "csv",
+    "columns": "5 cols",
+    "read_time_s_median": 0.178,
+    "read_times_s": [
+     0.173,
+     0.18,
+     0.178
+    ],
+    "peak_rss_mb": 277.97,
+    "peak_rss_delta_mb": 152.57,
+    "frame_mem_mb": 88.64,
+    "rows": 215889,
+    "cols": 5
+   },
+   {
+    "format": "csv_chunked",
+    "columns": "full",
+    "read_time_s_median": 0.378,
+    "read_times_s": [
+     0.416,
+     0.368,
+     0.378
+    ],
+    "peak_rss_mb": 273.25,
+    "peak_rss_delta_mb": 149.66,
+    "frame_mem_mb": null,
+    "rows": 215889,
+    "cols": 25
+   },
+   {
+    "format": "parquet",
+    "columns": "full",
+    "read_time_s_median": 0.228,
+    "read_times_s": [
+     0.397,
+     0.228,
+     0.18
+    ],
+    "peak_rss_mb": 1626.14,
+    "peak_rss_delta_mb": 1103.29,
+    "frame_mem_mb": 201.32,
+    "rows": 215889,
+    "cols": 25
+   },
+   {
+    "format": "parquet",
+    "columns": "5 cols",
+    "read_time_s_median": 0.025,
+    "read_times_s": [
+     0.041,
+     0.02,
+     0.025
+    ],
+    "peak_rss_mb": 799.57,
+    "peak_rss_delta_mb": 473.46,
+    "frame_mem_mb": 71.09,
+    "rows": 215889,
+    "cols": 5
+   }
+  ],
+  "memory": {
+   "object_dtype_mb": 636.85,
+   "pandas_default_mb": 353.45,
+   "optimized_full_frame_mb": 201.32,
+   "reduction_vs_object_pct": 68.4
+  }
+ },
+ "leakage_report": {
+  "temporal_split": {
+   "test": {
+    "years": [
+     2023,
+     2026
+    ],
+    "rows": 38471
+   },
+   "train": {
+    "years": [
+     1947,
+     2021
+    ],
+    "rows": 156570
+   },
+   "val": {
+    "years": [
+     2022,
+     2022
+    ],
+    "rows": 12863
+   }
+  },
+  "removed_by_build_dataset": {
+   "eval_titles_seen_in_train": 7030,
+   "test_titles_seen_in_val": 955
+  },
+  "exact_overlap_after_build": {
+   "train_val_rows": 0,
+   "train_val_pct": 0.0,
+   "train_test_rows": 0,
+   "train_test_pct": 0.0,
+   "val_test_rows": 0
+  },
+  "digit_masked_overlap": {
+   "train_val_rows": 3355,
+   "train_val_pct": 26.083,
+   "train_test_rows": 7906,
+   "train_test_pct": 20.551,
+   "val_test_rows": 9560
+  },
+  "within_train_duplicates": {
+   "rows": 156570,
+   "rows_in_duplicate_groups": 53541,
+   "redundant_copies": 38500,
+   "redundant_copies_pct": 24.59,
+   "distinct_titles": 118070
+  },
+  "near_duplicates": {
+   "method": "char_wb 3-5-gram TF-IDF (sublinear tf, min_df=2) fitted on train normalize_title(mask_digits=True); cosine",
+   "vocab_size": 69005,
+   "fit_time_s": 9.9,
+   "search_time_s": 175.0,
+   "val": {
+    "n": 12863,
+    "mean": 0.8928,
+    "quantiles": {
+     "0.05": 0.5898,
+     "0.25": 0.8464,
+     "0.5": 0.9373,
+     "0.75": 1.0,
+     "0.95": 1.0
+    },
+    "pct_ge_0.95": 45.08,
+    "pct_ge_0.9": 62.66,
+    "pct_ge_0.8": 81.14,
+    "pct_ge_0.7": 90.48,
+    "pct_lt_0.5": 2.01
+   },
+   "test": {
+    "n": 38471,
+    "mean": 0.8585,
+    "quantiles": {
+     "0.05": 0.535,
+     "0.25": 0.7736,
+     "0.5": 0.9137,
+     "0.75": 0.9887,
+     "0.95": 1.0
+    },
+    "pct_ge_0.95": 36.52,
+    "pct_ge_0.9": 54.18,
+    "pct_ge_0.8": 71.79,
+    "pct_ge_0.7": 83.12,
+    "pct_lt_0.5": 3.58
+   }
+  },
+  "test_strict": {
+   "definition": "test rows with max masked cosine < 0.9 and no digit-masked exact match in train",
+   "threshold": 0.9,
+   "n_test": 38471,
+   "n_below_threshold": 17629,
+   "n_masked_exact_below_threshold": 0,
+   "n_masked_exact_total": 7906,
+   "n_strict": 17629,
+   "pct_kept": 45.82
+  },
+  "char_1nn": {
+   "form": {
+    "n_train_labelled": 156514,
+    "val": {
+     "f1_macro": 0.6747,
+     "f1_weighted": 0.9385,
+     "accuracy": 0.9384,
+     "n_eval": 12863
+    },
+    "test": {
+     "f1_macro": 0.6697,
+     "f1_weighted": 0.9098,
+     "accuracy": 0.9065,
+     "n_eval": 38467
+    },
+    "test_strict": {
+     "f1_macro": 0.6322,
+     "f1_weighted": 0.8184,
+     "accuracy": 0.8124,
+     "n_eval": 17626
+    },
+    "test_agreement_by_similarity": {
+     "[0.0, 0.5)": {
+      "n": 1377,
+      "agreement": 0.5084
+     },
+     "[0.5, 0.7)": {
+      "n": 5127,
+      "agreement": 0.6823
+     },
+     "[0.7, 0.8)": {
+      "n": 4347,
+      "agreement": 0.8645
+     },
+     "[0.8, 0.9)": {
+      "n": 6790,
+      "agreement": 0.9393
+     },
+     "[0.9, 0.95)": {
+      "n": 6790,
+      "agreement": 0.9773
+     },
+     "[0.95, 1.0)": {
+      "n": 14036,
+      "agreement": 0.9903
+     }
+    }
+   },
+   "area": {
+    "n_train_labelled": 156449,
+    "val": {
+     "f1_macro": 0.5555,
+     "f1_weighted": 0.7907,
+     "accuracy": 0.7919,
+     "n_eval": 12841
+    },
+    "test": {
+     "f1_macro": 0.5363,
+     "f1_weighted": 0.7314,
+     "accuracy": 0.7379,
+     "n_eval": 38377
+    },
+    "test_strict": {
+     "f1_macro": 0.4875,
+     "f1_weighted": 0.6137,
+     "accuracy": 0.6155,
+     "n_eval": 17570
+    },
+    "test_agreement_by_similarity": {
+     "[0.0, 0.5)": {
+      "n": 1375,
+      "agreement": 0.3949
+     },
+     "[0.5, 0.7)": {
+      "n": 5113,
+      "agreement": 0.5326
+     },
+     "[0.7, 0.8)": {
+      "n": 4333,
+      "agreement": 0.6557
+     },
+     "[0.8, 0.9)": {
+      "n": 6764,
+      "agreement": 0.6974
+     },
+     "[0.9, 0.95)": {
+      "n": 6781,
+      "agreement": 0.7157
+     },
+     "[0.95, 1.0)": {
+      "n": 14011,
+      "agreement": 0.9024
+     }
+    }
+   }
+  },
+  "char_1nn_cost": {
+   "latency_ms_per_1000": 2801.2,
+   "index_size_mb": 362.9,
+   "peak_rss_mb": 2275.5
+  },
+  "elapsed_s": 203.5
+ },
+ "split_stats": {
+  "rows_in": 215889,
+  "dropped_missing_date": 0,
+  "area_classes": [
+   "Азаматтық құқық",
+   "Ауыл шаруашылығы",
+   "Байланыс",
+   "Білім",
+   "Денсаулық сақтау",
+   "ЕурАзЭҚ. Кедендік одақ. ЕАЭО",
+   "Еңбек",
+   "Жануарлар дүниесін қорғау және пайдалану",
+   "Жер қойнауын пайдалану және қорғау",
+   "Жерді пайдалану және қорғау",
+   "Кеден ісі",
+   "Конституциялық құрылыс және мемлекеттік басқару негіздері",
+   "Көлік",
+   "Мемлекеттік наградалар",
+   "Мәдениет",
+   "Ормандарды қорғау мен пайдалану",
+   "Сауда қызметі мен қоғамдық тамақтандыру",
+   "Сот. Әділет. Прокуратура",
+   "Суларды қорғау мен пайдалану",
+   "Сыртқы экономикалық қызмет",
+   "Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету",
+   "Халықаралық қатынастар",
+   "Шаруашылық қызмет",
+   "Ғылым",
+   "Қаржы",
+   "Қоршаған ортаны қорғау",
+   "Қорғаныс",
+   "Қылмыстық құқық",
+   "Құрылыс",
+   "Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау",
+   "Әлеуметтік қамсыздандыру. Сақтандыру",
+   "Өнеркәсіп",
+   "Басқа"
+  ],
+  "dropped_eval_titles_seen_in_train": 7030,
+  "dropped_test_titles_seen_in_val": 955,
+  "rows_out": 207904,
+  "split_sizes": {
+   "train": 156570,
+   "test": 38471,
+   "val": 12863
+  },
+  "form_label_missing_by_split": {
+   "test": 4,
+   "train": 56,
+   "val": 0
+  },
+  "class_distribution": {
+   "form": {
+    "Басқа": {
+     "test": 26,
+     "train": 1586,
+     "val": 13
+    },
+    "Бұйрық": {
+     "test": 5648,
+     "train": 20691,
+     "val": 1370
+    },
+    "Жарлық": {
+     "test": 319,
+     "train": 3421,
+     "val": 197
+    },
+    "Заң": {
+     "test": 329,
+     "train": 3070,
+     "val": 70
+    },
+    "Шешім": {
+     "test": 24668,
+     "train": 57164,
+     "val": 8551
+    },
+    "Қаулы": {
+     "test": 7215,
+     "train": 66373,
+     "val": 2541
+    },
+    "Өкім": {
+     "test": 262,
+     "train": 4209,
+     "val": 121
+    }
+   },
+   "area": {
+    "Азаматтық құқық": {
+     "test": 133,
+     "train": 1384,
+     "val": 45
+    },
+    "Ауыл шаруашылығы": {
+     "test": 748,
+     "train": 5187,
+     "val": 284
+    },
+    "Байланыс": {
+     "test": 56,
+     "train": 530,
+     "val": 8
+    },
+    "Басқа": {
+     "test": 26,
+     "train": 549,
+     "val": 9
+    },
+    "Білім": {
+     "test": 875,
+     "train": 5044,
+     "val": 257
+    },
+    "Денсаулық сақтау": {
+     "test": 638,
+     "train": 4350,
+     "val": 218
+    },
+    "ЕурАзЭҚ. Кедендік одақ. ЕАЭО": {
+     "test": 283,
+     "train": 2260,
+     "val": 269
+    },
+    "Еңбек": {
+     "test": 1128,
+     "train": 9926,
+     "val": 386
+    },
+    "Жануарлар дүниесін қорғау және пайдалану": {
+     "test": 192,
+     "train": 1197,
+     "val": 65
+    },
+    "Жер қойнауын пайдалану және қорғау": {
+     "test": 117,
+     "train": 881,
+     "val": 25
+    },
+    "Жерді пайдалану және қорғау": {
+     "test": 860,
+     "train": 2114,
+     "val": 198
+    },
+    "Кеден ісі": {
+     "test": 16,
+     "train": 1001,
+     "val": 2
+    },
+    "Конституциялық құрылыс және мемлекеттік басқару негіздері": {
+     "test": 7304,
+     "train": 30598,
+     "val": 2517
+    },
+    "Көлік": {
+     "test": 546,
+     "train": 3086,
+     "val": 89
+    },
+    "Мемлекеттік наградалар": {
+     "test": 70,
+     "train": 379,
+     "val": 11
+    },
+    "Мәдениет": {
+     "test": 574,
+     "train": 1415,
+     "val": 150
+    },
+    "Ормандарды қорғау мен пайдалану": {
+     "test": 36,
+     "train": 456,
+     "val": 5
+    },
+    "Сауда қызметі мен қоғамдық тамақтандыру": {
+     "test": 227,
+     "train": 584,
+     "val": 70
+    },
+    "Сот. Әділет. Прокуратура": {
+     "test": 153,
+     "train": 1578,
+     "val": 34
+    },
+    "Суларды қорғау мен пайдалану": {
+     "test": 282,
+     "train": 1305,
+     "val": 35
+    },
+    "Сыртқы экономикалық қызмет": {
+     "test": 8,
+     "train": 820,
+     "val": 0
+    },
+    "Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету": {
+     "test": 850,
+     "train": 1986,
+     "val": 286
+    },
+    "Халықаралық қатынастар": {
+     "test": 477,
+     "train": 6782,
+     "val": 149
+    },
+    "Шаруашылық қызмет": {
+     "test": 2115,
+     "train": 11484,
+     "val": 828
+    },
+    "Ғылым": {
+     "test": 85,
+     "train": 568,
+     "val": 10
+    },
+    "Қаржы": {
+     "test": 16928,
+     "train": 41367,
+     "val": 5922
+    },
+    "Қоршаған ортаны қорғау": {
+     "test": 67,
+     "train": 309,
+     "val": 25
+    },
+    "Қорғаныс": {
+     "test": 333,
+     "train": 2469,
+     "val": 90
+    },
+    "Қылмыстық құқық": {
+     "test": 29,
+     "train": 457,
+     "val": 10
+    },
+    "Құрылыс": {
+     "test": 234,
+     "train": 980,
+     "val": 61
+    },
+    "Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау": {
+     "test": 634,
+     "train": 3320,
+     "val": 146
+    },
+    "Әлеуметтік қамсыздандыру. Сақтандыру": {
+     "test": 1991,
+     "train": 9641,
+     "val": 534
+    },
+    "Өнеркәсіп": {
+     "test": 362,
+     "train": 2442,
+     "val": 103
+    }
+   }
+  },
+  "warnings": [
+   "form: class 'Басқа' has only 13 rows in val",
+   "form: class 'Басқа' has only 26 rows in test",
+   "area: class 'Байланыс' has only 8 rows in val",
+   "area: class 'Басқа' has only 9 rows in val",
+   "area: class 'Басқа' has only 26 rows in test",
+   "area: class 'Жер қойнауын пайдалану және қорғау' has only 25 rows in val",
+   "area: class 'Кеден ісі' has only 2 rows in val",
+   "area: class 'Кеден ісі' has only 16 rows in test",
+   "area: class 'Мемлекеттік наградалар' has only 11 rows in val",
+   "area: class 'Ормандарды қорғау мен пайдалану' has only 5 rows in val",
+   "area: class 'Сыртқы экономикалық қызмет' has only 0 rows in val",
+   "area: class 'Сыртқы экономикалық қызмет' has only 8 rows in test",
+   "area: class 'Ғылым' has only 10 rows in val",
+   "area: class 'Қоршаған ортаны қорғау' has only 25 rows in val",
+   "area: class 'Қылмыстық құқық' has only 10 rows in val",
+   "area: class 'Қылмыстық құқық' has only 29 rows in test"
+  ],
+  "area_missing_by_split": {
+   "test": 94,
+   "train": 121,
+   "val": 22
+  },
+  "year_range_by_split": {
+   "test": [
+    2023,
+    2026
+   ],
+   "train": [
+    1947,
+    2021
+   ],
+   "val": [
+    2022,
+    2022
+   ]
+  },
+  "columns": [
+   "law_id",
+   "title",
+   "act_form_raw",
+   "database_section",
+   "date_adopted",
+   "year",
+   "title_norm",
+   "form_label",
+   "split",
+   "area_label"
+  ]
+ },
+ "eda_summary": {
+  "class_distribution": {
+   "figure": "reports/figures/eda_class_distribution_by_split.png",
+   "finding": "Label shift between the temporal splits: in `form`, 'Шешім' goes from 36.5% of train to 64.1% of test while 'Қаулы' goes from 42.4% to 18.8%; the largest test class covers 64.1% of test, so accuracy mostly reflects one class and macro-F1 is the headline metric. In `area`, 'Қаржы' goes from 26.4% (train) to 44.1% (test).",
+   "numbers": {
+    "form": {
+     "up": "Шешім",
+     "up_pct": [
+      36.5,
+      64.1
+     ],
+     "down": "Қаулы",
+     "down_pct": [
+      42.4,
+      18.8
+     ],
+     "test_top": "Шешім",
+     "test_top_pct": 64.1
+    },
+    "area": {
+     "up": "Қаржы",
+     "up_pct": [
+      26.4,
+      44.1
+     ],
+     "down": "Еңбек",
+     "down_pct": [
+      6.3,
+      2.9
+     ],
+     "test_top": "Қаржы",
+     "test_top_pct": 44.1
+    }
+   }
+  },
+  "acts_per_year_by_form": {
+   "figure": "reports/figures/eda_acts_per_year_by_form.png",
+   "finding": "Volume peaks in 2023 (15,092 acts). The share of 'Шешім', the most frequent form in the test years, rises from 36% in 2011 to 62% in 2023, which drives the form label shift of the temporal split. 9,502 acts predate 2000 (earliest year: 1947).",
+   "sql_query": "acts_per_year_by_form"
+  },
+  "title_length": {
+   "figure": "reports/figures/eda_title_length_by_form.png",
+   "finding": "Median title length is 158 chars / 19 words (p95 336, p99 493, max 4,071 chars). By median, Жарлық titles are the shortest (105 chars) and Бұйрық the longest (202 chars); 47 titles (0.02%) exceed 1000 chars.",
+   "median_chars_by_form": {
+    "Басқа": 134.0,
+    "Бұйрық": 202.0,
+    "Жарлық": 105.0,
+    "Заң": 142.0,
+    "Шешім": 163.0,
+    "Қаулы": 140.0,
+    "Өкім": 123.0
+   }
+  },
+  "missingness": {
+   "figure": "reports/figures/eda_missingness.png",
+   "finding": "Model inputs are nearly complete (missing: title 0.0%, date_adopted 0.0%, act_form 0.03%, database_section 0.11%), but placeholders hide missingness: 'regulatory_body' looks 99.99% filled when only empty strings are counted, yet 93,272 rows (43.2%) are placeholders that a naive isna() would miss."
+  },
+  "duplicates": {
+   "figure": "reports/figures/eda_duplicates_overview.png",
+   "finding": "76,460 rows share their exact title with another row (22,544 distinct titles); law_id has 0 duplicated rows. After removing 7,030 eval rows whose normalised title occurs in train, 20.6% of test titles still match a train title up to digits and 54.18% have a near-duplicate (masked cosine ≥ 0.9); test_strict keeps 17,629 of 38,471 test rows (45.82%)."
+  },
+  "top_bodies": {
+   "figure": "reports/figures/eda_top_bodies.png",
+   "finding": "The largest single issuer is 'Қазақстан Республикасының Үкіметі' (37,807 acts, 29% repealed), yet the top-15 bodies together adopt only 30.7% of all 215,819 acts. Local bodies (types Мәслихат / Әкімдік / Әкім; 3,147 distinct bodies) adopt 59.7% of the acts (SQL: acts_by_body_type).",
+   "sql_query": [
+    "top_adopting_bodies",
+    "acts_by_body_type"
+   ]
+  },
+  "area_form_heatmap": {
+   "figure": "reports/figures/eda_area_form_heatmap.png",
+   "finding": "The two targets are correlated but not redundant: 7 of 33 areas have one form covering ≥70% of their acts (most concentrated: 'Қаржы', 79.6% Шешім), while the most mixed area 'Қоршаған ортаны қорғау' has at most 35.9% in any single form, so knowing the form does not determine the area.",
+   "sql_query": "area_form_matrix"
+  },
+  "elapsed_s": 8.5
+ },
+ "efficiency": [
+  {
+   "label": "TF-IDF word+char + LR",
+   "n_params": 1513015,
+   "size_mb": 15.19,
+   "latency": 192.9,
+   "latency_source": "benchmark",
+   "form": 0.8253,
+   "area": 0.5555,
+   "highlight": false
+  },
+  {
+   "label": "Tiny transformer 4L + MLM + KD (scratch)",
+   "n_params": 5229831,
+   "size_mb": 20.74,
+   "latency": 507.1,
+   "latency_source": "training-time",
+   "form": 0.828,
+   "area": 0.5797,
+   "highlight": true
+  },
+  {
+   "label": "e5-small fine-tuned",
+   "n_params": 117656455,
+   "size_mb": 465.14,
+   "latency": 3667.7,
+   "latency_source": "benchmark",
+   "form": 0.8462,
+   "area": 0.5792,
+   "highlight": false
+  },
+  {
+   "label": "e5-small, Kazakh vocab pruned",
+   "n_params": 25517191,
+   "size_mb": 98.32,
+   "latency": 8554.8,
+   "latency_source": "training-time",
+   "form": 0.8521,
+   "area": 0.579,
+   "highlight": false
+  },
+  {
+   "label": "kaz-roberta fine-tuned",
+   "n_params": 83456263,
+   "size_mb": 323.53,
+   "latency": 9707.8,
+   "latency_source": "training-time",
+   "form": 0.8675,
+   "area": 0.608,
+   "highlight": false
+  }
+ ]
+}

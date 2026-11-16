@@ -1,17 +1,17 @@
-task,model_name,selected_lam,note,val,test,test_strict,weights
-form,tfidf_word_char_lr_prioradj,0.0,no gain on val half B -> not logged,,,,
-form,tiny_transformer_4L_kd_a90_T2_prioradj,0.0,no gain on val half B -> not logged,,,,
-form,e5_small_ft_prioradj,1.0,,0.9173,0.8538,0.8663,
-form,kaz_roberta_llrd_rec_prioradj,0.5,,0.9342,0.8434,0.8512,
-form,ensemble_tfidf_tiny_e5,,,0.9166,0.8531,0.8617,"[0.3, 0.2, 0.5]"
-form,ensemble_tfidf_tiny_e5_prioradj,0.25,,0.919,0.8552,0.8704,
-form,ensemble_tfidf_tiny_e5_roberta,,,0.9314,0.8497,0.8607,"[0.3, 0.1, 0.1, 0.5]"
-form,ensemble_tfidf_tiny_e5_roberta_prioradj,0.0,no gain on val half B -> not logged,,,,
-area,tfidf_word_char_lr_prioradj,0.0,no gain on val half B -> not logged,,,,
-area,tiny_transformer_4L_recency_tau8_prioradj,0.25,,0.6299,0.5832,0.557,
-area,e5_small_ft_prioradj,0.0,no gain on val half B -> not logged,,,,
-area,kaz_roberta_llrd_rec_prioradj,0.25,,0.6323,0.6191,0.6001,
-area,ensemble_tfidf_tiny_e5,,,0.618,0.604,0.5839,"[0.6, 0.3, 0.1]"
-area,ensemble_tfidf_tiny_e5_prioradj,0.5,,0.6248,0.5879,0.5615,
-area,ensemble_tfidf_tiny_e5_roberta,,,0.6407,0.6215,0.6035,"[0.4, 0.1, 0.1, 0.4]"
-area,ensemble_tfidf_tiny_e5_roberta_prioradj,0.0,no gain on val half B -> not logged,,,,
+task,model_name,selected_lam,note,weights,val_half_b,test,test_strict
+form,tfidf_word_char_lr_prioradj,0.0,val-B gain +0.0000 < 0.002 -> not logged,,,,
+form,tiny_transformer_4L_kd_a90_T2_prioradj,0.0,val-B gain +0.0000 < 0.002 -> not logged,,,,
+form,e5_small_ft_prioradj,0.25,val-B gain +0.0002 < 0.002 -> not logged,,,,
+form,kaz_roberta_llrd_rec_prioradj,0.75,val-B gain +0.0008 < 0.002 -> not logged,,,,
+form,ensemble_tfidf_tiny_e5,,,"[0.3, 0.2, 0.5]",0.9166,0.8531,0.8617
+form,ensemble_tfidf_tiny_e5_prioradj,0.5,,,0.919,0.8624,0.8792
+form,ensemble_tfidf_tiny_e5_roberta,,,"[0.3, 0.1, 0.1, 0.5]",0.9314,0.8497,0.8607
+form,ensemble_tfidf_tiny_e5_roberta_prioradj,0.0,val-B gain +0.0000 < 0.002 -> not logged,,,,
+area,tfidf_word_char_lr_prioradj,0.0,val-B gain +0.0000 < 0.002 -> not logged,,,,
+area,tiny_transformer_4L_recency_tau8_prioradj,0.25,,,0.6386,0.5836,0.5576
+area,e5_small_ft_prioradj,0.0,val-B gain +0.0000 < 0.002 -> not logged,,,,
+area,kaz_roberta_llrd_rec_prioradj,1.0,,,0.6339,0.6097,0.5887
+area,ensemble_tfidf_tiny_e5,,,"[0.6, 0.3, 0.1]",0.618,0.604,0.5839
+area,ensemble_tfidf_tiny_e5_prioradj,0.0,val-B gain +0.0000 < 0.002 -> not logged,,,,
+area,ensemble_tfidf_tiny_e5_roberta,,,"[0.4, 0.1, 0.1, 0.4]",0.6407,0.6215,0.6035
+area,ensemble_tfidf_tiny_e5_roberta_prioradj,0.0,val-B gain +0.0000 < 0.002 -> not logged,,,,

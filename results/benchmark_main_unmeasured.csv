@@ -1,0 +1,14 @@
+kind,path,model_name,task,n_params,size_mb,load_time_s,n_texts,batch_size,cpu_threads,repeats,latency_cpu_ms_per_1000,infer_ram_mb,latency_cuda_ms_per_1000,infer_peak_gpu_mb
+posthoc,/home/ilyas/Prog_AI_final/artifacts/models/posthoc_ensemble_tfidf_tiny_e5_roberta_form,ensemble_tfidf_tiny_e5_roberta,form,207855564,824.61,3.42,1000,64,8,3,14330.4,1493.9,644.8,1062.5
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_form_4L_mlm,tiny_transformer_4L_mlm,form,5229831,20.74,0.08,1000,64,8,3,526.9,120.0,50.6,66.6
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_form_4L_mlm_kd_a90_T2,tiny_transformer_4L_mlm_kd_a90_T2,form,5229831,20.74,0.06,1000,64,8,3,538.3,125.0,52.1,66.6
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_form_4L_mlm_kdrob_a50_T2,tiny_transformer_4L_mlm_kdrob_a50_T2,form,5229831,20.74,0.06,1000,64,8,3,540.7,122.4,55.3,66.6
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_form_4L_recency_tau8,tiny_transformer_4L_recency_tau8,form,5229831,20.74,0.06,1000,64,8,3,524.7,122.8,51.0,66.6
+external,/home/ilyas/Prog_AI_final/artifacts/models/kazbert_ft_form,kazbert_ft,form,110622727,422.81,2.02,1000,64,8,3,25676.2,990.3,527.7,697.0
+posthoc,/home/ilyas/Prog_AI_final/artifacts/models/posthoc_ensemble_tfidf_tiny_e5_roberta_area,ensemble_tfidf_tiny_e5_roberta,area,213512020,846.2,3.55,1000,64,8,3,13960.2,1519.4,660.5,1062.6
+posthoc,/home/ilyas/Prog_AI_final/artifacts/models/posthoc_tiny_transformer_4L_recency_tau8_prioradj_area,tiny_transformer_4L_recency_tau8_prioradj,area,5236513,20.77,0.06,1000,64,8,3,536.2,123.1,51.2,66.7
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_area_4L_kd_a50_T2,tiny_transformer_4L_kd_a50_T2,area,5236513,20.77,0.06,1000,64,8,3,514.2,127.1,49.7,66.7
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_area_4L_mlm,tiny_transformer_4L_mlm,area,5236513,20.77,0.06,1000,64,8,3,508.6,129.6,50.3,66.7
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_area_4L_mlm_kd_a50_T2,tiny_transformer_4L_mlm_kd_a50_T2,area,5236513,20.77,0.06,1000,64,8,3,502.3,124.5,49.9,66.7
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_area_4L_mlm_kdrob_a50_T2,tiny_transformer_4L_mlm_kdrob_a50_T2,area,5236513,20.77,0.06,1000,64,8,3,515.5,124.4,50.2,66.7
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_area_4L_recency_tau8_trainval,tiny_transformer_4L_recency_tau8_trainval,area,5236513,20.77,0.05,1000,64,8,3,523.4,124.1,49.7,66.7

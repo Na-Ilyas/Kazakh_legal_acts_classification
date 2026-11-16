@@ -1,0 +1,72 @@
+{
+  "form": {
+    "teacher": {
+      "val": 0.7536,
+      "test": 0.7747,
+      "test_strict": 0.7745
+    },
+    "teacher_meta": {
+      "n_sub": 40000,
+      "train_time_s": 302.0,
+      "train_peak_gpu_mb": 15613.5,
+      "infer_s": {
+        "val": 30.5,
+        "test": 91.1
+      },
+      "infer_peak_gpu_mb": 5941.2,
+      "latency_cuda_ms_per_1000": 2423.6,
+      "n_params_total": 1727026176,
+      "n_params_trainable": 6436864,
+      "best": {
+        "step": 1250,
+        "samples_seen": 40000,
+        "val_f1": 0.7536,
+        "elapsed_s": 301.3
+      }
+    },
+    "reference_val": {
+      "kaz_roberta_ft_val": 0.883,
+      "e5_small_ft_val": 0.8656
+    },
+    "kd_run": false,
+    "decision": "teacher below kaz-roberta (and e5-small) on VAL -> not a useful teacher; train-title inference and KD students skipped per the time-boxed plan"
+  },
+  "area": {
+    "teacher": {
+      "val": 0.5486,
+      "test": 0.5862,
+      "test_strict": 0.5691
+    },
+    "teacher_meta": {
+      "n_sub": 81129,
+      "train_time_s": 528.2,
+      "train_peak_gpu_mb": 15615.2,
+      "infer_s": {
+        "val": 30.6,
+        "test": 91.1
+      },
+      "infer_peak_gpu_mb": 5941.5,
+      "latency_cuda_ms_per_1000": 2425.4,
+      "n_params_total": 1727132672,
+      "n_params_trainable": 6490112,
+      "best": {
+        "step": 2536,
+        "samples_seen": 81152,
+        "val_f1": 0.5486,
+        "elapsed_s": 527.5
+      }
+    },
+    "reference_val": {
+      "kaz_roberta_llrd_rec_val": 0.6162,
+      "e5_small_ft_val": 0.5836
+    },
+    "kd_run": false,
+    "decision": "teacher below kaz-roberta (and e5-small) on VAL -> not a useful teacher; train-title inference and KD students skipped per the time-boxed plan"
+  },
+  "_setup": {
+    "requested_llm": "inception42/Llama-3.1-Sherkala-8B-Chat (gated: HTTP 401, no HF token)",
+    "also_gated": "issai/LLama-3.1-KazLLM-1.0-8B",
+    "used": "Qwen/Qwen3-1.7B-Base",
+    "peft": "0.21.3"
+  }
+}
