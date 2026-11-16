@@ -82,5 +82,5 @@
     "place_of_adoption": 0.49,
     "database_section": 0.21
   },
-  "csv_to_parquet_write_time_s": 3.04
+  "csv_to_parquet_write_time_s": 3.35
 }

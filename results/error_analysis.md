@@ -1,6 +1,6 @@
 # Error analysis
 
-All numbers come from the test predictions stored in SQLite (`predictions` table, test split >= 2023). Figures: `reports/figures/confusion_*.png`, `per_class_f1_*.png`, `error_by_year_length.png`.
+All numbers come from the test predictions stored in SQLite (`predictions` table, test split >= 2023). Figures: `reports/figures/confusion_*.png`, `per_class_f1_*.png`, `error_by_year_length.png`, `error_by_similarity.png`.
 
 ## Task `form`
 
@@ -74,6 +74,29 @@ Error rate by adopting-body type (SQL JOIN predictions-acts-bodies, groups with 
 | Үкімет | 1576 | 158 | 0.1003 |
 | unknown | 33 | 3 | 0.0909 |
 | Бірлескен (joint) | 943 | 68 | 0.0721 |
+
+### Error rate vs similarity to the nearest train title (SQL JOIN predictions-nn_sim)
+
+`max_cos` = highest char-ngram TF-IDF cosine between a test title and any train title (data/processed/nn_similarity.parquet; >= 0.9 means a near-duplicate, excluded from test_strict).
+
+| sim_bucket | n | char_1nn | e5_frozen_lr | e5_small_ft | tfidf_word_char_lr | tiny_transformer_4L_mlm |
+|---|---|---|---|---|---|---|
+| 1: <0.60 | 4717 | 0.3714 | 0.2237 | 0.1338 | 0.1389 | 0.1433 |
+| 2: 0.60-0.75 | 9463 | 0.1004 | 0.0778 | 0.0269 | 0.0309 | 0.0348 |
+| 3: 0.75-0.85 | 11756 | 0.0441 | 0.0474 | 0.0158 | 0.0174 | 0.0171 |
+| 4: 0.85-0.90 | 5786 | 0.0313 | 0.0612 | 0.0171 | 0.0194 | 0.0216 |
+| 5: 0.90-0.95 | 3818 | 0.0320 | 0.0927 | 0.0194 | 0.0204 | 0.0217 |
+| 6: >=0.95 | 3078 | 0.0370 | 0.1436 | 0.0292 | 0.0335 | 0.0361 |
+
+The label of the nearest train title equals the true label for 90.6% of test titles (a 1-NN 'copy' rule). e5_small_ft predicts the neighbour's label for 91.2% of titles, and 48.9% of its errors are exactly the neighbour's label (errors inherited from a similar training title).
+
+| model_name | n | errors | neighbour_acc | copy_rate | errors_copying_share |
+|---|---|---|---|---|---|
+| char_1nn | 38618 | 3637 | 0.9058 | 1.0000 | 1.0000 |
+| tfidf_word_char_lr | 38618 | 1444 | 0.9058 | 0.9163 | 0.5353 |
+| e5_frozen_lr | 38618 | 3498 | 0.9058 | 0.8717 | 0.2530 |
+| tiny_transformer_4L_mlm | 38618 | 1525 | 0.9058 | 0.9106 | 0.4623 |
+| e5_small_ft | 38618 | 1335 | 0.9058 | 0.9124 | 0.4891 |
 
 Confidence: 94.0% of test predictions have confidence >= 0.9 with accuracy 0.983, vs 0.6883 below 0.9; 46.4% of all errors are confident (>= 0.9).
 
@@ -180,6 +203,29 @@ Error rate by adopting-body type (SQL JOIN predictions-acts-bodies, groups with 
 | Бірлескен (joint) | 942 | 352 | 0.3737 |
 | Үкімет | 1575 | 569 | 0.3613 |
 | Әкімдік | 5167 | 1766 | 0.3418 |
+
+### Error rate vs similarity to the nearest train title (SQL JOIN predictions-nn_sim)
+
+`max_cos` = highest char-ngram TF-IDF cosine between a test title and any train title (data/processed/nn_similarity.parquet; >= 0.9 means a near-duplicate, excluded from test_strict).
+
+| sim_bucket | n | char_1nn | e5_frozen_lr | e5_small_ft | tfidf_word_char_lr | tiny_transformer_4L_do30 |
+|---|---|---|---|---|---|---|
+| 1: <0.60 | 4706 | 0.4792 | 0.3855 | 0.3102 | 0.3319 | 0.3300 |
+| 2: 0.60-0.75 | 9443 | 0.2644 | 0.2485 | 0.2013 | 0.2133 | 0.2194 |
+| 3: 0.75-0.85 | 11729 | 0.1937 | 0.1985 | 0.1722 | 0.1790 | 0.1813 |
+| 4: 0.85-0.90 | 5761 | 0.2024 | 0.2121 | 0.1935 | 0.1928 | 0.1953 |
+| 5: 0.90-0.95 | 3813 | 0.2450 | 0.2591 | 0.2255 | 0.2261 | 0.2397 |
+| 6: >=0.95 | 3071 | 0.2996 | 0.3233 | 0.2680 | 0.2680 | 0.2879 |
+
+The label of the nearest train title equals the true label for 73.9% of test titles (a 1-NN 'copy' rule). tfidf_word_char_lr predicts the neighbour's label for 84.5% of titles, and 64.9% of its errors are exactly the neighbour's label (errors inherited from a similar training title).
+
+| model_name | n | errors | neighbour_acc | copy_rate | errors_copying_share |
+|---|---|---|---|---|---|
+| char_1nn | 38523 | 10044 | 0.7385 | 0.9985 | 0.9969 |
+| tfidf_word_char_lr | 38523 | 8471 | 0.7385 | 0.8451 | 0.6493 |
+| e5_frozen_lr | 38523 | 9692 | 0.7385 | 0.7698 | 0.4347 |
+| tiny_transformer_4L_do30 | 38523 | 8674 | 0.7385 | 0.8169 | 0.5566 |
+| e5_small_ft | 38523 | 8179 | 0.7385 | 0.8164 | 0.5767 |
 
 Confidence: 65.4% of test predictions have confidence >= 0.9 with accuracy 0.9051, vs 0.5439 below 0.9; 28.2% of all errors are confident (>= 0.9).
 

@@ -215,7 +215,9 @@ def label_coverage() -> dict:
         stats = {}
     return {
         "rows_in_dataset": int(len(ds)),
-        "form_label_from_missing_act_form": int(ds["act_form_raw"].isna().sum()),
+        "act_form_missing": int(ds["act_form_raw"].isna().sum()),
+        "form_label_missing": int(ds["form_label"].isna().sum()),
+        "form_label_n_classes": int(ds["form_label"].nunique()),
         "form_label_counts": ds["form_label"].value_counts().astype(int).to_dict(),
         "area_label_missing": int(ds["area_label"].isna().sum()),
         "area_label_n_classes": int(ds["area_label"].nunique()),
@@ -236,13 +238,18 @@ CLEANING_DECISIONS = [
      "Raw strings differ only by tag order/padding; set semantics collapses order-only duplicates."),
     ("`legal_relation_area` split with a parenthesis- and case-aware splitter",
      "Naive ', ' splitting breaks names that contain commas; numeric classifier codes are dropped."),
-    ("Primary form = highest base form in Заң > Жарлық > Қаулы > Шешім > Бұйрық > Өкім, else Басқа",
-     "Joint acts carry several base forms; a hierarchy gives one deterministic label (aliases such as 'Нормативтік қаулы' -> Қаулы)."),
+    ("Primary form = highest base form in Заң > Жарлық > Қаулы > Шешім > Бұйрық > Өкім, else Басқа; "
+     "missing act_form -> unlabelled (row excluded from task `form`)",
+     "Joint acts carry several base forms; a hierarchy gives one deterministic label (aliases such as "
+     "'Нормативтік қаулы' -> Қаулы). A missing form is unknown, not 'other', so it must not become a training label."),
+    ("Titles normalised for duplicate detection: NFC, lower-case, Latin->Cyrillic homoglyph folding, punctuation removed",
+     "~11 % of titles write Kazakh 'і' as Latin 'i'; without folding, copies of the same title escape the leakage guard."),
     ("Rare areas (< 300 train rows) collapsed to Басқа, decided on TRAIN only",
      "Classes with a handful of examples make macro-F1 unstable; using train counts only avoids peeking at test."),
     ("Temporal split train <= 2021, val 2022, test >= 2023", "Mimics deployment on future acts and prevents look-ahead leakage."),
-    ("Val/test rows whose normalised title occurs in train removed; test_strict excludes near-duplicates (cos >= 0.9)",
-     "Templated titles repeat every year; without this the test set measures memorisation."),
+    ("Val/test rows whose normalised title occurs in train removed; test_strict also excludes titles identical "
+     "up to digits and near-duplicates (char-gram cosine >= 0.9 on digit-masked titles)",
+     "Templated titles repeat every year with new dates/numbers; without this the test set measures memorisation."),
     ("Titles kept verbatim for models (no truncation at data level, NFC-normalised in text_prep)",
      "Length outliers are genuine (long amendment titles); models truncate at their own max length."),
     ("Dates parsed with strict ISO format; anomalies reported, not 'fixed'",

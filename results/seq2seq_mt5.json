@@ -1,0 +1,37 @@
+{
+  "form/text": {
+    "f1_macro": {
+      "val": 0.8213,
+      "test": 0.791,
+      "test_strict": 0.7956
+    },
+    "n_params": 58726784,
+    "n_params_full": 300176768,
+    "vocab_kept": 14321,
+    "oov_pct": {
+      "train": 0.0,
+      "val": 0.0519,
+      "test": 0.1186
+    },
+    "size_mb": 225.0,
+    "latency_cpu_ms_per_1000": 20552.0,
+    "train_time_s": 179.3,
+    "best_epoch": 1,
+    "score": "mean",
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 0.7366586957729969,
+        "val_f1_sum": 0.8148310171447204,
+        "val_f1_mean": 0.8212555112492785
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.06431802572569797,
+        "val_f1_sum": 0.80746440371655,
+        "val_f1_mean": 0.8079895817656118
+      }
+    ],
+    "elapsed_s": 284.8
+  }
+}

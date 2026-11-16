@@ -25,6 +25,7 @@ import math
 import re
 import time
 import unicodedata
+import warnings
 from collections import Counter
 from functools import lru_cache
 
@@ -130,12 +131,20 @@ def set_lexicon(lex: frozenset[str] | None) -> None:
 
 
 def get_lexicon() -> frozenset[str]:
-    """Lazy-load the saved lexicon (empty set -> pure rule-based stemming)."""
+    """Lazy-load the saved lexicon built on train by `python -m src.text_prep`.
+
+    If it is missing the stemmer silently changes behaviour (pure rule-based), so
+    stems would no longer match those the stem model was trained on -> warn loudly.
+    """
     global _LEXICON
     if _LEXICON is None:
         try:
             _LEXICON = frozenset(LEXICON_PATH.read_text(encoding="utf-8").split("\n"))
-        except OSError:
+        except OSError as exc:
+            msg = (f"stemmer lexicon {LEXICON_PATH} missing ({exc}); falling back to rule-only stemming, "
+                   "which differs from training - run `python -m src.text_prep` first")
+            warnings.warn(msg, RuntimeWarning, stacklevel=2)
+            print(f"[text_prep] WARNING: {msg}")
             _LEXICON = frozenset()
     return _LEXICON
 
@@ -245,6 +254,7 @@ def stopword_report(train: pd.DataFrame, label_col: str = "form_label", top: int
 
     Low KL = the word is spread like the classes overall -> little information.
     """
+    train = train.dropna(subset=[label_col])             # unlabelled rows are not a class
     prior = train[label_col].astype(str).value_counts(normalize=True)
     doc_tokens = train["title"].map(lambda t: set(tokenize(t)))
     rows = []

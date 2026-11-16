@@ -1,0 +1,55 @@
+{
+  "fold_num": {
+    "vocab": 115570,
+    "form": {
+      "val": 0.8309,
+      "test": 0.803,
+      "test_strict": 0.8007
+    },
+    "area": {
+      "val": 0.5861,
+      "test": 0.5915,
+      "test_strict": 0.5624
+    }
+  },
+  "nofold_num": {
+    "vocab": 122620,
+    "form": {
+      "val": 0.8362,
+      "test": 0.8084,
+      "test_strict": 0.8068
+    },
+    "area": {
+      "val": 0.586,
+      "test": 0.5857,
+      "test_strict": 0.5558
+    }
+  },
+  "fold_digits": {
+    "vocab": 137790,
+    "form": {
+      "val": 0.8318,
+      "test": 0.7928,
+      "test_strict": 0.7856
+    },
+    "area": {
+      "val": 0.5784,
+      "test": 0.581,
+      "test_strict": 0.5537
+    }
+  },
+  "raw": {
+    "vocab": 145010,
+    "form": {
+      "val": 0.8372,
+      "test": 0.7982,
+      "test_strict": 0.7934
+    },
+    "area": {
+      "val": 0.5812,
+      "test": 0.5821,
+      "test_strict": 0.5522
+    }
+  },
+  "elapsed_s": 51.0
+}

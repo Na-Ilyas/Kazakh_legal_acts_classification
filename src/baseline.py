@@ -15,7 +15,7 @@ history and tens of minutes, beyond the shared-machine budget. The same
 optimiser is used for every representation so the comparison is fair.
 
 Protocol: fit on train, choose the regularisation (alpha = 1 / (C * n_train),
-C in {1, 4, 16}) and class_weight on val macro-F1 (parallel threads share the
+C in {1, 4, 16, 64}) and class_weight on val macro-F1 (parallel threads share the
 sparse matrices), refit the chosen configuration alone so its train time /
 peak memory are measured cleanly, report val / test / test_strict. Every result is logged to SQLite
 (experiments_db) and test predictions are stored with confidence = max proba.
@@ -36,20 +36,23 @@ import scipy.sparse as sp
 from sklearn.dummy import DummyClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import SGDClassifier
-from sklearn.metrics import accuracy_score, classification_report, f1_score
+from sklearn.metrics import classification_report
 from sklearn.pipeline import FeatureUnion, Pipeline
 from threadpoolctl import threadpool_limits
 
 from src import config, experiments_db, text_prep
 from src.data_io import load_dataset
+from src.metrics import compute_metrics, eval_labels, macro_f1
 
 RESULTS_SUBDIR = config.RESULTS_DIR / "baseline"
 SUMMARY_JSON = config.RESULTS_DIR / "baseline_summary.json"
 STRICT_IDS_CSV = config.RESULTS_DIR / "test_strict_ids.csv"
-C_GRID = [1.0, 4.0, 16.0]
+C_GRID = [1.0, 4.0, 16.0, 64.0]
 N_THREADS = 2            # grid configs in parallel ...
 SGD_JOBS = 4             # ... x one-vs-rest classes in parallel = 8 cores max
-LR_KW = dict(loss="log_loss", penalty="l2", max_iter=30, tol=1e-4, n_iter_no_change=3,
+# tol / n_iter_no_change = sklearn defaults (stop when the epoch loss stops improving by
+# 1e-3 for 5 epochs); max_iter is a generous cap, convergence is recorded per model.
+LR_KW = dict(loss="log_loss", penalty="l2", max_iter=100, tol=1e-3, n_iter_no_change=5,
              random_state=config.SEED)
 
 
@@ -82,21 +85,16 @@ MODELS = {  # model_name -> (vectorizer kind(s), description)
 # --------------------------------------------------------------------------
 # Helpers
 # --------------------------------------------------------------------------
-def metrics(y_true, y_pred) -> dict:
-    """macro-F1 / weighted-F1 / accuracy (labels = union of true and predicted)."""
-    return {"f1_macro": float(f1_score(y_true, y_pred, average="macro", zero_division=0)),
-            "f1_weighted": float(f1_score(y_true, y_pred, average="weighted", zero_division=0)),
-            "accuracy": float(accuracy_score(y_true, y_pred)),
-            "n_eval": int(len(y_true))}
-
-
 def load_strict_ids() -> set[str]:
-    """law_ids of test_strict (written by src.leakage)."""
+    """law_ids of test_strict (written by src.leakage). Raises if unavailable:
+    silently evaluating on the full test set would mislabel results as 'strict'."""
     try:
-        return set(pd.read_csv(STRICT_IDS_CSV, dtype=str)["law_id"])
+        ids = set(pd.read_csv(STRICT_IDS_CSV, dtype=str)["law_id"])
     except (OSError, KeyError) as exc:
-        print(f"[baseline] WARNING: {STRICT_IDS_CSV} unavailable ({exc}); test_strict = test")
-        return set()
+        raise FileNotFoundError(f"{STRICT_IDS_CSV} unavailable ({exc}) - run `python -m src.leakage` first") from exc
+    if not ids:
+        raise ValueError(f"{STRICT_IDS_CSV} is empty")
+    return ids
 
 
 def model_dir(name: str, task: str) -> Path:
@@ -164,8 +162,9 @@ def tune_on_val(X_tr, y_tr, X_val, y_val) -> tuple[dict, list[dict]]:
     """Grid over C (class_weight='balanced'), then class_weight=None at the best C. Parallel threads."""
     def _eval(cfg):
         clf, dt = _fit_lr(X_tr, y_tr, cfg["C"], cfg["class_weight"])
-        f1 = f1_score(y_val, clf.predict(X_val), average="macro", zero_division=0)
-        return {**cfg, "val_f1_macro": round(float(f1), 4), "fit_s_parallel": round(dt, 1)}
+        f1 = macro_f1(y_val, clf.predict(X_val))
+        return {**cfg, "val_f1_macro": round(float(f1), 4), "fit_s_parallel": round(dt, 1),
+                "epochs": int(clf.n_iter_)}
 
     with ThreadPoolExecutor(max_workers=N_THREADS) as pool:
         grid = list(pool.map(_eval, [{"C": c, "class_weight": "balanced"} for c in C_GRID]))
@@ -183,7 +182,7 @@ def evaluate_and_log(name: str, family: str, task: str, model, splits: dict, cos
         probas = model.predict_proba(titles)
         classes = model.classes_ if hasattr(model, "classes_") else model[-1].classes_
         y_pred = np.asarray(classes)[probas.argmax(axis=1)]
-        m = metrics(y, y_pred)
+        m = compute_metrics(y, y_pred)
         out[split] = {k: round(v, 4) if isinstance(v, float) else v for k, v in m.items()}
         try:
             exp_id = experiments_db.log_experiment(name, family, task, split, {**m, **cost},
@@ -193,7 +192,7 @@ def evaluate_and_log(name: str, family: str, task: str, model, splits: dict, cos
         except Exception as exc:  # keep training even if the DB is busy
             print(f"[baseline] could not log {name}/{task}/{split}: {exc}")
         if split in ("test", "test_strict"):
-            rep = classification_report(y, y_pred, output_dict=True, zero_division=0)
+            rep = classification_report(y, y_pred, labels=eval_labels(y), output_dict=True, zero_division=0)
             try:
                 RESULTS_SUBDIR.mkdir(parents=True, exist_ok=True)
                 pd.DataFrame(rep).T.round(4).to_csv(RESULTS_SUBDIR / f"{name}_{task}_{split}_report.csv")
@@ -213,7 +212,7 @@ def _task_data(ds: pd.DataFrame, task: str, strict_ids: set[str]) -> dict:
         sub = ds[(ds["split"] == split) & ds[col].notna()]
         data[split] = sub
     test = data["test"]
-    data["test_strict"] = test[test["law_id"].isin(strict_ids)] if strict_ids else test
+    data["test_strict"] = test[test["law_id"].isin(strict_ids)]
     return data
 
 
@@ -271,17 +270,16 @@ def run_tfidf_model(name: str, feats: dict, vecs: dict, ds: pd.DataFrame, strict
         tuning[f"{name}/{task}"] = {"grid": grid, "best": best_cfg, "tuning_wall_s": round(time.perf_counter() - t0, 1)}
         print(f"[baseline] {name}/{task}: grid {[(g['C'], g['class_weight'], g['val_f1_macro']) for g in grid]}")
 
-        # Clean, sequential refit of the chosen configuration (measured). The train
-        # feature matrix is rebuilt inside the traced block so it counts towards the peak.
-        # tracemalloc (not RSS): freed pages from the grid fits are reused, so an RSS
-        # delta would read ~0.
-        del X_tr, X_val
+        # Clean, sequential refit of the chosen configuration (measured).
+        # peak_mem = train feature matrix bytes + tracemalloc peak of the fit (tracemalloc,
+        # not RSS: pages freed by the grid fits are reused, so an RSS delta reads ~0).
+        del X_val
+        feat_bytes = X_tr.data.nbytes + X_tr.indices.nbytes + X_tr.indptr.nbytes
         tracemalloc.start()
-        X_fit = _X("train")
-        clf, fit_time = _fit_lr(X_fit, y["train"], best_cfg["C"], best_cfg["class_weight"])
-        peak_mb = tracemalloc.get_traced_memory()[1] / 2**20
+        clf, fit_time = _fit_lr(X_tr, y["train"], best_cfg["C"], best_cfg["class_weight"])
+        peak_mb = (tracemalloc.get_traced_memory()[1] + feat_bytes) / 2**20
         tracemalloc.stop()
-        del X_fit
+        del X_tr
         vec = vecs[kinds[0]] if len(kinds) == 1 else FeatureUnion([(k, vecs[k]) for k in kinds])
         model = Pipeline([("tfidf", vec), ("clf", clf)])
         n_params = int(clf.coef_.size + clf.intercept_.size)
@@ -294,12 +292,14 @@ def run_tfidf_model(name: str, feats: dict, vecs: dict, ds: pd.DataFrame, strict
                 "latency_device": "cpu", "peak_mem_mb": round(peak_mb, 1), "n_train": int(len(data["train"]))}
         hp = {"C": best_cfg["C"], "alpha": 1.0 / (best_cfg["C"] * len(data["train"])),
               "class_weight": best_cfg["class_weight"], "features": kinds, "optimizer": "SGD",
-              "n_features": int(clf.coef_.shape[1]), "epochs_run": int(clf.n_iter_), **LR_KW}
+              "n_features": int(clf.coef_.shape[1]), "epochs_run": int(clf.n_iter_),
+              "converged": bool(clf.n_iter_ < LR_KW["max_iter"]), "c_on_grid_edge": best_cfg["C"] == max(C_GRID),
+              **LR_KW}
         notes = (f"{desc}; logistic regression (log-loss, L2, OvR) fitted with SGD. "
                  f"n_params = coef_.size + intercept_.size ({nnz:,} non-zero coef). "
                  f"train_time = vectoriser fit ({vec_time:.1f}s, shared by both tasks) + LR fit ({fit_time:.1f}s). "
-                 "peak_mem = tracemalloc peak while building the train feature matrix slice + LR fit "
-                 "(vectoriser fitting excluded). "
+                 "peak_mem = train feature matrix bytes + tracemalloc peak of the LR fit "
+                 "(vectoriser fitting excluded). Metrics: src.metrics (macro over classes present in y_true). "
                  "Latency: 1000 raw titles, vectoriser + predict_proba, single process on CPU.")
         splits = {}
         for s in ("val", "test", "test_strict"):

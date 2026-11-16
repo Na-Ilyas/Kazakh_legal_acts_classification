@@ -117,10 +117,22 @@ def measure(kind: str, path: str, name: str = "", task: str = "", n_texts: int =
     return out
 
 
+def skip_training_benchmark() -> bool:
+    """True when per-model benchmarking during training is switched off (env KAZLAW_SKIP_TRAIN_BENCH=1
+    or the file <project>/.skip_train_benchmark): the shared GPU is then held for less time, and the
+    final `python -m src.benchmark --all` pass measures every model with the same protocol anyway."""
+    from src import config
+    return os.environ.get("KAZLAW_SKIP_TRAIN_BENCH") == "1" or (config.PROJECT_ROOT / ".skip_train_benchmark").exists()
+
+
 def measure_subprocess(kind: str, path: str, name: str = "", task: str = "", quick: bool = False,
                        timeout: int = 900) -> dict:
     """Run `measure` in a fresh Python process and return its JSON result ({} on failure)."""
     from src import config
+
+    if skip_training_benchmark():
+        print(f"[benchmark] skipped for {name or Path(path).name} (measured later by benchmark --all)")
+        return {}
 
     with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as fh:
         out_path = fh.name

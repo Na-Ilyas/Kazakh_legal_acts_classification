@@ -12,7 +12,7 @@ SELECT year,
        form_label,
        COUNT(*) AS n_acts
 FROM acts
-WHERE year IS NOT NULL
+WHERE year IS NOT NULL AND form_label IS NOT NULL
 GROUP BY year, form_label
 ORDER BY year, form_label;
 
@@ -39,6 +39,7 @@ SELECT b.body_type,
        COUNT(*) AS n_acts
 FROM acts a
 JOIN bodies b ON b.body_id = a.body_id
+WHERE a.form_label IS NOT NULL
 GROUP BY b.body_type, a.form_label
 HAVING COUNT(*) >= 500
 ORDER BY b.body_type, n_acts DESC;
@@ -49,7 +50,7 @@ ORDER BY b.body_type, n_acts DESC;
 WITH yearly AS (
     SELECT form_label, year, COUNT(*) AS n_acts
     FROM acts
-    WHERE year BETWEEN 2000 AND 2026
+    WHERE year BETWEEN 2000 AND 2026 AND form_label IS NOT NULL
     GROUP BY form_label, year
 )
 SELECT form_label,
@@ -87,7 +88,7 @@ SELECT split,
        COUNT(*) AS n_acts,
        ROUND(100.0 * COUNT(*) / SUM(COUNT(*)) OVER (PARTITION BY split), 2) AS pct_within_split
 FROM acts
-WHERE split IS NOT NULL
+WHERE split IS NOT NULL AND form_label IS NOT NULL
 GROUP BY split, form_label
 ORDER BY split, n_acts DESC;
 
@@ -99,6 +100,7 @@ WITH counts AS (
     FROM acts a
     JOIN act_area aa ON aa.law_id = a.law_id
     JOIN areas ar    ON ar.area_id = aa.area_id
+    WHERE a.form_label IS NOT NULL
     GROUP BY a.form_label, ar.area_id
 ),
 ranked AS (
@@ -135,6 +137,7 @@ SELECT a.form_label,
 FROM acts a
 JOIN (SELECT law_id, COUNT(*) AS n_areas FROM act_area GROUP BY law_id) t ON t.law_id = a.law_id
 WHERE t.n_areas > (SELECT AVG(cnt) FROM (SELECT COUNT(*) AS cnt FROM act_area GROUP BY law_id))
+  AND a.form_label IS NOT NULL
 GROUP BY a.form_label
 ORDER BY n_acts_above_avg DESC;
 
@@ -162,6 +165,7 @@ SELECT form_label,
        ROUND(AVG(title_len_words), 1)   AS avg_words,
        MAX(title_len_words)             AS max_words
 FROM acts
+WHERE form_label IS NOT NULL
 GROUP BY form_label
 ORDER BY avg_chars DESC;
 
@@ -172,9 +176,21 @@ SELECT area_label,
        form_label,
        COUNT(*) AS n_acts
 FROM acts
-WHERE area_label IS NOT NULL AND split IS NOT NULL
+WHERE area_label IS NOT NULL AND form_label IS NOT NULL AND split IS NOT NULL
 GROUP BY area_label, form_label
 ORDER BY area_label, form_label;
+
+-- name: acts_by_body_type
+-- answers: How many acts and distinct bodies does each body type account for, and what share of the corpus is that? (used for the EDA "top bodies" finding)
+-- uses: JOIN, GROUP BY, COUNT(DISTINCT), share-of-total window SUM() OVER ()
+SELECT b.body_type,
+       COUNT(*)                                             AS n_acts,
+       COUNT(DISTINCT b.body_id)                            AS n_bodies,
+       ROUND(100.0 * COUNT(*) / SUM(COUNT(*)) OVER (), 2)    AS pct_of_acts
+FROM acts a
+JOIN bodies b ON b.body_id = a.body_id
+GROUP BY b.body_type
+ORDER BY n_acts DESC;
 
 -- name: top_regions_recent_rank
 -- answers: Which regions produced the most acts in 2019-2026 and how does each rank inside its leading body type?

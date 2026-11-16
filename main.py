@@ -15,21 +15,24 @@ from datetime import datetime
 
 from src import config  # noqa: F401  (pins GPU 0 before any torch import)
 
-# menu key -> (title, module(s), extra kwargs, asks for quick mode?)
-MENU: dict[str, tuple[str, str | list[str] | None, dict, bool]] = {
-    "1": ("Prepare data (download + parquet + labels)", "src.data_io", {}, False),
-    "2": ("Data audit", "src.audit", {}, False),
-    "3": ("Build SQLite + run SQL queries", "src.database", {}, False),
-    "4": ("EDA", "src.eda", {}, False),
-    "5": ("Leakage check", "src.leakage", {}, False),
-    "6": ("Train baselines (TF-IDF + LogisticRegression)", "src.baseline", {}, False),
+# menu key -> (title, module(s), extra kwargs). The menu always runs the full
+# steps; a fast smoke test is `python run_pipeline.py --steps all --quick`.
+MENU: dict[str, tuple[str, str | list[str] | None, dict]] = {
+    "1": ("Prepare data (download + parquet + labels)", "src.data_io", {}),
+    "2": ("Data audit", "src.audit", {}),
+    "3": ("Build SQLite + run SQL queries", "src.database", {}),
+    "4": ("EDA", "src.eda", {}),
+    "5": ("Leakage check", "src.leakage", {}),
+    "6": ("Train baselines (TF-IDF + LogisticRegression)", "src.baseline", {}),
     "7": ("Train tiny transformer (own BPE, from scratch)", ["src.bpe_tokenizer", "src.tiny_transformer"],
-          {}, True),
-    "8": ("Fine-tune e5-small (+ frozen e5 + LR)", "src.finetune_e5", {}, True),
-    "9": ("Compare models (benchmark table + figures)", "src.compare", {}, False),
-    "10": ("Error analysis", "src.error_analysis", {}, False),
-    "11": ("Classify your own title", None, {}, False),
-    "0": ("Exit", None, {}, False),
+          {}),
+    "8": ("Fine-tune e5-small (+ frozen e5 + LR)", "src.finetune_e5", {}),
+    "9": ("Compare models (benchmark table + figures)", "src.compare", {}),
+    "10": ("Error analysis", "src.error_analysis", {}),
+    "11": ("Classify your own title", None, {}),
+    "12": ("Improve tiny transformer (distillation from e5, recency weighting)", "src.distill", {}),
+    "13": ("Post-hoc: prior-shift adjustment + ensemble", "src.posthoc", {}),
+    "0": ("Exit", None, {}),
 }
 
 
@@ -38,7 +41,7 @@ def print_menu() -> None:
     print("\n" + "=" * 64)
     print(" Tiny Transformer for Kazakh Legal Act Classification")
     print("=" * 64)
-    for key, (title, _, _, _) in MENU.items():
+    for key, (title, _, _) in MENU.items():
         print(f" {key:>2}. {title}")
 
 
@@ -131,11 +134,12 @@ def main() -> None:
         if choice == "11":
             classify_loop()
             continue
-        title, module, kwargs, quick_option = MENU[choice]
-        quick = ask_yes_no("Quick smoke-test mode (small subset, few epochs)?") if quick_option else False
+        title, module, kwargs = MENU[choice]
+        if not ask_yes_no(f"Run '{title}' now?", default=True):
+            continue
         print(f"\n>>> {title}")
         for name in ([module] if isinstance(module, str) else module):
-            if call_step(name, kwargs, quick=quick) is None:
+            if call_step(name, kwargs) is None:
                 break                       # stop a multi-step item at the first failure
 
 

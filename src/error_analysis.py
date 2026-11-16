@@ -25,10 +25,12 @@ from src import config, experiments_db
 from src.model_utils import QUICK_SUFFIX, load_dataset, load_json
 
 REPORT_MD = config.RESULTS_DIR / "error_analysis.md"
+NN_SIM_PARQUET = config.PROCESSED_DIR / "nn_similarity.parquet"   # max char-ngram cosine to train (src.leakage)
 PER_CLASS_CSV = config.RESULTS_DIR / "per_class_metrics.csv"
-FAMILY_ORDER = ["baseline", "tfidf", "pretrained_frozen", "tiny_transformer", "pretrained"]
+FAMILY_ORDER = ["baseline", "tfidf", "pretrained_frozen", "tiny_transformer", "pretrained", "posthoc"]
 FAMILY_LABEL = {"baseline": "baseline", "tfidf": "TF-IDF+LR", "pretrained_frozen": "e5 frozen+LR",
-                "tiny_transformer": "tiny transformer", "pretrained": "e5-small fine-tuned"}
+                "tiny_transformer": "tiny transformer", "pretrained": "e5-small fine-tuned",
+                "posthoc": "ensemble / prior-adjusted"}
 
 SQL_CONFUSED_PAIRS = """
 SELECT y_true, y_pred, COUNT(*) AS n
@@ -79,6 +81,34 @@ GROUP BY COALESCE(b.body_type, 'unknown')
 HAVING COUNT(*) >= 30
 ORDER BY error_rate DESC
 """
+SQL_ERROR_BY_SIMILARITY = """
+WITH s AS (
+    SELECT p.y_true, p.y_pred,
+           CASE WHEN n.max_cos < 0.60 THEN '1: <0.60'
+                WHEN n.max_cos < 0.75 THEN '2: 0.60-0.75'
+                WHEN n.max_cos < 0.85 THEN '3: 0.75-0.85'
+                WHEN n.max_cos < 0.90 THEN '4: 0.85-0.90'
+                WHEN n.max_cos < 0.95 THEN '5: 0.90-0.95'
+                ELSE '6: >=0.95' END AS sim_bucket
+    FROM predictions p JOIN nn_sim n ON n.law_id = p.law_id
+    WHERE p.exp_id = ?
+)
+SELECT sim_bucket, COUNT(*) AS n, SUM(y_pred <> y_true) AS errors,
+       ROUND(AVG(y_pred <> y_true), 4) AS error_rate
+FROM s GROUP BY sim_bucket ORDER BY sim_bucket
+"""
+# Does a model reproduce the label of the most similar TRAIN title? ({col} = form_label / area_label)
+SQL_NEIGHBOUR_LABEL = """
+SELECT COUNT(*) AS n,
+       SUM(nb.{col} = p.y_true)                              AS neighbour_label_is_true,
+       SUM(p.y_pred = nb.{col})                              AS prediction_equals_neighbour,
+       SUM(p.y_pred <> p.y_true)                             AS errors,
+       SUM(p.y_pred <> p.y_true AND p.y_pred = nb.{col})     AS errors_copying_neighbour
+FROM predictions p
+JOIN nn_sim n ON n.law_id = p.law_id
+JOIN acts nb ON nb.law_id = n.nn_law_id
+WHERE p.exp_id = ?
+"""
 SQL_AGREEMENT = """
 SELECT COUNT(*) AS n,
        SUM(a.y_pred = a.y_true AND b.y_pred = b.y_true)   AS both_right,
@@ -108,20 +138,37 @@ def open_db() -> sqlite3.Connection:
     con = experiments_db.connect()
     has_acts = con.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='acts'").fetchone()
     if not has_acts:
-        df = load_dataset(["law_id", "title", "year"])
+        df = load_dataset(["law_id", "title", "year", "form_label", "area_label"])
         df["title_len_words"] = df["title"].str.split().str.len()
         con.execute("CREATE TEMP TABLE acts (law_id TEXT PRIMARY KEY, title TEXT, year INTEGER, "
-                    "title_len_words INTEGER, body_id INTEGER)")
-        con.executemany("INSERT INTO acts VALUES (?, ?, ?, ?, NULL)",
-                        df[["law_id", "title", "year", "title_len_words"]].astype(object).itertuples(index=False))
+                    "title_len_words INTEGER, form_label TEXT, area_label TEXT, body_id INTEGER)")
+        cols = ["law_id", "title", "year", "title_len_words", "form_label", "area_label"]
+        con.executemany("INSERT INTO acts VALUES (?, ?, ?, ?, ?, ?, NULL)",
+                        df[cols].astype(object).where(df[cols].notna(), None).itertuples(index=False))
         print("[error_analysis] `acts` table missing - using a temporary copy from the parquet")
+    try:   # nearest-train-neighbour similarity from the leakage check -> TEMP table for SQL joins
+        nn = pd.read_parquet(NN_SIM_PARQUET, columns=["law_id", "max_cos", "nn_law_id"])
+        con.execute("CREATE TEMP TABLE nn_sim (law_id TEXT PRIMARY KEY, max_cos REAL, nn_law_id TEXT)")
+        con.executemany("INSERT INTO nn_sim VALUES (?, ?, ?)",
+                        zip(nn["law_id"].astype(str), nn["max_cos"].astype(float), nn["nn_law_id"].astype(str)))
+    except (FileNotFoundError, OSError, KeyError) as exc:
+        print(f"[error_analysis] nn_similarity unavailable ({exc}); similarity analysis skipped")
+    # Commit so that a later failing query (pandas calls rollback()) cannot wipe the TEMP tables.
+    con.commit()
     return con
+
+
+def has_table(con: sqlite3.Connection, name: str) -> bool:
+    """True if a (temp or main) table exists."""
+    q = "SELECT 1 FROM sqlite_master WHERE name=? UNION ALL SELECT 1 FROM sqlite_temp_master WHERE name=?"
+    return con.execute(q, (name, name)).fetchone() is not None
 
 
 def select_models(con: sqlite3.Connection, quick: bool = False) -> pd.DataFrame:
     """Best model (by VAL macro-F1) per task and family, with the exp_id of its test row."""
     exps = pd.read_sql_query("SELECT exp_id, model_name, model_family, task, eval_split, f1_macro "
                              "FROM experiments", con)
+    exps = exps[~exps["model_name"].str.endswith("_trainval")]   # refits trained on val: not selectable
     is_quick = exps["model_name"].str.endswith(QUICK_SUFFIX)
     exps = exps[is_quick | exps["model_family"].isin(["baseline", "tfidf"])] if quick else exps[~is_quick]
     val = exps[exps["eval_split"] == "val"]
@@ -231,6 +278,28 @@ def plot_error_breakdown(year_df: pd.DataFrame, len_df: pd.DataFrame, path) -> N
     plt.close(fig)
 
 
+def plot_similarity(sim_df: pd.DataFrame, path) -> None:
+    """Error rate per bucket of max cosine similarity to the training set (one panel per task)."""
+    plt = _plt()
+    tasks = list(sim_df["task"].unique())
+    fig, axes = plt.subplots(1, len(tasks), figsize=(7 * len(tasks), 4.5), squeeze=False)
+    for ax, task in zip(axes[0], tasks):
+        part = sim_df[sim_df["task"] == task]
+        for label, g in part.groupby("family_label", sort=False):
+            ax.plot(g["sim_bucket"].str[3:], g["error_rate"], "o-", label=label)
+        counts = part.groupby("sim_bucket")["n"].first()
+        ax.set_xticks(range(len(counts)))
+        ax.set_xticklabels([f"{b[3:]}\n(n={n})" for b, n in counts.items()], fontsize=7)
+        ax.set_xlabel("max char-ngram cosine to any train title")
+        ax.set_ylabel("error rate (1 - accuracy)")
+        ax.set_title(f"Task '{task}': errors vs similarity to the training set (test)")
+        ax.grid(alpha=0.3)
+        ax.legend(fontsize=6)
+    fig.tight_layout()
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+
+
 # --------------------------------------------------------------------------
 # Analysis
 # --------------------------------------------------------------------------
@@ -296,7 +365,7 @@ def analyse_task(con, task: str, models: pd.DataFrame, md: list[str], sfx: str =
 
     preds_by_model = {r.model_name: load_preds(con, r.test_exp_id) for r in part.itertuples()}
     classes = sorted(set().union(*[set(p["y_true"]) for p in preds_by_model.values()]))
-    per_class_rows, year_rows, len_rows, body_rows = [], [], [], []
+    per_class_rows, year_rows, len_rows, body_rows, sim_rows, neighbour_rows = [], [], [], [], [], []
     for r in part.itertuples():
         preds = preds_by_model[r.model_name]
         fam = f"{FAMILY_LABEL.get(r.model_family, r.model_family)}: {r.model_name}"   # unique series label
@@ -313,17 +382,25 @@ def analyse_task(con, task: str, models: pd.DataFrame, md: list[str], sfx: str =
             df.insert(0, "family_label", fam)
             df.insert(0, "task", task)
             rows.append(df)
-        try:
+        if has_table(con, "nn_sim"):
+            df = pd.read_sql_query(SQL_ERROR_BY_SIMILARITY, con, params=(int(r.test_exp_id),))
+            df.insert(0, "model_name", r.model_name)
+            df.insert(0, "family_label", fam)
+            df.insert(0, "task", task)
+            sim_rows.append(df)
+            nb = pd.read_sql_query(SQL_NEIGHBOUR_LABEL.format(col=config.TASKS[task]), con,
+                                   params=(int(r.test_exp_id),)).iloc[0]
+            neighbour_rows.append({"task": task, "model_name": r.model_name, **{k: int(v) for k, v in nb.items()}})
+        if has_table(con, "bodies"):          # built by src.database (absent in quick runs)
             df = pd.read_sql_query(SQL_ERROR_BY_BODY, con, params=(int(r.test_exp_id),))
             df.insert(0, "model_name", r.model_name)
             df.insert(0, "family_label", fam)
             df.insert(0, "task", task)
             body_rows.append(df)
-        except Exception:      # bodies table not built (database step skipped)
-            pass
     per_class = pd.concat(per_class_rows)
     year_df, len_df = pd.concat(year_rows), pd.concat(len_rows)
     body_df = pd.concat(body_rows) if body_rows else pd.DataFrame()
+    sim_df = pd.concat(sim_rows) if sim_rows else pd.DataFrame()
 
     # Per-class observations for the overall best model.
     best_pc = per_class[per_class["model_name"] == overall.model_name].sort_values("f1")
@@ -360,6 +437,29 @@ def analyse_task(con, task: str, models: pd.DataFrame, md: list[str], sfx: str =
         bb = body_df[body_df["model_name"] == overall.model_name].head(6)
         md += ["Error rate by adopting-body type (SQL JOIN predictions-acts-bodies, groups with n>=30):", ""]
         md += _md_table(bb[["body_type", "n", "errors", "error_rate"]]) + [""]
+
+    # Similarity to the nearest training title (from the leakage check).
+    if not sim_df.empty:
+        piv = sim_df.pivot_table(index="sim_bucket", columns="model_name", values="error_rate", aggfunc="first")
+        counts = sim_df.groupby("sim_bucket")["n"].first()
+        piv.insert(0, "n", counts)
+        md += ["### Error rate vs similarity to the nearest train title (SQL JOIN predictions-nn_sim)", "",
+               "`max_cos` = highest char-ngram TF-IDF cosine between a test title and any train title "
+               "(data/processed/nn_similarity.parquet; >= 0.9 means a near-duplicate, excluded from test_strict).", ""]
+        md += _md_table(piv.reset_index()) + [""]
+        nbd = pd.DataFrame(neighbour_rows)
+        best_nb = nbd[nbd["model_name"] == overall.model_name].iloc[0]
+        md += [f"The label of the nearest train title equals the true label for "
+               f"{best_nb.neighbour_label_is_true / best_nb.n:.1%} of test titles (a 1-NN 'copy' rule). "
+               f"{overall.model_name} predicts the neighbour's label for "
+               f"{best_nb.prediction_equals_neighbour / best_nb.n:.1%} of titles, and "
+               f"{best_nb.errors_copying_neighbour / max(1, best_nb.errors):.1%} of its errors are exactly the "
+               f"neighbour's label (errors inherited from a similar training title).", ""]
+        md += _md_table(nbd.assign(
+            neighbour_acc=(nbd.neighbour_label_is_true / nbd.n).round(4),
+            copy_rate=(nbd.prediction_equals_neighbour / nbd.n).round(4),
+            errors_copying_share=(nbd.errors_copying_neighbour / nbd.errors.clip(lower=1)).round(4))
+            [["model_name", "n", "errors", "neighbour_acc", "copy_rate", "errors_copying_share"]]) + [""]
 
     # Confidence.
     conf = confidence_profile(preds_by_model[overall.model_name])
@@ -403,7 +503,7 @@ def analyse_task(con, task: str, models: pd.DataFrame, md: list[str], sfx: str =
                f"{e['wrong_prediction']} (conf {e['wrong_confidence']})" for e in ag["examples_only_b_right"]]
         md.append("")
     plot_per_class_f1(per_class, task, config.FIGURES_DIR / f"per_class_f1_{task}{sfx}.png")
-    return {"per_class": per_class, "year": year_df, "length": len_df, "body": body_df,
+    return {"per_class": per_class, "year": year_df, "length": len_df, "body": body_df, "similarity": sim_df,
             "pairs": pairs, "agreements": agreements, "best": overall.model_name}
 
 
@@ -419,7 +519,7 @@ def run(tasks: tuple[str, ...] = ("form", "area"), quick: bool = False) -> dict:
         md = ["# Error analysis", "",
               "All numbers come from the test predictions stored in SQLite (`predictions` table, test split "
               ">= 2023). Figures: `reports/figures/confusion_*.png`, `per_class_f1_*.png`, "
-              "`error_by_year_length.png`.", ""]
+              "`error_by_year_length.png`, `error_by_similarity.png`.", ""]
         outs = {task: analyse_task(con, task, models, md, sfx) for task in tasks}
         outs = {k: v for k, v in outs.items() if v}
         per_class = pd.concat([o["per_class"] for o in outs.values()])
@@ -432,6 +532,11 @@ def run(tasks: tuple[str, ...] = ("form", "area"), quick: bool = False) -> dict:
         if bodies:
             pd.concat(bodies).to_csv(config.RESULTS_DIR / f"error_by_body_type{sfx}.csv", index=False)
         plot_error_breakdown(year_df, len_df, config.FIGURES_DIR / f"error_by_year_length{sfx}.png")
+        sims = [o["similarity"] for o in outs.values() if not o["similarity"].empty]
+        if sims:
+            sim_all = pd.concat(sims)
+            sim_all.to_csv(config.RESULTS_DIR / f"error_by_similarity{sfx}.csv", index=False)
+            plot_similarity(sim_all, config.FIGURES_DIR / f"error_by_similarity{sfx}.png")
         report = REPORT_MD.with_name(f"error_analysis{sfx}.md")
         report.write_text("\n".join(md) + "\n", encoding="utf-8")
         print(f"[error_analysis] wrote {report}")

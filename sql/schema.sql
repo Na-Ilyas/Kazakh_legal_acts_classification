@@ -71,7 +71,7 @@ CREATE TABLE acts (
     date_published  TEXT,
     year            INTEGER,
     is_repealed     INTEGER NOT NULL CHECK (is_repealed IN (0, 1)),
-    form_label      TEXT NOT NULL,             -- task `form` label (primary legal form)
+    form_label      TEXT,                      -- task `form` label (primary legal form; NULL if act_form missing)
     area_label      TEXT,                      -- task `area` label (NULL if section missing / not in dataset)
     split           TEXT CHECK (split IN ('train', 'val', 'test') OR split IS NULL),  -- NULL = removed by leakage guard
     body_id         INTEGER REFERENCES bodies(body_id),

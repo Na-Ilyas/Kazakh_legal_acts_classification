@@ -65,6 +65,12 @@ def _load_json(name: str) -> dict:
         return {}
 
 
+def _form_order(present) -> list[str]:
+    """Known form classes in display order, then any other present class (never NaN)."""
+    present = [str(c) for c in present if isinstance(c, str)]
+    return [f for f in FORM_ORDER if f in present] + sorted(c for c in present if c not in FORM_ORDER)
+
+
 def _short(name: str, width: int = 48) -> str:
     """Shorten long Kazakh names for tick labels (drop parenthesised history)."""
     base = re.sub(r"\s*\([^()]*\)", "", name)
@@ -93,79 +99,92 @@ def fig_class_distribution(ds: pd.DataFrame) -> dict:
         ax.set_ylabel(f"{task} class")
         ax.set_title(f"Task `{task}`: class share per temporal split")
         ax.legend(loc="lower right")
-        top = share["train"].idxmax()
-        findings[task] = {"top_class": top, "train_pct": round(float(share.loc[top, "train"]), 1),
-                          "test_pct": round(float(share.loc[top, "test"]), 1)}
-        if task == "form":
-            findings[task]["shift"] = {c: [round(float(share.loc[c, "train"]), 1), round(float(share.loc[c, "test"]), 1)]
-                                       for c in share.index}
+        delta = share["test"] - share["train"]
+        up, down = delta.idxmax(), delta.idxmin()
+        findings[task] = {
+            "up": up, "up_pct": [round(float(share.loc[up, "train"]), 1), round(float(share.loc[up, "test"]), 1)],
+            "down": down, "down_pct": [round(float(share.loc[down, "train"]), 1), round(float(share.loc[down, "test"]), 1)],
+            "test_top": share["test"].idxmax(), "test_top_pct": round(float(share["test"].max()), 1)}
     path = _save(fig, "eda_class_distribution_by_split.png")
     f, a = findings["form"], findings["area"]
-    sh = f["shift"]
-    text = (f"Strong label shift: Шешім grows from {sh['Шешім'][0]}% of train to {sh['Шешім'][1]}% of test while "
-            f"Қаулы falls from {sh['Қаулы'][0]}% to {sh['Қаулы'][1]}%, so accuracy is dominated by one class and "
-            f"macro-F1 is the right headline metric. For `area`, '{_short(a['top_class'], 30)}' rises from "
-            f"{a['train_pct']}% (train) to {a['test_pct']}% (test).")
-    return {"figure": path, "finding": text}
+    text = (f"Label shift between the temporal splits: in `form`, '{f['up']}' goes from {f['up_pct'][0]}% of train "
+            f"to {f['up_pct'][1]}% of test while '{f['down']}' goes from {f['down_pct'][0]}% to {f['down_pct'][1]}%; "
+            f"the largest test class covers {f['test_top_pct']}% of test, so accuracy mostly reflects one class and "
+            f"macro-F1 is the headline metric. In `area`, '{_short(a['up'], 30)}' goes from {a['up_pct'][0]}% "
+            f"(train) to {a['up_pct'][1]}% (test).")
+    return {"figure": path, "finding": text, "numbers": findings}
 
 
 def fig_acts_per_year(q: pd.DataFrame) -> dict:
     """Stacked bars of acts per year and form (SQL result)."""
-    piv = q.pivot_table(index="year", columns="form_label", values="n_acts", fill_value=0)
-    piv = piv[[c for c in FORM_ORDER if c in piv.columns]]
-    piv = piv.loc[piv.index >= 1990]
+    full = q.pivot_table(index="year", columns="form_label", values="n_acts", fill_value=0)
+    forms = _form_order(full.columns)
+    full = full[forms]
+    piv = full.loc[full.index >= 1990]
     fig, ax = plt.subplots(figsize=(13, 5.5))
     bottom = np.zeros(len(piv))
     for form in piv.columns:
-        ax.bar(piv.index, piv[form], bottom=bottom, color=FORM_COLORS[form], width=0.85, label=form,
+        ax.bar(piv.index, piv[form], bottom=bottom, color=FORM_COLORS.get(form, MUTED), width=0.85, label=form,
                edgecolor="white", linewidth=0.6)
         bottom += piv[form].to_numpy()
     top_y = bottom.max() * 1.03
     for x in (config.TRAIN_END_YEAR + 0.5, config.VAL_YEAR + 0.5):
         ax.axvline(x, color=INK, ls="--", lw=1)
-    ax.text(config.TRAIN_END_YEAR + 0.3, top_y, "train ≤2021", ha="right", fontsize=8.5, color=INK)
+    ax.text(config.TRAIN_END_YEAR + 0.3, top_y, f"train ≤{config.TRAIN_END_YEAR}", ha="right", fontsize=8.5, color=INK)
     ax.text(config.VAL_YEAR, top_y * 1.04, "val", ha="center", fontsize=8.5, color=INK)
-    ax.text(config.VAL_YEAR + 0.7, top_y, "test ≥2023", ha="left", fontsize=8.5, color=INK)
+    ax.text(config.VAL_YEAR + 0.7, top_y, f"test ≥{config.VAL_YEAR + 1}", ha="left", fontsize=8.5, color=INK)
     ax.set_ylim(0, top_y * 1.12)
-    ax.set_title("Acts adopted per year by primary legal form (SQL: acts_per_year_by_form), 1990-2026 "
-                 "(2026 = partial year)")
+    last_year = int(full.index.max())
+    ax.set_title(f"Acts adopted per year by primary legal form (SQL: acts_per_year_by_form), 1990-{last_year}"
+                 + (" (last year partial)" if full.loc[last_year].sum() < 0.5 * full.sum(axis=1).median() else ""))
     ax.set_xlabel("year adopted")
     ax.set_ylabel("number of acts")
-    ax.legend(title="form", ncol=7, loc="upper left", fontsize=8.5)
+    ax.legend(title="form", ncol=len(forms), loc="upper left", fontsize=8.5)
     path = _save(fig, "eda_acts_per_year_by_form.png")
-    totals = piv.sum(axis=1)
+    totals = full.sum(axis=1)
     peak = int(totals.idxmax())
-    share_shesim = (piv.get("Шешім", 0) / totals * 100)
-    text = (f"Volume peaks in {peak} ({int(totals.max()):,} acts); the share of Шешім (local council decisions) rises "
-            f"from {share_shesim.loc[2010]:.0f}% in 2010 to {share_shesim.loc[2023]:.0f}% in 2023, which explains the "
-            f"form label shift of the temporal split. {int(totals.loc[totals.index < 2000].sum()):,} acts predate 2000.")
+    shares = full.div(totals, axis=0) * 100
+    # Compare the form that dominates the test years with its share 10 years before the split
+    test_years = shares.index[shares.index > config.VAL_YEAR]
+    dom = full.loc[test_years].sum().idxmax()
+    ref = config.TRAIN_END_YEAR - 10
+    direction = "rises" if shares.loc[peak, dom] > shares.loc[ref, dom] else "falls"
+    text = (f"Volume peaks in {peak} ({int(totals.max()):,} acts). The share of '{dom}', the most frequent form in "
+            f"the test years, {direction} from {shares.loc[ref, dom]:.0f}% in {ref} to {shares.loc[peak, dom]:.0f}% "
+            f"in {peak}, which drives the form label shift of the temporal split. "
+            f"{int(totals.loc[totals.index < 2000].sum()):,} acts predate 2000 "
+            f"(earliest year: {int(totals.index.min())}).")
     return {"figure": path, "finding": text, "sql_query": "acts_per_year_by_form"}
 
-
 def fig_title_length(ds: pd.DataFrame) -> dict:
-    """Title length in characters and words per form (box plots, outliers clipped at p99)."""
-    d = ds[["title", "form_label"]].copy()
+    """Title length in characters and words per form (box plots, outliers hidden)."""
+    d = ds.dropna(subset=["form_label"])[["title", "form_label"]].copy()
+    d["form_label"] = d["form_label"].astype(str)
     d["chars"] = d["title"].str.len()
     d["words"] = d["title"].str.split().str.len()
-    fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+    forms = _form_order(d["form_label"].unique())
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5.2))
     for ax, col, unit in ((axes[0], "chars", "characters"), (axes[1], "words", "whitespace words")):
-        data = [d.loc[d["form_label"] == f, col].to_numpy() for f in FORM_ORDER]
-        bp = ax.boxplot(data, tick_labels=FORM_ORDER, showfliers=False, patch_artist=True, widths=0.6,
+        data = [d.loc[d["form_label"] == f, col].to_numpy() for f in forms]
+        bp = ax.boxplot(data, tick_labels=forms, showfliers=False, patch_artist=True, widths=0.6,
                         medianprops={"color": INK})
-        for patch, f in zip(bp["boxes"], FORM_ORDER):
-            patch.set_facecolor(FORM_COLORS[f])
+        for patch, f in zip(bp["boxes"], forms):
+            patch.set_facecolor(FORM_COLORS.get(f, MUTED))
             patch.set_alpha(0.75)
-        ax.set_title(f"Title length in {unit} by form (whiskers 1.5 IQR, outliers hidden)")
+        ax.set_title(f"Length in {unit}")
         ax.set_xlabel("form class")
         ax.set_ylabel(f"title length ({unit})")
+    fig.suptitle("Title length by form class (boxes = IQR, whiskers = 1.5 IQR, outliers hidden)",
+                 fontweight="bold", fontsize=12)
     path = _save(fig, "eda_title_length_by_form.png")
-    med = d.groupby("form_label", observed=True)[["chars", "words"]].median()
+    med = d.groupby("form_label")[["chars", "words"]].median()
+    short, long_ = med["chars"].idxmin(), med["chars"].idxmax()
     text = (f"Median title length is {d['chars'].median():.0f} chars / {d['words'].median():.0f} words "
-            f"(p95 {d['chars'].quantile(0.95):.0f} chars, max {d['chars'].max():,}); Заң titles are the shortest "
-            f"(median {med.loc['Заң', 'chars']:.0f} chars) and Шешім the longest ({med.loc['Шешім', 'chars']:.0f}); "
-            f"only {(d['chars'] > 1000).sum()} titles exceed 1000 chars, so truncating long titles loses little.")
-    return {"figure": path, "finding": text}
-
+            f"(p95 {d['chars'].quantile(0.95):.0f}, p99 {d['chars'].quantile(0.99):.0f}, max {d['chars'].max():,} chars). "
+            f"By median, {short} titles are the shortest ({med.loc[short, 'chars']:.0f} chars) and {long_} the "
+            f"longest ({med.loc[long_, 'chars']:.0f} chars); {int((d['chars'] > 1000).sum())} titles "
+            f"({100 * (d['chars'] > 1000).mean():.2f}%) exceed 1000 chars.")
+    return {"figure": path, "finding": text, "median_chars_by_form": med["chars"].round(1).to_dict()}
 
 def fig_missingness(audit: dict) -> dict:
     """Missing values per field split into true empties and placeholders."""
@@ -186,15 +205,19 @@ def fig_missingness(audit: dict) -> dict:
     ax.set_yticks(y)
     ax.set_yticklabels(miss.index)
     ax.set_xlim(0, 100)
-    ax.set_xlabel("rows missing (% of 215,889)")
+    ax.set_xlabel(f"rows missing (% of {n:,})")
     ax.set_ylabel("field")
     ax.set_title("Missing values per field: true empties vs. source placeholders")
     ax.legend(loc="lower right")
     path = _save(fig, "eda_missingness.png")
+    allm = audit["missing"]
     hidden = miss.sort_values("placeholder").iloc[-1]
-    text = (f"Model inputs are complete (title, date_adopted: 0 missing; act_form {audit['missing']['act_form']['missing_pct']}%), "
-            f"but placeholders hide a lot of missingness: '{hidden.name}' looks 99.99% filled yet "
-            f"{int(hidden['placeholder']):,} rows are placeholders; a naive isna() would miss them.")
+    looks_filled = 100 * (1 - float(hidden["empty"]) / n)
+    text = (f"Model inputs are nearly complete (missing: title {allm['title']['missing_pct']}%, date_adopted "
+            f"{allm['date_adopted']['missing_pct']}%, act_form {allm['act_form']['missing_pct']}%, database_section "
+            f"{allm['database_section']['missing_pct']}%), but placeholders hide missingness: '{hidden.name}' looks "
+            f"{looks_filled:.2f}% filled when only empty strings are counted, yet {int(hidden['placeholder']):,} rows "
+            f"({100 * float(hidden['placeholder']) / n:.1f}%) are placeholders that a naive isna() would miss.")
     return {"figure": path, "finding": text}
 
 
@@ -235,8 +258,8 @@ def fig_duplicates(audit: dict, leak: dict) -> dict:
     val_vals = [exact.get("val", 0), masked.get("train_val_pct", 0), nd.get("val", {}).get("pct_ge_0.9", 0),
                 nd.get("val", {}).get("pct_ge_0.8", 0)]
     x = np.arange(len(cats))
-    axes[1].bar(x - 0.2, val_vals, width=0.38, color=SPLIT_COLORS["val"], label="val (2022)")
-    axes[1].bar(x + 0.2, test_vals, width=0.38, color=SPLIT_COLORS["test"], label="test (2023+)")
+    axes[1].bar(x - 0.2, val_vals, width=0.38, color=SPLIT_COLORS["val"], label=f"val ({config.VAL_YEAR})")
+    axes[1].bar(x + 0.2, test_vals, width=0.38, color=SPLIT_COLORS["test"], label=f"test ({config.VAL_YEAR + 1}+)")
     for xi, v, w in zip(x, test_vals, val_vals):
         axes[1].text(xi + 0.2, v, f"{v:.1f}%", ha="center", va="bottom", fontsize=8.5)
         axes[1].text(xi - 0.2, w, f"{w:.1f}%", ha="center", va="bottom", fontsize=8.5)
@@ -244,18 +267,22 @@ def fig_duplicates(audit: dict, leak: dict) -> dict:
     axes[1].set_xticklabels(cats)
     axes[1].set_ylabel("% of eval titles")
     axes[1].set_xlabel("overlap type with a TRAIN title")
-    axes[1].set_title("Eval titles overlapping a TRAIN title (bars 2-4: after exact removal)")
+    axes[1].set_title("Eval titles overlapping a TRAIN title\n(bars 2-4: after exact removal; cosine on digit-masked titles)")
     axes[1].legend()
     path = _save(fig, "eda_duplicates_overview.png")
     td = dup.get("title_exact", {})
+    lid = dup.get("law_id", {}).get("redundant_rows", 0)
+    strict = leak.get("test_strict", {})
     text = (f"{td.get('rows_in_duplicate_groups', 0):,} rows share their exact title with another row "
-            f"({td.get('distinct_duplicated_values', 0):,} distinct titles) while law_id is unique; after removing "
-            f"{ex.get('eval_titles_seen_in_train') or 0:,} eval rows with a train title, {nd.get('test', {}).get('pct_ge_0.9')}% "
-            f"of test titles still have a train near-duplicate (cos ≥ 0.9), hence the test_strict subset.")
+            f"({td.get('distinct_duplicated_values', 0):,} distinct titles); law_id has {lid:,} duplicated rows. "
+            f"After removing {ex.get('eval_titles_seen_in_train') or 0:,} eval rows whose normalised title occurs in "
+            f"train, {masked.get('train_test_pct', 0):.1f}% of test titles still match a train title up to digits and "
+            f"{nd.get('test', {}).get('pct_ge_0.9')}% have a near-duplicate (masked cosine ≥ 0.9); test_strict keeps "
+            f"{strict.get('n_strict', 0):,} of {strict.get('n_test', 0):,} test rows ({strict.get('pct_kept', 0)}%).")
     return {"figure": path, "finding": text}
 
 
-def fig_top_bodies(q: pd.DataFrame, total_acts: int | None = None) -> dict:
+def fig_top_bodies(q: pd.DataFrame, by_type: pd.DataFrame) -> dict:
     """Top-15 adopting bodies (SQL result), coloured by body type."""
     q = q.sort_values("n_acts")
     types = list(dict.fromkeys(q["body_type"][::-1]))
@@ -274,18 +301,20 @@ def fig_top_bodies(q: pd.DataFrame, total_acts: int | None = None) -> dict:
     ax.set_xlim(0, q["n_acts"].max() * 1.3)
     path = _save(fig, "eda_top_bodies.png")
     top = q.iloc[-1]
-    total = int(total_acts) if total_acts else 0
-    top_share = 100 * q["n_acts"].sum() / total if total else float("nan")
-    text = (f"The national Government is the largest single issuer ({int(top['n_acts']):,} acts, "
-            f"{top['pct_repealed']:.0f}% repealed), yet the top-15 bodies together adopt only {top_share:.1f}% of all "
-            f"{total:,} acts: most acts come from the long tail of ~4.2k local bodies (maslikhats, akimats).")
-    return {"figure": path, "finding": text, "sql_query": "top_adopting_bodies"}
+    total = int(by_type["n_acts"].sum())
+    top_share = 100 * q["n_acts"].sum() / total
+    local = by_type[by_type["body_type"].isin(["Мәслихат", "Әкімдік", "Әкім"])]
+    text = (f"The largest single issuer is '{_short(top['body'], 50)}' ({int(top['n_acts']):,} acts, "
+            f"{top['pct_repealed']:.0f}% repealed), yet the top-{len(q)} bodies together adopt only {top_share:.1f}% of "
+            f"all {total:,} acts. Local bodies (types Мәслихат / Әкімдік / Әкім; {int(local['n_bodies'].sum()):,} "
+            f"distinct bodies) adopt {local['pct_of_acts'].sum():.1f}% of the acts (SQL: acts_by_body_type).")
+    return {"figure": path, "finding": text, "sql_query": ["top_adopting_bodies", "acts_by_body_type"]}
 
 
 def fig_area_form_heatmap(q: pd.DataFrame) -> dict:
     """Area x form heatmap (row-normalised %) from SQL."""
     piv = q.pivot_table(index="area_label", columns="form_label", values="n_acts", fill_value=0)
-    piv = piv[[c for c in FORM_ORDER if c in piv.columns]]
+    piv = piv[_form_order(piv.columns)]
     piv = piv.loc[piv.sum(axis=1).sort_values(ascending=False).index]
     pct = piv.div(piv.sum(axis=1), axis=0) * 100
     fig, ax = plt.subplots(figsize=(11, 12))
@@ -320,13 +349,13 @@ def run() -> dict:
     """Create all EDA figures and results/eda_summary.json."""
     t0 = time.perf_counter()
     ds = load_dataset(["title", "split", "form_label", "area_label", "year"])
-    ds["form_label"] = ds["form_label"].astype(str)
     audit = _load_json("audit.json")
     leak = _load_json("leakage_report.json")
     if not database.db_has_corpus():
         print("[eda] corpus DB missing - building it")
         database.build_database()
-    sql = database.run_queries(["acts_per_year_by_form", "top_adopting_bodies", "area_form_matrix"])
+    sql = database.run_queries(["acts_per_year_by_form", "top_adopting_bodies", "area_form_matrix",
+                                "acts_by_body_type"])
     summary: dict = {}
     steps = [
         ("class_distribution", lambda: fig_class_distribution(ds)),
@@ -334,7 +363,7 @@ def run() -> dict:
         ("title_length", lambda: fig_title_length(ds)),
         ("missingness", lambda: fig_missingness(audit)),
         ("duplicates", lambda: fig_duplicates(audit, leak)),
-        ("top_bodies", lambda: fig_top_bodies(sql["top_adopting_bodies"], audit.get("n_rows"))),
+        ("top_bodies", lambda: fig_top_bodies(sql["top_adopting_bodies"], sql["acts_by_body_type"])),
         ("area_form_heatmap", lambda: fig_area_form_heatmap(sql["area_form_matrix"])),
     ]
     for name, fn in steps:

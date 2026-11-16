@@ -23,9 +23,9 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics import accuracy_score, f1_score
 
 from src import config, experiments_db
+from src import metrics as shared_metrics
 
 DATA_COLUMNS = ["law_id", "title", "year", "split", "form_label", "area_label"]
 SPLITS = ("train", "val", "test")
@@ -63,7 +63,8 @@ def load_task(task: str, max_train: int | None = None, max_eval: int | None = No
               seed: int = config.SEED) -> dict[str, pd.DataFrame]:
     """Return {'train','val','test'} frames with columns law_id, title, year, label.
 
-    Rows whose label is missing (area task: no database_section) are dropped.
+    Rows whose label is missing are dropped (area: no database_section; form: the
+    acts without act_form, NaN since contract v2), so no NaN ever becomes a class.
     `max_train` / `max_eval` subsample (seeded) for quick smoke tests.
     """
     if task not in config.TASKS:
@@ -116,15 +117,9 @@ def class_weights(y: np.ndarray, n_classes: int, kind: str = "sqrt_inv") -> np.n
 # Metrics / strict test / logging
 # --------------------------------------------------------------------------
 def compute_metrics(y_true, y_pred) -> dict:
-    """f1_macro, accuracy, f1_weighted (sklearn defaults over the labels present)."""
-    y_true = [str(v) for v in y_true]
-    y_pred = [str(v) for v in y_pred]
-    return {
-        "f1_macro": float(f1_score(y_true, y_pred, average="macro", zero_division=0)),
-        "accuracy": float(accuracy_score(y_true, y_pred)),
-        "f1_weighted": float(f1_score(y_true, y_pred, average="weighted", zero_division=0)),
-        "n_eval": int(len(y_true)),
-    }
+    """f1_macro, accuracy, f1_weighted, n_eval via the shared src.metrics convention
+    (macro-F1 averaged over the classes PRESENT in y_true)."""
+    return shared_metrics.compute_metrics(y_true, y_pred)
 
 
 def load_strict_ids() -> set[str] | None:
@@ -208,6 +203,40 @@ def dir_size_mb(path: Path) -> float:
     if path.is_file():
         return path.stat().st_size / 2**20
     return sum(p.stat().st_size for p in path.rglob("*") if p.is_file()) / 2**20
+
+
+def prob_cache_dir(model_dir_name: str) -> Path:
+    """artifacts/cache/<model dir>: cached class probabilities (kept out of the model dir so
+    that size_mb measures only what is needed for inference)."""
+    return config.ARTIFACTS_DIR / "cache" / model_dir_name
+
+
+def save_probs(model_dir_name: str, split: str, probs: np.ndarray, law_ids, classes: list[str]) -> None:
+    """Cache a probability matrix (float16) + row ids + class order for post-hoc methods."""
+    d = prob_cache_dir(model_dir_name)
+    d.mkdir(parents=True, exist_ok=True)
+    np.save(d / f"probs_{split}.npy", np.asarray(probs, dtype=np.float16))
+    pd.Series(list(map(str, law_ids))).to_csv(d / f"law_ids_{split}.csv", index=False, header=["law_id"])
+    save_json({"classes": list(classes)}, d / "classes.json")
+
+
+def load_probs(model_dir_name: str, split: str) -> tuple[np.ndarray, list[str], list[str]] | None:
+    """(probs float32, law_ids, classes) from the cache, or None if missing."""
+    d = prob_cache_dir(model_dir_name)
+    try:
+        probs = np.load(d / f"probs_{split}.npy").astype(np.float32)
+        ids = pd.read_csv(d / f"law_ids_{split}.csv", dtype=str)["law_id"].tolist()
+        return probs, ids, load_json(d / "classes.json")["classes"]
+    except (FileNotFoundError, KeyError):
+        return None
+
+
+def display_path(path: Path | str) -> str:
+    """Path relative to the project root when inside it (portable logs), else absolute."""
+    try:
+        return str(Path(path).resolve().relative_to(config.PROJECT_ROOT))
+    except ValueError:
+        return str(path)
 
 
 def save_json(obj, path: Path) -> None:

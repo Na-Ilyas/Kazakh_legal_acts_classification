@@ -280,9 +280,9 @@ ER_TABLES: dict[str, dict] = {
     "act_form_tags": {"xy": (0.02, 0.02), "cols": ["PK tag_id", "name (UQ)", "base_form"]},
     "act_area":      {"xy": (0.47, 0.08), "cols": ["PK,FK law_id", "PK,FK area_id"]},
     "areas":         {"xy": (0.72, 0.24), "cols": ["PK area_id", "name (UQ)"]},
-    "experiments":   {"xy": (0.72, 0.86), "cols": ["PK exp_id", "model_name, family", "task, eval_split",
+    "experiments":   {"xy": (0.72, 0.83), "cols": ["PK exp_id", "model_name, family", "task, eval_split",
                                                    "f1_macro, n_params, ..."]},
-    "predictions":   {"xy": (0.36, 0.84), "cols": ["PK,FK exp_id", "PK law_id (-> acts)", "y_true, y_pred",
+    "predictions":   {"xy": (0.36, 0.82), "cols": ["PK,FK exp_id", "PK law_id (-> acts)", "y_true, y_pred",
                                                    "confidence"]},
 }
 # (child, parent, label) - arrow from the FK side ("many") to the referenced table ("one")
@@ -298,7 +298,7 @@ def draw_er_diagram(path: Path = ER_PNG) -> None:
     """Draw the ER diagram with matplotlib boxes and arrows (graphviz not required)."""
     fig, ax = plt.subplots(figsize=(15, 10))
     ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
+    ax.set_ylim(-0.01, 1.01)          # headroom: rounded box edges must not touch the title
     ax.axis("off")
     line_h, width = 0.026, 0.25
     boxes = {}
@@ -491,9 +491,19 @@ def db_has_corpus() -> bool:
         return False
 
 
-def run(rebuild: bool = True) -> dict:
-    """Build the DB (unless present and rebuild=False), draw ER, run all queries."""
+def run(rebuild: bool = True, queries_only: bool = False) -> dict:
+    """Build the DB (unless present and rebuild=False), draw ER, run all queries.
+
+    queries_only=True only re-runs sql/queries.sql against the current DB and
+    refreshes results/sql/*.csv (use as the very last pipeline step, after all
+    models have logged): `python -m src.database --queries-only`.
+    """
     t0 = time.perf_counter()
+    if queries_only:
+        results = run_queries()
+        rows = {k: len(v) for k, v in results.items()}
+        print(f"[database] queries -> rows: {rows}")
+        return {"query_rows": rows, "elapsed_s": round(time.perf_counter() - t0, 1)}
     counts = build_database() if (rebuild or not db_has_corpus()) else {"rebuilt": False}
     print(f"[database] loaded: {counts}")
     draw_er_diagram()
@@ -505,4 +515,5 @@ def run(rebuild: bool = True) -> dict:
 
 
 if __name__ == "__main__":
-    run()
+    import sys
+    run(queries_only="--queries-only" in sys.argv[1:])

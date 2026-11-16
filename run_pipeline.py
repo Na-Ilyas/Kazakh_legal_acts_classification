@@ -5,11 +5,12 @@ Examples (from the project root):
     .venv/bin/python run_pipeline.py --steps all --quick    # smoke test, a few minutes
     .venv/bin/python run_pipeline.py --steps tiny,e5,benchmark,compare,errors
 
---quick trains every model on a small subset for 1-2 epochs and tags the
-results with the suffix "_quick" (models, SQLite rows, output files), so a
-smoke test never overwrites the full-run results. In quick mode, the slow data
-steps whose outputs already exist (parquet, leakage ids, SQLite corpus) are
-skipped; pass --force-data to rerun them anyway.
+--quick trains every model on a small subset for 1-2 epochs and writes ALL its
+outputs (models, results, figures, SQLite) to a separate scratch folder
+(default: <tmp>/kazlaw_quick, see --quick-dir), so a smoke test never touches
+the full-run deliverables. In quick mode, the slow data steps whose outputs
+already exist (parquet, leakage ids, audit, EDA, baselines) are skipped; pass
+--force-data to rerun them anyway.
 """
 from __future__ import annotations
 
@@ -17,9 +18,13 @@ import argparse
 import importlib
 import inspect
 import json
+import os
+import shutil
 import sys
+import tempfile
 import time
 from datetime import datetime
+from pathlib import Path
 
 from src import config
 
@@ -35,12 +40,28 @@ STEPS: dict[str, tuple[str, dict, dict]] = {
     "tokenizer": ("src.bpe_tokenizer", {}, {}),
     "tiny": ("src.tiny_transformer", {}, {}),
     "e5": ("src.finetune_e5", {}, {}),
+    "seeds": ("src.tiny_transformer:run_seed_study", {}, {}),   # 3-seed variance of the tiny model
     "mlm": ("src.mlm_pretrain", {}, {}),          # optional extension: MLM-pretrained tiny transformer
+    "distill": ("src.distill", {}, {}),           # KD e5 -> tiny transformer, recency weighting
+    "e5_variants": ("src.finetune_e5:run_5ep", {}, {}),   # e5 up to 5 epochs + early stopping
+    "refit": ("src.distill:run_refits", {}, {}),          # train+val refit of the val-best tiny model
+    "refit_e5": ("src.finetune_e5:refit_trainval", {}, {}),  # ... and of the val-best e5 variant
+    "posthoc": ("src.posthoc", {}, {}),           # prior-shift adjustment + ensembles (full runs only)
     "benchmark": ("src.benchmark", {}, {}),
     "compare": ("src.compare", {}, {}),
     "errors": ("src.error_analysis", {}, {}),
     "predict": ("src.predict", {}, {}),
+    # refresh results/sql/*.csv so the SQL query outputs include the final experiment tables
+    "sql_final": ("src.database:run_queries", {}, {}),
 }
+# Research track (data agent), appended: preprocessing ablation, Kazakh vocabulary pruning
+# of e5-small, mT5-small seq2seq label generation, Kazakh encoder survey. GPU steps should be
+# run under the shared lock: flock .gpu.lock .venv/bin/python run_pipeline.py --steps ...
+STEPS["prep_ablation"] = ("src.prep_ablation", {}, {})
+STEPS["vocab_prune"] = ("src.vocab_prune", {}, {})
+STEPS["seq2seq"] = ("src.seq2seq_mt5", {}, {})
+STEPS["survey"] = ("src.model_survey", {}, {"finetune_model": False})
+STEPS["sql_final"] = STEPS.pop("sql_final")      # keep the SQL refresh as the very last step
 # Outputs that let quick mode skip an expensive, already-completed data step.
 DONE_MARKERS = {
     "data": config.PROCESSED_DIR / "READY",
@@ -52,6 +73,30 @@ DONE_MARKERS = {
     # skipped as soon as one trained baseline exists on disk.
     "baseline": config.MODELS_DIR / "tfidf_word_lr_form" / "model.joblib",
 }
+
+
+def redirect_outputs(quick_dir: Path) -> None:
+    """Point every OUTPUT path of src.config to `quick_dir` (inputs stay in place).
+
+    Must run before any step module is imported: modules derive their output paths
+    from src.config at import time. Small inputs that the model steps read from the
+    results/models folders (strict test ids, token stats, tokenizer) are copied.
+    """
+    real_results, real_models = config.RESULTS_DIR, config.MODELS_DIR
+    config.ARTIFACTS_DIR = quick_dir
+    for attr, sub in (("RESULTS_DIR", "results"), ("FIGURES_DIR", "figures"), ("MODELS_DIR", "models")):
+        target = quick_dir / sub
+        target.mkdir(parents=True, exist_ok=True)
+        setattr(config, attr, target)
+    config.DB_PATH = quick_dir / "kazlaw_quick.db"
+    os.environ["KAZLAW_DB"] = str(config.DB_PATH)          # read by src.model_utils
+    for name in ("test_strict_ids.csv", "token_lengths.json", "tiny_transformer_loss_search.csv"):
+        if (real_results / name).exists():
+            shutil.copy(real_results / name, config.RESULTS_DIR / name)
+    for name in ("bpe_tokenizer", "bpe_tokenizer_4k"):
+        if (real_models / name).exists():
+            shutil.copytree(real_models / name, config.MODELS_DIR / name, dirs_exist_ok=True)
+    print(f"[quick] all outputs go to {quick_dir}")
 
 
 def parse_steps(spec: str) -> list[str]:
@@ -70,18 +115,19 @@ def run_step(name: str, quick: bool, force_data: bool) -> dict:
     module_name, full_kwargs, quick_kwargs = STEPS[name]
     marker = DONE_MARKERS.get(name)
     if quick and not force_data and marker is not None and marker.exists():
-        print(f"[skip] {name}: output already present ({marker.relative_to(config.PROJECT_ROOT)})")
+        print(f"[skip] {name}: output already present ({marker})")
         return {"step": name, "status": "skipped"}
     t0 = time.perf_counter()
     try:
-        module = importlib.import_module(module_name)
-        params = inspect.signature(module.run).parameters
+        module_path, _, func_name = module_name.partition(":")
+        func = getattr(importlib.import_module(module_path), func_name or "run")
+        params = inspect.signature(func).parameters
         kwargs = dict(quick_kwargs if quick else full_kwargs)
         kwargs = {k: v for k, v in kwargs.items() if k in params}
         if quick and "quick" in params:
             kwargs["quick"] = True
-        print(f"\n===== {name}: {module_name}.run({kwargs}) =====", flush=True)
-        result = module.run(**kwargs)
+        print(f"\n===== {name}: {module_name}({kwargs}) =====", flush=True)
+        result = func(**kwargs)
         status = {"step": name, "status": "ok", "seconds": round(time.perf_counter() - t0, 1)}
         if isinstance(result, dict):
             status["summary"] = {k: v for k, v in list(result.items())[:8]}
@@ -98,9 +144,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--quick", action="store_true", help="small, fast smoke-test run")
     parser.add_argument("--force-data", action="store_true", help="in quick mode, rerun finished data steps")
     parser.add_argument("--stop-on-error", action="store_true")
+    parser.add_argument("--quick-dir", default=str(Path(tempfile.gettempdir()) / "kazlaw_quick"),
+                        help="where --quick writes its outputs (never inside the deliverables)")
     args = parser.parse_args(argv)
 
     steps = parse_steps(args.steps)
+    if args.quick:
+        redirect_outputs(Path(args.quick_dir))
     print(f"Pipeline steps: {steps} | quick={args.quick}")
     log = []
     t0 = time.perf_counter()
@@ -110,7 +160,7 @@ def main(argv: list[str] | None = None) -> int:
         if record["status"] == "error" and args.stop_on_error:
             break
     total = round(time.perf_counter() - t0, 1)
-    out = config.RESULTS_DIR / f"pipeline_log{'_quick' if args.quick else ''}.json"
+    out = config.RESULTS_DIR / "pipeline_log.json"         # quick runs: inside --quick-dir
     try:
         with open(out, "w", encoding="utf-8") as fh:
             json.dump({"finished": datetime.now().isoformat(timespec="seconds"), "quick": args.quick,

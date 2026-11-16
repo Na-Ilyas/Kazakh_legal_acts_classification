@@ -27,7 +27,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from src import bpe_tokenizer
-from src.model_utils import (BPE_DIR, label_maps, encode_labels, load_task, log_all_splits,
+from src.model_utils import (BPE_DIR, display_path, save_probs, label_maps, encode_labels, load_task, log_all_splits,
                              max_len_for, prediction_frame, quick_name, save_json)
 from src.trainer import (TokenData, TrainConfig, fit, get_device, plot_learning_curve, predict_proba,
                          set_seed)
@@ -179,7 +179,8 @@ def encode_splits(data: dict[str, pd.DataFrame], tok, max_len: int, label2id: di
 
 def train_variant(task: str, data: dict, tensors: dict, classes: list[str], arch: dict,
                   cfg: TrainConfig, out_dir: Path, max_len: int, vocab_size: int, run_name: str,
-                  tok_dir: Path = BPE_DIR, init_from: Path | None = None) -> dict:
+                  tok_dir: Path = BPE_DIR, init_from: Path | None = None,
+                  teacher_logp: torch.Tensor | None = None, sample_weight: torch.Tensor | None = None) -> dict:
     """Train one architecture/loss variant; best checkpoint + config are saved in out_dir.
 
     init_from: encoder weights from MLM pretraining (src.mlm_pretrain); the
@@ -198,7 +199,8 @@ def train_variant(task: str, data: dict, tensors: dict, classes: list[str], arch
     print(f"[tiny] {run_name}: {n_params:,} parameters on {device}")
     assert n_params <= MAX_PARAMS, f"{n_params} params exceeds the 10M budget"
     res = fit(model, tensors["train"], tensors["val"], len(classes), cfg, out_dir / "model.pt",
-              run_name, log_csv=out_dir / "train_log.csv")
+              run_name, log_csv=out_dir / "train_log.csv", teacher_logp=teacher_logp,
+              sample_weight=sample_weight)
     model_cfg = {"vocab_size": vocab_size, "n_classes": len(classes), "max_len": max_len, "dropout": 0.1,
                  "pooling": "mean", "pad_id": bpe_tokenizer.PAD_ID, **arch}
     save_json({"model": model_cfg, "train": res["train_config"], "task": task, "max_len": max_len,
@@ -206,12 +208,13 @@ def train_variant(task: str, data: dict, tensors: dict, classes: list[str], arch
               out_dir / "config.json")
     save_json({c: i for i, c in enumerate(classes)}, out_dir / "label2id.json")
     shutil.copy(tok_dir / "tokenizer.json", out_dir / "tokenizer.json")
-    preds = {split: prediction_frame(data[split]["law_id"], data[split]["label"],
-                                     predict_proba(model, tensors[split]), classes)
+    probs = {split: predict_proba(model, tensors[split]) for split in ("val", "test")}
+    preds = {split: prediction_frame(data[split]["law_id"], data[split]["label"], probs[split], classes)
              for split in ("val", "test")}
     del model
     torch.cuda.empty_cache()
-    return {**res, "n_params": n_params, "preds": preds, "model_cfg": model_cfg}
+    return {**res, "n_params": n_params, "preds": preds, "model_cfg": model_cfg,
+            "probs": {k: v.astype(np.float16) for k, v in probs.items()}, "classes": classes}
 
 
 def finalize(task: str, model_name: str, out_dir: Path, res: dict, n_train: int,
@@ -220,6 +223,8 @@ def finalize(task: str, model_name: str, out_dir: Path, res: dict, n_train: int,
     from src import benchmark
 
     log_name = out_dir.name
+    for split, probs in res.get("probs", {}).items():      # for post-hoc adjustment / ensembles
+        save_probs(out_dir.name, split, probs, res["preds"][split]["law_id"], res["classes"])
     hist = res["history"]
     hist.to_csv(config.RESULTS_DIR / f"train_log_{log_name}.csv", index=False)
     plot_learning_curve(hist, f"Tiny transformer {arch_label(res['model_cfg'])} - task '{task}'",
@@ -234,7 +239,7 @@ def finalize(task: str, model_name: str, out_dir: Path, res: dict, n_train: int,
           "train_peak_gpu_mb": res["train_peak_gpu_mb"],
           "latency_cuda_ms_per_1000": bench.get("latency_cuda_ms_per_1000"),
           "infer_peak_gpu_mb": bench.get("infer_peak_gpu_mb"),
-          "infer_ram_mb": bench.get("infer_ram_mb"), "model_dir": str(out_dir.relative_to(config.PROJECT_ROOT))}
+          "infer_ram_mb": bench.get("infer_ram_mb"), "model_dir": display_path(out_dir)}
     logged = log_all_splits(model_name, FAMILY, task, res["preds"], common, hp,
                             notes="own BPE + transformer encoder from scratch")
     return {split: round(v["f1_macro"], 4) for split, v in logged.items()}
@@ -337,7 +342,7 @@ def run_dropout_variants(tasks: tuple[str, ...] = ("form", "area")) -> dict:
 
 
 def run_seed_study(tasks: tuple[str, ...] = ("form", "area"), seeds: tuple[int, ...] = (1, 2, 3),
-                   archs: list[dict] | None = None) -> pd.DataFrame:
+                   archs: list[dict] | None = None, quick: bool = False) -> pd.DataFrame:
     """Seed variance of the tiny transformer (same data/config, different init + batch order).
 
     Not logged as separate experiments; writes results/tiny_transformer_seed_study.csv
@@ -345,6 +350,8 @@ def run_seed_study(tasks: tuple[str, ...] = ("form", "area"), seeds: tuple[int, 
     """
     from src.model_utils import compute_metrics, load_strict_ids
 
+    if quick:
+        return pd.DataFrame()
     search = pd.read_csv(config.RESULTS_DIR / "tiny_transformer_loss_search.csv")
     strict = load_strict_ids()
     device = get_device()
@@ -399,11 +406,12 @@ def run_vocab_variant(tasks: tuple[str, ...] = ("form",), vocab_size: int = 4000
 
 def run(tasks: tuple[str, ...] = ("form", "area"), quick: bool = False,
         losses: tuple[str, ...] | None = None, ablation: list[dict] | None = None,
-        extra_ablations: bool = True) -> dict:
+        extra_ablations: bool = True, seed_study: bool = False) -> dict:
     """Train the tiny transformer for every task (quick=True: small smoke test).
 
     Full runs also train the extra ablations: dropout 0.3 (both tasks) and the
-    4k-vocabulary BPE tokenizer (form task).
+    4k-vocabulary BPE tokenizer (form task). The 3-seed variance study is a separate
+    step (run_seed_study, pipeline step `seeds`).
     """
     if not (BPE_DIR / "tokenizer.json").exists():
         bpe_tokenizer.run(quick=quick)
@@ -420,6 +428,9 @@ def run(tasks: tuple[str, ...] = ("form", "area"), quick: bool = False,
         results["dropout_ablation"] = run_dropout_variants(tasks)
         if "form" in tasks:
             results["vocab_ablation"] = run_vocab_variant(("form",), vocab_size=4000)
+    if seed_study and not quick:
+        df = run_seed_study(tasks)
+        results["seed_study_rows"] = len(df)
     return results
 
 

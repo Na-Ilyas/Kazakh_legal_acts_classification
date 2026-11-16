@@ -2,7 +2,8 @@
 
 Steps
 1. (Re)compute the test_strict rows from the stored test predictions for any
-   experiment where that row is missing or stale (strict ids written later).
+   experiment where that row is missing or stale (strict ids redefined later,
+   or a different metric convention); metrics come from src.metrics.
 2. Pivot experiments into one row per (task, model): val / test / test_strict
    macro-F1, accuracy, #params, size MB, CPU + CUDA latency per 1000 titles,
    memory, train time -> results/model_comparison.csv and .md.
@@ -24,7 +25,7 @@ COMPARISON_CSV = config.RESULTS_DIR / "model_comparison.csv"
 COMPARISON_MD = config.RESULTS_DIR / "model_comparison.md"
 BEST_JSON = config.RESULTS_DIR / "best_models.json"
 FAMILY_COLORS = {"baseline": "#b0b0b0", "tfidf": "#4d4d4d", "tiny_transformer": "#2a6fdb",
-                 "pretrained": "#d62728", "pretrained_frozen": "#e07b39"}
+                 "pretrained": "#d62728", "pretrained_frozen": "#e07b39", "posthoc": "#7b3fbf"}
 
 RANK_SQL = """
 WITH test_rows AS (
@@ -51,9 +52,9 @@ def recompute_test_strict(force: bool = False) -> list[dict]:
     done = []
     with experiments_db.connect() as con:
         tests = pd.read_sql_query("SELECT * FROM experiments WHERE eval_split='test'", con)
-        existing = pd.read_sql_query("SELECT model_name, task, n_eval FROM experiments "
+        existing = pd.read_sql_query("SELECT model_name, task, n_eval, f1_macro FROM experiments "
                                      "WHERE eval_split='test_strict'", con)
-    have = {(r.model_name, r.task): r.n_eval for r in existing.itertuples()}
+    have = {(r.model_name, r.task): (r.n_eval, r.f1_macro) for r in existing.itertuples()}
     for row in tests.itertuples():
         with experiments_db.connect() as con:
             preds = pd.read_sql_query("SELECT law_id, y_true, y_pred FROM predictions WHERE exp_id=?",
@@ -64,9 +65,10 @@ def recompute_test_strict(force: bool = False) -> list[dict]:
         if sub.empty:
             continue
         key = (row.model_name, row.task)
-        if not force and key in have and have[key] == len(sub):
-            continue                                  # already present and consistent
-        metrics = compute_metrics(sub["y_true"], sub["y_pred"])
+        metrics = compute_metrics(sub["y_true"], sub["y_pred"])     # shared src.metrics convention
+        if not force and key in have and have[key][0] == len(sub) \
+                and abs((have[key][1] or 0) - metrics["f1_macro"]) < 1e-9:
+            continue                                  # present and consistent with current strict ids
         for col in ("n_params", "size_mb", "latency_ms_per_1000", "latency_device", "peak_mem_mb",
                     "train_time_s", "n_train"):
             metrics[col] = getattr(row, col)
@@ -137,10 +139,19 @@ def to_markdown(table: pd.DataFrame) -> str:
              "titles). Latency = end-to-end inference for 1000 test titles (batch 64, 8 CPU threads, median "
              "of 3). `train peak MB` = peak CUDA memory while training for neural models (as logged by the "
              "baseline module for TF-IDF models); `infer RAM MB` = RAM growth of a fresh process while "
-             "loading the model and predicting on CPU.", ""]
-    for task, part in table.groupby("task", sort=False):
-        lines += [f"## Task `{task}`", "", "| " + " | ".join(show.values()) + " |",
-                  "|" + "---|" * len(show)]
+             "loading the model and predicting on CPU. Family `posthoc` (ensembles, prior-shift "
+             "adjustment): F1 val is measured on val half B only (half A estimated the class prior), and "
+             "latency/size/params cover all member models. `*_trainval` = refit on train+val with the "
+             "val-selected config: its F1 val is NOT a held-out score and it is never selected on val. "
+             "Main table = best model of each family on validation (+ the from-scratch tiny_transformer_4L "
+             "and the majority floor); every other variant is listed in the ablation table.", ""]
+    groups = [(task, kind, part) for (task, kind), part in
+              table.groupby(["task", "table"], sort=False)] if "table" in table else \
+        [(task, "main", part) for task, part in table.groupby("task", sort=False)]
+    for task, kind, part in sorted(groups, key=lambda g: (g[0], g[1] != "main")):
+        title = (f"## Task `{task}`: main models" if kind == "main" else
+                 f"### Task `{task}`: ablations and other variants")
+        lines += [title, "", "| " + " | ".join(show.values()) + " |", "|" + "---|" * len(show)]
         for _, r in part.iterrows():
             cells = []
             for col in show:
@@ -158,6 +169,26 @@ def to_markdown(table: pd.DataFrame) -> str:
             lines.append("| " + " | ".join(cells) + " |")
         lines.append("")
     return "\n".join(lines)
+
+
+MAIN_REFERENCE = {"tiny_transformer_4L", "majority_dummy"}   # always in the main table
+REFIT_SUFFIX = "_trainval"    # refits on train+val: their val score is not held-out -> never selected on it
+
+
+def mark_main(table: pd.DataFrame) -> pd.DataFrame:
+    """Column `table` = 'main' for the best model of each family on VAL (plus the from-scratch
+    tiny_transformer_4L reference and the majority floor), 'ablation' for every other variant."""
+    table = table.copy()
+    selectable = table[~table["model_name"].str.endswith(REFIT_SUFFIX)]     # refits saw val
+    best = (selectable.dropna(subset=["f1_val"]).sort_values("f1_val", ascending=False)
+            .groupby(["task", "model_family"]).head(1))
+    main_keys = set(zip(best["task"], best["model_name"]))
+    # a train+val refit of a main model is shown next to it in the main table
+    main_keys |= {(t, m) for t, m in zip(table["task"], table["model_name"])
+                  if m.endswith(REFIT_SUFFIX) and (t, m[:-len(REFIT_SUFFIX)]) in main_keys}
+    table["table"] = [("main" if (t, m) in main_keys or m in MAIN_REFERENCE else "ablation")
+                      for t, m in zip(table["task"], table["model_name"])]
+    return table
 
 
 def seed_section() -> list[str]:
@@ -184,6 +215,7 @@ def seed_section() -> list[str]:
 def best_models(table: pd.DataFrame) -> dict:
     """Best model per task and family, selected on VALIDATION macro-F1 (never on test)."""
     out: dict = {}
+    table = table[~table["model_name"].str.endswith(REFIT_SUFFIX)]
     for (task, fam), part in table.dropna(subset=["f1_val"]).groupby(["task", "model_family"]):
         best = part.sort_values("f1_val", ascending=False).iloc[0]
         out.setdefault(task, {})[fam] = {"model_name": best["model_name"], "f1_val": round(best["f1_val"], 4),
@@ -204,6 +236,9 @@ def _plt():
     return plt
 
 
+HIGHLIGHT_EXTRA = {"tiny_transformer_2L_d128", "tfidf_word_lr"}   # smallest tiny / fastest TF-IDF
+
+
 def short_name(name: str) -> str:
     """Compact label for crowded plots ('tiny_transformer_4L_d128' -> 'tiny 4L d128')."""
     return (name.replace("tiny_transformer_", "tiny ").replace("e5_small_ft", "e5 fine-tuned")
@@ -218,10 +253,17 @@ def plot_bubble(table: pd.DataFrame, path) -> None:
     plt = _plt()
     tasks = list(table["task"].unique())
     fig, axes = plt.subplots(1, len(tasks), figsize=(8 * len(tasks), 6.5), squeeze=False)
-    offsets = [(7, 7), (7, -13), (-10, 12), (-10, -18)]
+    offsets = [(30, 22), (30, -26), (-30, 22), (-30, -26), (45, 2), (-45, 2)]
     for ax, task in zip(axes[0], tasks):
         part = table[(table["task"] == task) & table["latency_ms_per_1000"].notna()
                      & ~table["model_name"].str.contains("dummy")].sort_values("latency_ms_per_1000")
+        # Label only the informative points; other ablation variants are faint context dots.
+        best = part.sort_values("f1_val", ascending=False).groupby("model_family").head(1)["model_name"]
+        highlight = set(best) | HIGHLIGHT_EXTRA
+        others = part[~part["model_name"].isin(highlight)]
+        ax.scatter(others["latency_ms_per_1000"], others["f1_test"], s=25, alpha=0.25,
+                   color=[FAMILY_COLORS.get(f, "#555555") for f in others["model_family"]])
+        part = part[part["model_name"].isin(highlight)]
         for i, (_, r) in enumerate(part.iterrows()):
             params = r["n_params"] if pd.notna(r["n_params"]) and r["n_params"] > 0 else 1e5
             size = 40 + 1500 * np.sqrt(params / 1.2e8)
@@ -230,14 +272,18 @@ def plot_bubble(table: pd.DataFrame, path) -> None:
             ax.annotate(f"{short_name(r['model_name'])} ({params / 1e6:.1f}M)",
                         (r["latency_ms_per_1000"], r["f1_test"]), fontsize=7,
                         xytext=offsets[i % len(offsets)], textcoords="offset points",
-                        ha="left" if offsets[i % len(offsets)][0] > 0 else "right")
+                        ha="left" if offsets[i % len(offsets)][0] > 0 else "right", va="center",
+                        arrowprops={"arrowstyle": "-", "lw": 0.5, "color": "#666666"})
         ax.set_xscale("log")
         ax.set_xlabel("CPU latency, ms per 1000 titles (log scale, 8 threads, batch 64)")
         ax.set_ylabel("macro-F1 on test (>=2023)")
-        ax.set_title(f"Task '{task}': quality vs speed (bubble area ~ #params)")
+        ax.set_title(f"Task '{task}': quality vs speed (bubble area ~ #params)\n"
+                     "labelled: best per family on val + smallest tiny + fastest TF-IDF; faint = other variants",
+                     fontsize=10)
         ax.grid(alpha=0.3, which="both")
         if len(part):
-            lo, hi = part["f1_test"].min(), part["f1_test"].max()
+            lo = min(part["f1_test"].min(), others["f1_test"].min() if len(others) else 1.0)
+            hi = max(part["f1_test"].max(), others["f1_test"].max() if len(others) else 0.0)
             ax.set_ylim(lo - 0.03, hi + 0.03)
             ax.set_xlim(part["latency_ms_per_1000"].min() / 2.5, part["latency_ms_per_1000"].max() * 3)
     handles = [plt.Line2D([], [], marker="o", ls="", color=c, label=f, markersize=9)
@@ -307,7 +353,7 @@ def run(quick: bool = False, force_strict: bool = False) -> dict:
     if rows.empty:
         print("[compare] no experiments logged yet")
         return {"n_models": 0}
-    table = build_table(rows)
+    table = mark_main(build_table(rows))
     try:
         table.to_csv(COMPARISON_CSV.with_name(f"model_comparison{sfx}.csv"), index=False)
         md = to_markdown(table) + "\n" + "\n".join(seed_section() if not quick else [])
@@ -321,7 +367,7 @@ def run(quick: bool = False, force_strict: bool = False) -> dict:
     best = best_models(table)
     save_json(best, BEST_JSON.with_name(f"best_models{sfx}.json"))
     plot_bubble(table, config.FIGURES_DIR / f"f1_vs_latency{sfx}.png")
-    plot_grouped_bars(table, config.FIGURES_DIR / f"f1_grouped_bars{sfx}.png")
+    plot_grouped_bars(table[table["table"] == "main"], config.FIGURES_DIR / f"f1_grouped_bars{sfx}.png")
     plot_test_vs_strict(table, config.FIGURES_DIR / f"f1_test_vs_strict{sfx}.png")
     with pd.option_context("display.width", 200, "display.max_columns", 20):
         print(table[["task", "model_name", "f1_val", "f1_test", "f1_test_strict", "n_params", "size_mb",

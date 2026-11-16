@@ -338,9 +338,9 @@
       "distinct_duplicated_values": 22544
     },
     "title_normalized": {
-      "rows_in_duplicate_groups": 80757,
-      "redundant_rows": 57285,
-      "distinct_duplicated_values": 23472
+      "rows_in_duplicate_groups": 83042,
+      "redundant_rows": 59066,
+      "distinct_duplicated_values": 23976
     },
     "title_plus_description": {
       "rows_in_duplicate_groups": 98,
@@ -352,13 +352,13 @@
       "redundant_rows": 3514,
       "distinct_duplicated_values": 1881
     },
-    "duplicate_titles_with_conflicting_form_label": 802,
+    "duplicate_titles_with_conflicting_form_label": 865,
     "top_duplicated_titles": {
       "қауымдық сервитут белгілеу туралы": 667,
-      "шектеу іс шараларын белгілеу туралы": 595,
-      "қазақстан республикасы үкіметінің резервінен қаражат бөлу туралы": 410,
-      "қазақстан республикасы үкіметінің кейбір шешімдерінің күші жойылды деп тану туралы": 387,
-      "әлеуметтік көмек көрсетудің оның мөлшерлерін белгілеудің және мұқтаж азаматтардың жекелеген санаттарының тізбесін айқындаудың қағидаларын бекіту туралы": 192
+      "шектеу іс шараларын белгілеу туралы": 599,
+      "қазақстан республикасы үкіметінің резервінен қаражат бөлу туралы": 461,
+      "қазақстан республикасы үкіметінің кейбір шешімдерінің күші жойылды деп тану туралы": 410,
+      "қазақстан республикасы үкіметінің кейбір шешімдеріне өзгерістер мен толықтырулар енгізу туралы": 248
     }
   },
   "text_quality": {
@@ -382,26 +382,28 @@
     "titles_with_double_space": 786
   },
   "label_coverage": {
-    "rows_in_dataset": 208098,
-    "form_label_from_missing_act_form": 60,
+    "rows_in_dataset": 207904,
+    "act_form_missing": 60,
+    "form_label_missing": 60,
+    "form_label_n_classes": 7,
     "form_label_counts": {
-      "Шешім": 90436,
-      "Қаулы": 76198,
-      "Бұйрық": 27769,
-      "Өкім": 4595,
-      "Жарлық": 3944,
-      "Заң": 3471,
-      "Басқа": 1685
+      "Шешім": 90383,
+      "Қаулы": 76129,
+      "Бұйрық": 27709,
+      "Өкім": 4592,
+      "Жарлық": 3937,
+      "Заң": 3469,
+      "Басқа": 1625
     },
-    "area_label_missing": 238,
+    "area_label_missing": 237,
     "area_label_n_classes": 33,
     "area_collapsed_to_other": 584,
-    "removed_eval_rows_seen_in_train": 6846,
-    "removed_test_rows_seen_in_val": 945,
+    "removed_eval_rows_seen_in_train": 7030,
+    "removed_test_rows_seen_in_val": 955,
     "split_sizes": {
       "train": 156570,
-      "test": 38618,
-      "val": 12910
+      "test": 38471,
+      "val": 12863
     }
   },
   "cleaning_decisions": [
@@ -426,8 +428,12 @@
       "justification": "Naive ', ' splitting breaks names that contain commas; numeric classifier codes are dropped."
     },
     {
-      "decision": "Primary form = highest base form in Заң > Жарлық > Қаулы > Шешім > Бұйрық > Өкім, else Басқа",
-      "justification": "Joint acts carry several base forms; a hierarchy gives one deterministic label (aliases such as 'Нормативтік қаулы' -> Қаулы)."
+      "decision": "Primary form = highest base form in Заң > Жарлық > Қаулы > Шешім > Бұйрық > Өкім, else Басқа; missing act_form -> unlabelled (row excluded from task `form`)",
+      "justification": "Joint acts carry several base forms; a hierarchy gives one deterministic label (aliases such as 'Нормативтік қаулы' -> Қаулы). A missing form is unknown, not 'other', so it must not become a training label."
+    },
+    {
+      "decision": "Titles normalised for duplicate detection: NFC, lower-case, Latin->Cyrillic homoglyph folding, punctuation removed",
+      "justification": "~11 % of titles write Kazakh 'і' as Latin 'i'; without folding, copies of the same title escape the leakage guard."
     },
     {
       "decision": "Rare areas (< 300 train rows) collapsed to Басқа, decided on TRAIN only",
@@ -438,8 +444,8 @@
       "justification": "Mimics deployment on future acts and prevents look-ahead leakage."
     },
     {
-      "decision": "Val/test rows whose normalised title occurs in train removed; test_strict excludes near-duplicates (cos >= 0.9)",
-      "justification": "Templated titles repeat every year; without this the test set measures memorisation."
+      "decision": "Val/test rows whose normalised title occurs in train removed; test_strict also excludes titles identical up to digits and near-duplicates (char-gram cosine >= 0.9 on digit-masked titles)",
+      "justification": "Templated titles repeat every year with new dates/numbers; without this the test set measures memorisation."
     },
     {
       "decision": "Titles kept verbatim for models (no truncation at data level, NFC-normalised in text_prep)",
@@ -450,5 +456,5 @@
       "justification": "No ground truth to repair them; affected rows are few and dates only drive the split by year."
     }
   ],
-  "elapsed_s": 8.7
+  "elapsed_s": 10.0
 }

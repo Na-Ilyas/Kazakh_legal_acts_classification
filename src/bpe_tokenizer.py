@@ -22,8 +22,8 @@ import numpy as np
 import pandas as pd
 
 from src import config
-from src.model_utils import (BPE_DIR, E5_MODEL_NAME, E5_PREFIX, TOKEN_STATS_JSON, load_json,
-                             load_task, save_json)
+from src.model_utils import (BPE_DIR, E5_MODEL_NAME, E5_PREFIX, TOKEN_STATS_JSON, display_path, load_dataset,
+                             load_json, save_json)
 
 SPECIAL_TOKENS = ["[PAD]", "[UNK]", "[CLS]", "[SEP]", "[MASK]"]
 PAD_ID, UNK_ID, CLS_ID, SEP_ID, MASK_ID = range(5)
@@ -218,9 +218,9 @@ def run(vocab_sizes: tuple[int, ...] = VOCAB_SIZES, quick: bool = False, force: 
         return load_json(TOKEN_STATS_JSON)
 
     t0 = time.time()
-    data = load_task("form")          # form labels are never missing -> all titles
-    train_titles = data["train"]["title"].tolist()
-    heldout_titles = data["val"]["title"].tolist() + data["test"]["title"].tolist()
+    ds = load_dataset(["title", "split"])        # every title, whatever its labels
+    train_titles = ds.loc[ds["split"] == "train", "title"].astype(str).tolist()
+    heldout_titles = ds.loc[ds["split"] != "train", "title"].astype(str).tolist()
     all_titles = train_titles + heldout_titles
     print(f"[bpe] training on {len(train_titles):,} train titles; held-out {len(heldout_titles):,}")
 
@@ -239,7 +239,7 @@ def run(vocab_sizes: tuple[int, ...] = VOCAB_SIZES, quick: bool = False, force: 
         lens_held_raw = bpe_lengths(tok, heldout_titles, with_special=False)
         name = f"bpe_{vs // 1000}k"
         report["tokenizers"][name] = {
-            "path": str(path.relative_to(config.PROJECT_ROOT)), "vocab_size": tok.get_vocab_size(),
+            "path": display_path(path), "vocab_size": tok.get_vocab_size(),
             "train_time_s": round(time.time() - ts, 2),
             "length_all_with_special": length_stats(lens_all),
             "length_train_with_special": length_stats(lens_train),

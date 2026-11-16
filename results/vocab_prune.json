@@ -1,0 +1,64 @@
+{
+  "form": {
+    "f1_macro": {
+      "val": 0.8628,
+      "test": 0.8448,
+      "test_strict": 0.8521
+    },
+    "n_params": 25517191,
+    "n_params_full": 117656455,
+    "vocab_kept": 10091,
+    "vocab_full": 250037,
+    "oov_pct": {
+      "train": 0.0,
+      "val": 0.0228,
+      "test": 0.0452
+    },
+    "size_mb": 98.3,
+    "latency_cpu_ms_per_1000": 7892.9,
+    "train_time_s": 82.83,
+    "best_epoch": 3
+  },
+  "area": {
+    "f1_macro": {
+      "val": 0.5805,
+      "test": 0.5997,
+      "test_strict": 0.579
+    },
+    "n_params": 25529121,
+    "n_params_full": 117666465,
+    "vocab_kept": 10096,
+    "vocab_full": 250037,
+    "oov_pct": {
+      "train": 0.0,
+      "val": 0.0229,
+      "test": 0.045
+    },
+    "size_mb": 98.4,
+    "latency_cpu_ms_per_1000": 8209.7,
+    "train_time_s": 76.97,
+    "best_epoch": 3
+  },
+  "latency_compare_same_process": {
+    "form": {
+      "e5_small_ft": {
+        "latency_cpu_ms_per_1000": 10393.5,
+        "n_params": 117656455
+      },
+      "e5_small_kkprune_ft": {
+        "latency_cpu_ms_per_1000": 8554.8,
+        "n_params": 25517191
+      }
+    },
+    "area": {
+      "e5_small_ft": {
+        "latency_cpu_ms_per_1000": 7042.8,
+        "n_params": 117666465
+      },
+      "e5_small_kkprune_ft": {
+        "latency_cpu_ms_per_1000": 8051.2,
+        "n_params": 25529121
+      }
+    }
+  }
+}

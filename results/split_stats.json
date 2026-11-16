@@ -36,68 +36,72 @@
     "Өнеркәсіп",
     "Басқа"
   ],
-  "dropped_eval_titles_seen_in_train": 6846,
-  "dropped_test_titles_seen_in_val": 945,
-  "rows_out": 208098,
+  "dropped_eval_titles_seen_in_train": 7030,
+  "dropped_test_titles_seen_in_val": 955,
+  "rows_out": 207904,
   "split_sizes": {
     "train": 156570,
-    "test": 38618,
-    "val": 12910
+    "test": 38471,
+    "val": 12863
   },
-  "area_label_reset_to_nan_missing_section": 238,
+  "form_label_missing_by_split": {
+    "test": 4,
+    "train": 56,
+    "val": 0
+  },
   "class_distribution": {
     "form": {
       "Басқа": {
-        "test": 30,
-        "train": 1642,
+        "test": 26,
+        "train": 1586,
         "val": 13
       },
       "Бұйрық": {
-        "test": 5693,
+        "test": 5648,
         "train": 20691,
-        "val": 1385
+        "val": 1370
       },
       "Жарлық": {
-        "test": 324,
+        "test": 319,
         "train": 3421,
-        "val": 199
+        "val": 197
       },
       "Заң": {
-        "test": 331,
+        "test": 329,
         "train": 3070,
         "val": 70
       },
       "Шешім": {
-        "test": 24708,
+        "test": 24668,
         "train": 57164,
-        "val": 8564
+        "val": 8551
       },
       "Қаулы": {
-        "test": 7268,
+        "test": 7215,
         "train": 66373,
-        "val": 2557
+        "val": 2541
       },
       "Өкім": {
-        "test": 264,
+        "test": 262,
         "train": 4209,
-        "val": 122
+        "val": 121
       }
     },
     "area": {
       "Азаматтық құқық": {
-        "test": 134,
+        "test": 133,
         "train": 1384,
-        "val": 46
+        "val": 45
       },
       "Ауыл шаруашылығы": {
-        "test": 755,
+        "test": 748,
         "train": 5187,
-        "val": 287
+        "val": 284
       },
       "Байланыс": {
         "test": 56,
         "train": 530,
-        "val": 9
+        "val": 8
       },
       "Басқа": {
         "test": 26,
@@ -105,12 +109,12 @@
         "val": 9
       },
       "Білім": {
-        "test": 881,
+        "test": 875,
         "train": 5044,
-        "val": 258
+        "val": 257
       },
       "Денсаулық сақтау": {
-        "test": 640,
+        "test": 638,
         "train": 4350,
         "val": 218
       },
@@ -120,24 +124,24 @@
         "val": 269
       },
       "Еңбек": {
-        "test": 1135,
+        "test": 1128,
         "train": 9926,
-        "val": 390
+        "val": 386
       },
       "Жануарлар дүниесін қорғау және пайдалану": {
-        "test": 193,
+        "test": 192,
         "train": 1197,
         "val": 65
       },
       "Жер қойнауын пайдалану және қорғау": {
         "test": 117,
         "train": 881,
-        "val": 26
+        "val": 25
       },
       "Жерді пайдалану және қорғау": {
-        "test": 861,
+        "test": 860,
         "train": 2114,
-        "val": 199
+        "val": 198
       },
       "Кеден ісі": {
         "test": 16,
@@ -145,17 +149,17 @@
         "val": 2
       },
       "Конституциялық құрылыс және мемлекеттік басқару негіздері": {
-        "test": 7341,
+        "test": 7304,
         "train": 30598,
-        "val": 2529
+        "val": 2517
       },
       "Көлік": {
-        "test": 551,
+        "test": 546,
         "train": 3086,
-        "val": 91
+        "val": 89
       },
       "Мемлекеттік наградалар": {
-        "test": 71,
+        "test": 70,
         "train": 379,
         "val": 11
       },
@@ -170,17 +174,17 @@
         "val": 5
       },
       "Сауда қызметі мен қоғамдық тамақтандыру": {
-        "test": 228,
+        "test": 227,
         "train": 584,
         "val": 70
       },
       "Сот. Әділет. Прокуратура": {
-        "test": 154,
+        "test": 153,
         "train": 1578,
         "val": 34
       },
       "Суларды қорғау мен пайдалану": {
-        "test": 284,
+        "test": 282,
         "train": 1305,
         "val": 35
       },
@@ -192,71 +196,72 @@
       "Тұрғын үй-коммуналдық заңдар. Халыққа тұрмыстық қызмет көрсету": {
         "test": 850,
         "train": 1986,
-        "val": 288
+        "val": 286
       },
       "Халықаралық қатынастар": {
-        "test": 478,
+        "test": 477,
         "train": 6782,
-        "val": 150
+        "val": 149
       },
       "Шаруашылық қызмет": {
-        "test": 2130,
+        "test": 2115,
         "train": 11484,
-        "val": 834
+        "val": 828
       },
       "Ғылым": {
-        "test": 86,
+        "test": 85,
         "train": 568,
         "val": 10
       },
       "Қаржы": {
-        "test": 16943,
+        "test": 16928,
         "train": 41367,
-        "val": 5926
+        "val": 5922
       },
       "Қоршаған ортаны қорғау": {
-        "test": 68,
+        "test": 67,
         "train": 309,
         "val": 25
       },
       "Қорғаныс": {
-        "test": 334,
+        "test": 333,
         "train": 2469,
-        "val": 91
+        "val": 90
       },
       "Қылмыстық құқық": {
-        "test": 30,
+        "test": 29,
         "train": 457,
         "val": 10
       },
       "Құрылыс": {
-        "test": 235,
+        "test": 234,
         "train": 980,
         "val": 61
       },
       "Ұлттық қауіпсіздік. Қоғамдық тәртіпті қорғау": {
-        "test": 659,
+        "test": 634,
         "train": 3320,
-        "val": 147
+        "val": 146
       },
       "Әлеуметтік қамсыздандыру. Сақтандыру": {
-        "test": 2002,
+        "test": 1991,
         "train": 9641,
-        "val": 539
+        "val": 534
       },
       "Өнеркәсіп": {
-        "test": 364,
+        "test": 362,
         "train": 2442,
-        "val": 104
+        "val": 103
       }
     }
   },
   "warnings": [
     "form: class 'Басқа' has only 13 rows in val",
-    "area: class 'Байланыс' has only 9 rows in val",
+    "form: class 'Басқа' has only 26 rows in test",
+    "area: class 'Байланыс' has only 8 rows in val",
     "area: class 'Басқа' has only 9 rows in val",
     "area: class 'Басқа' has only 26 rows in test",
-    "area: class 'Жер қойнауын пайдалану және қорғау' has only 26 rows in val",
+    "area: class 'Жер қойнауын пайдалану және қорғау' has only 25 rows in val",
     "area: class 'Кеден ісі' has only 2 rows in val",
     "area: class 'Кеден ісі' has only 16 rows in test",
     "area: class 'Мемлекеттік наградалар' has only 11 rows in val",
@@ -265,10 +270,11 @@
     "area: class 'Сыртқы экономикалық қызмет' has only 8 rows in test",
     "area: class 'Ғылым' has only 10 rows in val",
     "area: class 'Қоршаған ортаны қорғау' has only 25 rows in val",
-    "area: class 'Қылмыстық құқық' has only 10 rows in val"
+    "area: class 'Қылмыстық құқық' has only 10 rows in val",
+    "area: class 'Қылмыстық құқық' has only 29 rows in test"
   ],
   "area_missing_by_split": {
-    "test": 95,
+    "test": 94,
     "train": 121,
     "val": 22
   },

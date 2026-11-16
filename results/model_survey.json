@@ -1,0 +1,82 @@
+{
+  "candidates": [
+    {
+      "model": "intfloat/multilingual-e5-small",
+      "params": 117654272,
+      "note": "multilingual MiniLM-L12, XLM-R SentencePiece 250k (project baseline)",
+      "vocab_size": 250002,
+      "fertility_tokens_per_word": 1.732,
+      "median_tokens_per_title": 30.5,
+      "unk_pct": 0.0,
+      "pct_titles_over_128_tokens": 0.3,
+      "f1": "0.8656 / 0.8415 / 0.8462"
+    },
+    {
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "params": 117654272,
+      "note": "same architecture/tokenizer as e5-small",
+      "vocab_size": 250002,
+      "fertility_tokens_per_word": 1.732,
+      "median_tokens_per_title": 30.5,
+      "unk_pct": 0.0,
+      "pct_titles_over_128_tokens": 0.3,
+      "f1": ""
+    },
+    {
+      "model": "kz-transformers/kaz-roberta-conversational",
+      "params": 83504930,
+      "note": "monolingual Kazakh RoBERTa",
+      "vocab_size": 52000,
+      "fertility_tokens_per_word": 1.256,
+      "median_tokens_per_title": 23.0,
+      "unk_pct": 0.0,
+      "pct_titles_over_128_tokens": 0.03,
+      "f1": "0.8830 / 0.8528 / 0.8675"
+    },
+    {
+      "model": "Eraly-ml/KazBERT",
+      "params": 110650880,
+      "note": "Kazakh BERT",
+      "vocab_size": 32000,
+      "fertility_tokens_per_word": 1.453,
+      "median_tokens_per_title": 26.0,
+      "unk_pct": 0.0,
+      "pct_titles_over_128_tokens": 0.07,
+      "f1": ""
+    },
+    {
+      "model": "google/mt5-small",
+      "params": 300176768,
+      "note": "seq2seq; >120M unless vocabulary-pruned (src.seq2seq_mt5)",
+      "vocab_size": 250100,
+      "fertility_tokens_per_word": 2.209,
+      "median_tokens_per_title": 40.5,
+      "unk_pct": 0.0,
+      "pct_titles_over_128_tokens": 0.97,
+      "f1": "0.8213 / 0.7910 / 0.7956"
+    },
+    {
+      "model": "FacebookAI/xlm-roberta-base",
+      "params": 278885778,
+      "note": "too large (>120M) without pruning",
+      "vocab_size": 250002,
+      "fertility_tokens_per_word": 1.732,
+      "median_tokens_per_title": 30.5,
+      "unk_pct": 0.0,
+      "pct_titles_over_128_tokens": 0.3,
+      "f1": ""
+    }
+  ],
+  "finetune": {
+    "f1_macro": {
+      "val": 0.883,
+      "test": 0.8528,
+      "test_strict": 0.8675
+    },
+    "n_params": 83456263,
+    "size_mb": 323.5,
+    "latency_cpu_ms_per_1000": 10217.7,
+    "train_time_s": 70.95,
+    "best_epoch": 2
+  }
+}

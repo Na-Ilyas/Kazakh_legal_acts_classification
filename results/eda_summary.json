@@ -1,34 +1,76 @@
 {
   "class_distribution": {
     "figure": "reports/figures/eda_class_distribution_by_split.png",
-    "finding": "Strong label shift: Шешім grows from 36.5% of train to 64.0% of test while Қаулы falls from 42.4% to 18.8%, so accuracy is dominated by one class and macro-F1 is the right headline metric. For `area`, 'Қаржы' rises from 26.4% (train) to 44.0% (test)."
+    "finding": "Label shift between the temporal splits: in `form`, 'Шешім' goes from 36.5% of train to 64.1% of test while 'Қаулы' goes from 42.4% to 18.8%; the largest test class covers 64.1% of test, so accuracy mostly reflects one class and macro-F1 is the headline metric. In `area`, 'Қаржы' goes from 26.4% (train) to 44.1% (test).",
+    "numbers": {
+      "form": {
+        "up": "Шешім",
+        "up_pct": [
+          36.5,
+          64.1
+        ],
+        "down": "Қаулы",
+        "down_pct": [
+          42.4,
+          18.8
+        ],
+        "test_top": "Шешім",
+        "test_top_pct": 64.1
+      },
+      "area": {
+        "up": "Қаржы",
+        "up_pct": [
+          26.4,
+          44.1
+        ],
+        "down": "Еңбек",
+        "down_pct": [
+          6.3,
+          2.9
+        ],
+        "test_top": "Қаржы",
+        "test_top_pct": 44.1
+      }
+    }
   },
   "acts_per_year_by_form": {
     "figure": "reports/figures/eda_acts_per_year_by_form.png",
-    "finding": "Volume peaks in 2023 (15,092 acts); the share of Шешім (local council decisions) rises from 30% in 2010 to 62% in 2023, which explains the form label shift of the temporal split. 9,455 acts predate 2000.",
+    "finding": "Volume peaks in 2023 (15,092 acts). The share of 'Шешім', the most frequent form in the test years, rises from 36% in 2011 to 62% in 2023, which drives the form label shift of the temporal split. 9,502 acts predate 2000 (earliest year: 1947).",
     "sql_query": "acts_per_year_by_form"
   },
   "title_length": {
     "figure": "reports/figures/eda_title_length_by_form.png",
-    "finding": "Median title length is 158 chars / 19 words (p95 337 chars, max 4,071); Заң titles are the shortest (median 142 chars) and Шешім the longest (163); only 47 titles exceed 1000 chars, so truncating long titles loses little."
+    "finding": "Median title length is 158 chars / 19 words (p95 336, p99 493, max 4,071 chars). By median, Жарлық titles are the shortest (105 chars) and Бұйрық the longest (202 chars); 47 titles (0.02%) exceed 1000 chars.",
+    "median_chars_by_form": {
+      "Басқа": 134.0,
+      "Бұйрық": 202.0,
+      "Жарлық": 105.0,
+      "Заң": 142.0,
+      "Шешім": 163.0,
+      "Қаулы": 140.0,
+      "Өкім": 123.0
+    }
   },
   "missingness": {
     "figure": "reports/figures/eda_missingness.png",
-    "finding": "Model inputs are complete (title, date_adopted: 0 missing; act_form 0.03%), but placeholders hide a lot of missingness: 'regulatory_body' looks 99.99% filled yet 93,272 rows are placeholders; a naive isna() would miss them."
+    "finding": "Model inputs are nearly complete (missing: title 0.0%, date_adopted 0.0%, act_form 0.03%, database_section 0.11%), but placeholders hide missingness: 'regulatory_body' looks 99.99% filled when only empty strings are counted, yet 93,272 rows (43.2%) are placeholders that a naive isna() would miss."
   },
   "duplicates": {
     "figure": "reports/figures/eda_duplicates_overview.png",
-    "finding": "76,460 rows share their exact title with another row (22,544 distinct titles) while law_id is unique; after removing 6,846 eval rows with a train title, 17.87% of test titles still have a train near-duplicate (cos ≥ 0.9), hence the test_strict subset."
+    "finding": "76,460 rows share their exact title with another row (22,544 distinct titles); law_id has 0 duplicated rows. After removing 7,030 eval rows whose normalised title occurs in train, 20.6% of test titles still match a train title up to digits and 54.18% have a near-duplicate (masked cosine ≥ 0.9); test_strict keeps 17,629 of 38,471 test rows (45.82%)."
   },
   "top_bodies": {
     "figure": "reports/figures/eda_top_bodies.png",
-    "finding": "The national Government is the largest single issuer (37,807 acts, 29% repealed), yet the top-15 bodies together adopt only 30.7% of all 215,889 acts: most acts come from the long tail of ~4.2k local bodies (maslikhats, akimats).",
-    "sql_query": "top_adopting_bodies"
+    "finding": "The largest single issuer is 'Қазақстан Республикасының Үкіметі' (37,807 acts, 29% repealed), yet the top-15 bodies together adopt only 30.7% of all 215,819 acts. Local bodies (types Мәслихат / Әкімдік / Әкім; 3,147 distinct bodies) adopt 59.7% of the acts (SQL: acts_by_body_type).",
+    "sql_query": [
+      "top_adopting_bodies",
+      "acts_by_body_type"
+    ]
   },
   "area_form_heatmap": {
     "figure": "reports/figures/eda_area_form_heatmap.png",
-    "finding": "The two targets are correlated but not redundant: 7 of 33 areas have one form covering ≥70% of their acts (most concentrated: 'Қаржы', 79.6% Шешім), while the most mixed area 'Қоршаған ортаны қорғау' has at most 36.1% in any single form, so knowing the form does not determine the area.",
+    "finding": "The two targets are correlated but not redundant: 7 of 33 areas have one form covering ≥70% of their acts (most concentrated: 'Қаржы', 79.6% Шешім), while the most mixed area 'Қоршаған ортаны қорғау' has at most 35.9% in any single form, so knowing the form does not determine the area.",
     "sql_query": "area_form_matrix"
   },
-  "elapsed_s": 4.6
+  "elapsed_s": 8.5
 }

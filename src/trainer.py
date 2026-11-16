@@ -24,8 +24,7 @@ from src import config  # noqa: F401  (sets CUDA_VISIBLE_DEVICES before torch)
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from sklearn.metrics import f1_score
-
+from src.metrics import macro_f1
 from src.model_utils import RUNS_DIR, class_weights
 
 
@@ -45,6 +44,10 @@ class TrainConfig:
     seed: int = config.SEED
     bf16: bool = True
     bucket: bool = False             # length-bucketed batches (less padding, faster)
+    kd_alpha: float = 0.0            # knowledge distillation: weight of the KL term (0 = off)
+    kd_temperature: float = 2.0      # softening temperature for teacher and student
+    stop_after: int = 0              # >0: train exactly this many epochs and keep the LAST weights
+                                     #     (train+val refit with the epoch count selected on val)
 
 
 @dataclass
@@ -160,15 +163,22 @@ def build_criterion(cfg: TrainConfig, y_train: np.ndarray, n_classes: int, devic
 
 
 def fit(model: nn.Module, train: TokenData, val: TokenData, n_classes: int, cfg: TrainConfig,
-        ckpt_path: Path, run_name: str, log_csv: Path | None = None) -> dict:
+        ckpt_path: Path, run_name: str, log_csv: Path | None = None,
+        teacher_logp: torch.Tensor | None = None, sample_weight: torch.Tensor | None = None) -> dict:
     """Train with early stopping on val macro-F1; best weights are saved to `ckpt_path`.
 
+    teacher_logp: [N_train, C] teacher log-probabilities (knowledge distillation,
+        loss = alpha * T^2 * KL(teacher_T || student_T) + (1 - alpha) * CE).
+    sample_weight: [N_train] per-row weights (e.g. recency weighting), mean ~1.
     Returns a summary with the history DataFrame, best epoch/F1, train time and
     peak CUDA memory. The model is left loaded with the BEST weights.
     """
     set_seed(cfg.seed)
     device = next(model.parameters()).device
     criterion = build_criterion(cfg, train.y, n_classes, device)
+    if sample_weight is not None:              # per-row losses, weighted mean below
+        criterion.reduction = "none"
+    use_kd = teacher_logp is not None and cfg.kd_alpha > 0
     use_amp = cfg.bf16 and device.type == "cuda"
     opt = torch.optim.AdamW(param_groups(model, cfg.weight_decay), lr=cfg.lr, betas=(0.9, 0.98),
                             eps=1e-6, fused=device.type == "cuda")
@@ -191,7 +201,17 @@ def fit(model: nn.Module, train: TokenData, val: TokenData, n_classes: int, cfg:
             ids, mask = make_batch(train, idx, device)
             with torch.autocast(device_type=device.type, dtype=torch.bfloat16, enabled=use_amp):
                 logits = model(ids, mask)
-            loss = criterion(logits.float(), y_train_t[torch.from_numpy(idx).to(device)])
+            idx_t = torch.from_numpy(idx).to(device)
+            loss = criterion(logits.float(), y_train_t[idx_t])
+            if sample_weight is not None:
+                w = sample_weight[idx_t]
+                loss = (loss * w).sum() / w.sum()
+            if use_kd:
+                temp = cfg.kd_temperature
+                kd = F.kl_div(F.log_softmax(logits.float() / temp, dim=-1),
+                              F.log_softmax(teacher_logp[idx_t].float() / temp, dim=-1),
+                              log_target=True, reduction="batchmean") * temp * temp
+                loss = cfg.kd_alpha * kd + (1.0 - cfg.kd_alpha) * loss
             opt.zero_grad(set_to_none=True)
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), cfg.grad_clip)
@@ -207,7 +227,7 @@ def fit(model: nn.Module, train: TokenData, val: TokenData, n_classes: int, cfg:
         val_pred = probs.argmax(1)
         val_loss = float(F.nll_loss(torch.log(torch.from_numpy(probs).clamp_min(1e-9)),
                                     torch.from_numpy(np.where(val.y < 0, 0, val.y))).item())
-        val_f1 = float(f1_score(val.y, val_pred, average="macro", zero_division=0))
+        val_f1 = macro_f1(val.y, val_pred)      # shared metric: classes present in val
         val_acc = float((val_pred == val.y).mean())
         row = {"epoch": epoch, "train_loss": round(train_loss, 5), "val_loss": round(val_loss, 5),
                "val_f1_macro": round(val_f1, 5), "val_accuracy": round(val_acc, 5),
@@ -216,7 +236,7 @@ def fit(model: nn.Module, train: TokenData, val: TokenData, n_classes: int, cfg:
         if writer is not None:
             for k in ("train_loss", "val_loss", "val_f1_macro", "val_accuracy"):
                 writer.add_scalar(f"epoch/{k}", row[k], epoch)
-        improved = val_f1 > best_f1
+        improved = val_f1 > best_f1 or cfg.stop_after > 0      # refit: always keep the latest epoch
         print(f"[{run_name}] epoch {epoch:2d} loss {train_loss:.4f} val_loss {val_loss:.4f} "
               f"val_f1 {val_f1:.4f} acc {val_acc:.4f} ({row['epoch_time_s']}s){' *' if improved else ''}",
               flush=True)
@@ -224,7 +244,9 @@ def fit(model: nn.Module, train: TokenData, val: TokenData, n_classes: int, cfg:
             best_f1, best_epoch, bad = val_f1, epoch, 0
             ckpt_path.parent.mkdir(parents=True, exist_ok=True)
             torch.save(model.state_dict(), ckpt_path)
-        else:
+        if cfg.stop_after and epoch >= cfg.stop_after:
+            break
+        if not improved:
             bad += 1
             if bad >= cfg.patience:
                 print(f"[{run_name}] early stopping (no val-F1 gain for {cfg.patience} epochs)")

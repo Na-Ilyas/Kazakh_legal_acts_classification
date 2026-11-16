@@ -39,7 +39,7 @@ def get_predictors(task: str, device: str = "cpu", all_models: bool = False) -> 
     key = f"{task}:{device}:{all_models}"
     if key in _CACHE:
         return _CACHE[key]
-    specs = discover_models(task)
+    specs = discover_models(task, include_quick=True)   # quick models only exist in --quick runs
     names = None if all_models else _selected_names(task)
     if names:
         specs = [s for s in specs if s.name in names] or specs

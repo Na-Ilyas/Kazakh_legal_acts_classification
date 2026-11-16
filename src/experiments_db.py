@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from contextlib import contextmanager
 from datetime import datetime
 from typing import Iterable
 
@@ -49,11 +50,29 @@ CREATE INDEX IF NOT EXISTS idx_exp_task ON experiments(task, eval_split);
 
 
 def connect(db_path=config.DB_PATH) -> sqlite3.Connection:
-    """Open the project database and make sure the experiment tables exist."""
-    con = sqlite3.connect(db_path)
+    """Open the project database and make sure the experiment tables exist.
+
+    The caller owns the connection (close it); inside this module use session().
+    timeout=60: several processes (data + model agents) may write concurrently.
+    """
+    con = sqlite3.connect(db_path, timeout=60)
     con.execute("PRAGMA foreign_keys = ON")
     con.executescript(SCHEMA)
     return con
+
+
+@contextmanager
+def session(db_path=config.DB_PATH):
+    """Connection that commits on success, rolls back on error and is ALWAYS closed.
+
+    (`with sqlite3.connect(...)` only commits/rolls back - it never closes.)
+    """
+    con = connect(db_path)
+    try:
+        with con:
+            yield con
+    finally:
+        con.close()
 
 
 def log_experiment(model_name: str, model_family: str, task: str, eval_split: str,
@@ -69,7 +88,7 @@ def log_experiment(model_name: str, model_family: str, task: str, eval_split: st
     cols = ["f1_macro", "accuracy", "f1_weighted", "n_params", "size_mb",
             "latency_ms_per_1000", "latency_device", "peak_mem_mb", "train_time_s",
             "n_train", "n_eval"]
-    with connect() as con:
+    with session() as con:
         if replace:
             con.execute("DELETE FROM experiments WHERE model_name=? AND task=? AND eval_split=?",
                         (model_name, task, eval_split))
@@ -91,7 +110,7 @@ def log_predictions(exp_id: int, law_ids: Iterable[str], y_true: Iterable, y_pre
     rows = [(exp_id, str(l), None if t is None else str(t), str(p),
              None if c is None else float(c))
             for l, t, p, c in zip(law_ids, y_true, y_pred, conf)]
-    with connect() as con:
+    with session() as con:
         con.execute("DELETE FROM predictions WHERE exp_id=?", (exp_id,))
         con.executemany("INSERT INTO predictions VALUES (?, ?, ?, ?, ?)", rows)
 
@@ -103,5 +122,5 @@ def load_experiments(task: str | None = None) -> pd.DataFrame:
     if task:
         query += " WHERE task = ?"
         params = (task,)
-    with connect() as con:
+    with session() as con:
         return pd.read_sql_query(query + " ORDER BY task, eval_split, f1_macro DESC", con, params=params)

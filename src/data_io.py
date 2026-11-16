@@ -203,10 +203,19 @@ def csv_to_parquet(plan: dict[str, object], src: Path = config.RAW_CSV,
             writer.write_table(table)
             n_rows += len(opt)
             n_chunks += 1
+    except (OSError, pa.ArrowException) as exc:
+        if writer is not None:
+            writer.close()
+            writer = None
+        tmp.unlink(missing_ok=True)
+        raise RuntimeError(f"writing {dest} failed after {n_rows} rows: {exc}") from exc
     finally:
         if writer is not None:
             writer.close()
-    tmp.replace(dest)
+    try:
+        tmp.replace(dest)                 # atomic: readers never see a half-written file
+    except OSError as exc:
+        raise RuntimeError(f"could not move {tmp} to {dest}: {exc}") from exc
     return {
         "rows": n_rows,
         "chunks": n_chunks,
@@ -396,16 +405,18 @@ def build_and_save_dataset() -> dict:
     corpus["database_section"] = corpus["database_section"].astype(object)
     ds, stats = labels.build_dataset(corpus)
     del corpus
-    # Contract says area_label is NaN when the section is missing. Under pandas 3
-    # labels.build_dataset sees NaN (not None) after `.map(clean_section)` and
-    # sends those rows to 'Басқа'; restore the intended NaN here.
-    fix = ds["database_section"].isna() & ds["area_label"].notna()
-    if fix.any():
-        ds["area_label"] = ds["area_label"].astype(object).where(~fix, None).astype("category")
-    stats["area_label_reset_to_nan_missing_section"] = int(fix.sum())
+    # Contract checks: a missing section must give a missing area label, a missing
+    # act_form a missing form label (both rows are simply excluded from that task).
+    assert not (ds["database_section"].isna() & ds["area_label"].notna()).any(), "area label without section"
+    stats["form_label_missing_by_split"] = ds.groupby("split", observed=True)["form_label"].apply(
+        lambda s: int(s.isna().sum())).to_dict()
     tmp = config.DATASET_PARQUET.with_suffix(".parquet.part")
-    ds.to_parquet(tmp, index=False)
-    tmp.replace(config.DATASET_PARQUET)
+    try:
+        ds.to_parquet(tmp, index=False)
+        tmp.replace(config.DATASET_PARQUET)
+    except (OSError, ValueError) as exc:
+        tmp.unlink(missing_ok=True)
+        raise RuntimeError(f"could not write {config.DATASET_PARQUET}: {exc}") from exc
     dist = split_class_distribution(ds)
     stats["class_distribution"] = dist
     stats["warnings"] = class_distribution_warnings(dist)

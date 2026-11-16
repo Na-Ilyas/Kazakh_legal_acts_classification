@@ -22,7 +22,7 @@ import numpy as np
 from src import config  # noqa: F401  (pins GPU 0 before torch)
 from src.model_utils import E5_MODEL_NAME, E5_PREFIX, dir_size_mb, load_json
 
-KINDS = ("baseline", "tiny", "e5_frozen_lr", "e5_ft")
+KINDS = ("baseline", "tiny", "e5_frozen_lr", "e5_ft", "posthoc")
 _SHARED: dict = {}      # objects shared between predictors (frozen e5 encoder)
 
 
@@ -245,6 +245,49 @@ class BaselinePredictor(BasePredictor):
         return np.concatenate(parts)
 
 
+class PosthocPredictor(BasePredictor):
+    """Ensemble and/or prior-shift-adjusted model written by src.posthoc.
+
+    p(x) = normalise( sum_i w_i * p_i(x) * ratio**lam ), members loaded with load_predictor.
+    """
+
+    def __init__(self, model_dir: str | Path, device: str = "cpu"):
+        self.model_dir = Path(model_dir)
+        cfg = load_json(self.model_dir / "config.json")
+        self.classes = list(cfg["classes"])
+        self.weights = np.array(cfg["weights"], dtype=np.float64)
+        self.ratio = np.array(cfg["prior_ratio"], dtype=np.float64) ** float(cfg["lam"])
+        temps = cfg.get("member_temperatures") or {}          # calibration chosen on val NLL
+        self.temps = [float(temps.get(m["name"], 1.0)) for m in cfg["members"]]
+        self.members = [load_predictor(ModelSpec(m["kind"], m["name"], cfg["task"], m["path"]), device)
+                        for m in cfg["members"]]
+        self.n_params = int(sum(m.n_params or 0 for m in self.members))
+        self.size_mb = float(sum(m.size_mb or 0 for m in self.members))
+        self.supports_cuda = True      # GPU-capable members move to CUDA, TF-IDF stays on CPU
+        self.device = device
+
+    def to(self, device: str) -> "PosthocPredictor":
+        self.device = device
+        for m in self.members:
+            if m.supports_cuda:
+                m.to(device)
+        return self
+
+    def predict_proba(self, texts: list[str], batch_size: int = 64) -> np.ndarray:
+        total = np.zeros((len(texts), len(self.classes)))
+        for w, temp, member in zip(self.weights, self.temps, self.members):
+            probs = member.predict_proba(texts, batch_size)
+            idx = [member.classes.index(c) for c in self.classes]
+            probs = probs[:, idx]
+            if temp != 1.0:                                  # temperature scaling, as in src.posthoc
+                logp = np.log(np.clip(probs, 1e-9, 1.0)) / temp
+                probs = np.exp(logp - logp.max(axis=1, keepdims=True))
+                probs /= probs.sum(axis=1, keepdims=True)
+            total += w * probs
+        total *= self.ratio[None, :]
+        return total / total.sum(axis=1, keepdims=True)
+
+
 def _alias_main_symbols(module) -> None:
     """Models pickled while `module` ran as __main__ (python -m src.baseline) reference
     __main__.<name>; expose the module's own classes/functions there so they unpickle anywhere."""
@@ -285,7 +328,21 @@ def _hf_weights_mb(model_name: str) -> float:
 
 
 def load_predictor(spec: ModelSpec, device: str = "cpu") -> BasePredictor:
-    """Instantiate the right predictor for a ModelSpec."""
+    """Instantiate (once per process) the right predictor for a ModelSpec.
+
+    Memoised: an ensemble re-uses member models that are already loaded (RAM is scarce).
+    """
+    key = (spec.kind, str(spec.path), spec.name, spec.task, device)
+    if key not in _PREDICTORS:
+        _PREDICTORS[key] = _build_predictor(spec, device)
+    return _PREDICTORS[key]
+
+
+_PREDICTORS: dict = {}
+
+
+def _build_predictor(spec: ModelSpec, device: str) -> BasePredictor:
+    """Construct a predictor (no caching)."""
     if spec.kind == "tiny":
         return TinyTransformerPredictor(spec.path, device)
     if spec.kind == "e5_ft":
@@ -294,13 +351,16 @@ def load_predictor(spec: ModelSpec, device: str = "cpu") -> BasePredictor:
         return E5FrozenLRPredictor(spec.path, device)
     if spec.kind == "baseline":
         return BaselinePredictor(spec.name, spec.task, device)
+    if spec.kind == "posthoc":
+        return PosthocPredictor(spec.path, device)
     raise ValueError(f"unknown model kind {spec.kind!r}")
 
 
 def discover_models(task: str | None = None, include_quick: bool = False) -> list[ModelSpec]:
     """Find every trained model on disk (own models via config.json, baselines via SQLite)."""
     specs: list[ModelSpec] = []
-    kind_by_prefix = {"tiny_transformer_": "tiny", "e5_small_ft_": "e5_ft", "e5_frozen_lr_": "e5_frozen_lr"}
+    kind_by_prefix = {"tiny_transformer_": "tiny", "e5_small_ft_": "e5_ft", "e5_frozen_lr_": "e5_frozen_lr",
+                      "posthoc_": "posthoc"}
     for cfg_path in sorted(config.MODELS_DIR.glob("*/config.json")):
         d = cfg_path.parent
         kind = next((k for p, k in kind_by_prefix.items() if d.name.startswith(p)), None)
