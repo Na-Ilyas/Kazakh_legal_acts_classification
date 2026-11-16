@@ -1,0 +1,66 @@
+{
+  "area": {
+    "baseline": {
+      "model_name": "char_1nn",
+      "f1_val": 0.5386,
+      "f1_test": 0.5375
+    },
+    "pretrained": {
+      "model_name": "e5_small_ft",
+      "f1_val": 0.563,
+      "f1_test": 0.6001
+    },
+    "pretrained_frozen": {
+      "model_name": "e5_frozen_lr",
+      "f1_val": 0.5123,
+      "f1_test": 0.5338
+    },
+    "tfidf": {
+      "model_name": "tfidf_word_char_lr",
+      "f1_val": 0.5816,
+      "f1_test": 0.5949
+    },
+    "tiny_transformer": {
+      "model_name": "tiny_transformer_4L_do30",
+      "f1_val": 0.574,
+      "f1_test": 0.5814
+    },
+    "_overall": {
+      "model_name": "tfidf_word_char_lr",
+      "f1_val": 0.5816,
+      "f1_test": 0.5949
+    }
+  },
+  "form": {
+    "baseline": {
+      "model_name": "char_1nn",
+      "f1_val": 0.6751,
+      "f1_test": 0.6802
+    },
+    "pretrained": {
+      "model_name": "e5_small_ft",
+      "f1_val": 0.8648,
+      "f1_test": 0.8519
+    },
+    "pretrained_frozen": {
+      "model_name": "e5_frozen_lr",
+      "f1_val": 0.6666,
+      "f1_test": 0.7178
+    },
+    "tfidf": {
+      "model_name": "tfidf_word_char_lr",
+      "f1_val": 0.8405,
+      "f1_test": 0.8257
+    },
+    "tiny_transformer": {
+      "model_name": "tiny_transformer_4L_mlm",
+      "f1_val": 0.8575,
+      "f1_test": 0.8294
+    },
+    "_overall": {
+      "model_name": "e5_small_ft",
+      "f1_val": 0.8648,
+      "f1_test": 0.8519
+    }
+  }
+}

@@ -1,0 +1,579 @@
+{
+  "n_train": 156570,
+  "n_test": 38618,
+  "normalization": {
+    "steps": [
+      "NFC",
+      "lower-case",
+      "Latin->Cyrillic homoglyph folding inside Cyrillic words",
+      "digits -> 'num'"
+    ],
+    "titles_changed_by_homoglyph_folding": 22693,
+    "titles_changed_pct": 10.9
+  },
+  "stopwords": {
+    "n": 53,
+    "general": [
+      "арасында",
+      "арасындағы",
+      "арналған",
+      "байланысты",
+      "барлық",
+      "бастап",
+      "бен",
+      "бойынша",
+      "бірақ",
+      "бұл",
+      "да",
+      "де",
+      "дейін",
+      "және",
+      "жөнінде",
+      "жөніндегі",
+      "кейбір",
+      "кейін",
+      "ма",
+      "ме",
+      "мен",
+      "не",
+      "немесе",
+      "ол",
+      "олардың",
+      "оның",
+      "осы",
+      "пен",
+      "ретінде",
+      "сол",
+      "соң",
+      "сәйкес",
+      "та",
+      "те",
+      "тиісті",
+      "туралы",
+      "ішінде",
+      "қатысты",
+      "қоса",
+      "үшін",
+      "әрі",
+      "өз",
+      "өзінің"
+    ],
+    "legal_boilerplate": [
+      "n",
+      "num",
+      "жылы",
+      "жылғы",
+      "күні",
+      "нөмірі",
+      "республикасы",
+      "республикасындағы",
+      "республикасының",
+      "қазақстан"
+    ],
+    "justification": "Function words and boilerplate that occur in a large share of titles of every class; kl_vs_prior close to 0 means the word's class distribution equals the overall prior, i.e. it carries little class information. Words with high KL (e.g. 'республикасының', typical of national acts) are informative and their removal is tested downstream (stems vs words).",
+    "report_form_label": [
+      {
+        "word": "туралы",
+        "train_doc_freq_pct": 98.92,
+        "kl_vs_prior": 0.0
+      },
+      {
+        "word": "num",
+        "train_doc_freq_pct": 52.12,
+        "kl_vs_prior": 0.043
+      },
+      {
+        "word": "жылғы",
+        "train_doc_freq_pct": 39.44,
+        "kl_vs_prior": 0.051
+      },
+      {
+        "word": "қазақстан",
+        "train_doc_freq_pct": 32.83,
+        "kl_vs_prior": 0.242
+      },
+      {
+        "word": "және",
+        "train_doc_freq_pct": 31.34,
+        "kl_vs_prior": 0.039
+      },
+      {
+        "word": "арналған",
+        "train_doc_freq_pct": 24.13,
+        "kl_vs_prior": 0.348
+      },
+      {
+        "word": "мен",
+        "train_doc_freq_pct": 22.01,
+        "kl_vs_prior": 0.048
+      },
+      {
+        "word": "республикасы",
+        "train_doc_freq_pct": 20.93,
+        "kl_vs_prior": 0.473
+      },
+      {
+        "word": "республикасының",
+        "train_doc_freq_pct": 10.03,
+        "kl_vs_prior": 0.454
+      },
+      {
+        "word": "бойынша",
+        "train_doc_freq_pct": 8.47,
+        "kl_vs_prior": 0.073
+      },
+      {
+        "word": "үшін",
+        "train_doc_freq_pct": 7.77,
+        "kl_vs_prior": 0.038
+      },
+      {
+        "word": "n",
+        "train_doc_freq_pct": 7.54,
+        "kl_vs_prior": 0.057
+      },
+      {
+        "word": "жөніндегі",
+        "train_doc_freq_pct": 7.29,
+        "kl_vs_prior": 0.315
+      },
+      {
+        "word": "кейбір",
+        "train_doc_freq_pct": 7.25,
+        "kl_vs_prior": 0.192
+      },
+      {
+        "word": "арасындағы",
+        "train_doc_freq_pct": 2.51,
+        "kl_vs_prior": 0.807
+      },
+      {
+        "word": "оның",
+        "train_doc_freq_pct": 2.39,
+        "kl_vs_prior": 0.198
+      },
+      {
+        "word": "немесе",
+        "train_doc_freq_pct": 1.96,
+        "kl_vs_prior": 0.144
+      },
+      {
+        "word": "жылы",
+        "train_doc_freq_pct": 1.87,
+        "kl_vs_prior": 0.127
+      },
+      {
+        "word": "пен",
+        "train_doc_freq_pct": 1.18,
+        "kl_vs_prior": 0.175
+      },
+      {
+        "word": "олардың",
+        "train_doc_freq_pct": 1.15,
+        "kl_vs_prior": 0.269
+      },
+      {
+        "word": "жөнінде",
+        "train_doc_freq_pct": 0.78,
+        "kl_vs_prior": 0.725
+      },
+      {
+        "word": "байланысты",
+        "train_doc_freq_pct": 0.57,
+        "kl_vs_prior": 0.241
+      },
+      {
+        "word": "да",
+        "train_doc_freq_pct": 0.5,
+        "kl_vs_prior": 0.362
+      },
+      {
+        "word": "қатысты",
+        "train_doc_freq_pct": 0.47,
+        "kl_vs_prior": 0.157
+      },
+      {
+        "word": "дейін",
+        "train_doc_freq_pct": 0.4,
+        "kl_vs_prior": 0.301
+      },
+      {
+        "word": "республикасындағы",
+        "train_doc_freq_pct": 0.4,
+        "kl_vs_prior": 0.7
+      },
+      {
+        "word": "сәйкес",
+        "train_doc_freq_pct": 0.4,
+        "kl_vs_prior": 0.105
+      },
+      {
+        "word": "де",
+        "train_doc_freq_pct": 0.39,
+        "kl_vs_prior": 0.346
+      },
+      {
+        "word": "ішінде",
+        "train_doc_freq_pct": 0.36,
+        "kl_vs_prior": 0.355
+      },
+      {
+        "word": "арасында",
+        "train_doc_freq_pct": 0.32,
+        "kl_vs_prior": 0.305
+      },
+      {
+        "word": "әрі",
+        "train_doc_freq_pct": 0.26,
+        "kl_vs_prior": 0.802
+      },
+      {
+        "word": "барлық",
+        "train_doc_freq_pct": 0.25,
+        "kl_vs_prior": 0.092
+      },
+      {
+        "word": "қоса",
+        "train_doc_freq_pct": 0.15,
+        "kl_vs_prior": 0.192
+      },
+      {
+        "word": "осы",
+        "train_doc_freq_pct": 0.13,
+        "kl_vs_prior": 0.171
+      },
+      {
+        "word": "ретінде",
+        "train_doc_freq_pct": 0.13,
+        "kl_vs_prior": 0.149
+      },
+      {
+        "word": "тиісті",
+        "train_doc_freq_pct": 0.11,
+        "kl_vs_prior": 0.495
+      },
+      {
+        "word": "не",
+        "train_doc_freq_pct": 0.09,
+        "kl_vs_prior": 0.495
+      },
+      {
+        "word": "өз",
+        "train_doc_freq_pct": 0.09,
+        "kl_vs_prior": 0.275
+      },
+      {
+        "word": "бастап",
+        "train_doc_freq_pct": 0.07,
+        "kl_vs_prior": 0.078
+      },
+      {
+        "word": "сол",
+        "train_doc_freq_pct": 0.05,
+        "kl_vs_prior": 0.418
+      }
+    ]
+  },
+  "stemmer": {
+    "min_stem_len": 3,
+    "n_suffixes": 73,
+    "max_rounds": 4,
+    "lexicon_size": 16110,
+    "lexicon_min_count": 3,
+    "exceptions": [
+      "заң",
+      "кеден",
+      "сауда",
+      "шешім",
+      "қала"
+    ],
+    "examples": [
+      {
+        "title": "Қазақстан Республикасы Үкіметінің 2015 жылғы 12 мамырдағы № 330 қаулысына өзгерістер енгізу туралы",
+        "tokens": [
+          "қазақстан",
+          "республикасы",
+          "үкіметінің",
+          "num",
+          "жылғы",
+          "num",
+          "мамырдағы",
+          "num",
+          "қаулысына",
+          "өзгерістер",
+          "енгізу",
+          "туралы"
+        ],
+        "stems": [
+          "үкімет",
+          "мамыр",
+          "қаулы",
+          "өзгеріс",
+          "енгізу"
+        ]
+      },
+      {
+        "title": "Ақтөбе облысы әкімдігінің кейбір қаулыларының күші жойылды деп тану туралы",
+        "tokens": [
+          "ақтөбе",
+          "облысы",
+          "әкімдігінің",
+          "кейбір",
+          "қаулыларының",
+          "күші",
+          "жойылды",
+          "деп",
+          "тану",
+          "туралы"
+        ],
+        "stems": [
+          "ақтөбе",
+          "облыс",
+          "әкімдік",
+          "қаулы",
+          "күш",
+          "жойылды",
+          "деп",
+          "тану"
+        ]
+      },
+      {
+        "title": "Жамбыл ауданы мәслихатының 2022 жылғы 23 желтоқсандағы №39-2 шешіміне өзгерістер енгізу туралы",
+        "tokens": [
+          "жамбыл",
+          "ауданы",
+          "мәслихатының",
+          "num",
+          "жылғы",
+          "num",
+          "желтоқсандағы",
+          "num",
+          "num",
+          "шешіміне",
+          "өзгерістер",
+          "енгізу",
+          "туралы"
+        ],
+        "stems": [
+          "жамбыл",
+          "аудан",
+          "мәслихат",
+          "желтоқсан",
+          "шешім",
+          "өзгеріс",
+          "енгізу"
+        ]
+      },
+      {
+        "title": "Ветеринария саласындағы мемлекеттік көрсетілетін қызметтер регламенттерін бекіту туралы",
+        "tokens": [
+          "ветеринария",
+          "саласындағы",
+          "мемлекеттік",
+          "көрсетілетін",
+          "қызметтер",
+          "регламенттерін",
+          "бекіту",
+          "туралы"
+        ],
+        "stems": [
+          "ветеринария",
+          "сала",
+          "мемлекеттік",
+          "көрсетілетін",
+          "қызмет",
+          "регламент",
+          "бекіту"
+        ]
+      }
+    ],
+    "top_words": [
+      {
+        "word": "енгізу",
+        "stem": "енгізу",
+        "count_in_50k_train": 17916
+      },
+      {
+        "word": "бекіту",
+        "stem": "бекіту",
+        "count_in_50k_train": 13074
+      },
+      {
+        "word": "өзгерістер",
+        "stem": "өзгеріс",
+        "count_in_50k_train": 12418
+      },
+      {
+        "word": "үкіметінің",
+        "stem": "үкімет",
+        "count_in_50k_train": 10574
+      },
+      {
+        "word": "мемлекеттік",
+        "stem": "мемлекеттік",
+        "count_in_50k_train": 8255
+      },
+      {
+        "word": "қаулысына",
+        "stem": "қаулы",
+        "count_in_50k_train": 8104
+      },
+      {
+        "word": "толықтырулар",
+        "stem": "толықтыру",
+        "count_in_50k_train": 5771
+      },
+      {
+        "word": "жылдарға",
+        "stem": "жыл",
+        "count_in_50k_train": 4797
+      },
+      {
+        "word": "мәселелері",
+        "stem": "мәселе",
+        "count_in_50k_train": 4686
+      },
+      {
+        "word": "желтоқсандағы",
+        "stem": "желтоқсан",
+        "count_in_50k_train": 4326
+      },
+      {
+        "word": "жобасы",
+        "stem": "жоба",
+        "count_in_50k_train": 3932
+      },
+      {
+        "word": "үкіметі",
+        "stem": "үкімет",
+        "count_in_50k_train": 3744
+      },
+      {
+        "word": "тану",
+        "stem": "тану",
+        "count_in_50k_train": 3692
+      },
+      {
+        "word": "деп",
+        "stem": "деп",
+        "count_in_50k_train": 3651
+      },
+      {
+        "word": "күші",
+        "stem": "күш",
+        "count_in_50k_train": 3612
+      },
+      {
+        "word": "экономикалық",
+        "stem": "экономикалық",
+        "count_in_50k_train": 3487
+      },
+      {
+        "word": "ауылдық",
+        "stem": "ауылдық",
+        "count_in_50k_train": 3320
+      },
+      {
+        "word": "жойылды",
+        "stem": "жойылды",
+        "count_in_50k_train": 3308
+      },
+      {
+        "word": "өзгеріс",
+        "stem": "өзгеріс",
+        "count_in_50k_train": 3261
+      },
+      {
+        "word": "құру",
+        "stem": "құру",
+        "count_in_50k_train": 2883
+      },
+      {
+        "word": "беру",
+        "stem": "беру",
+        "count_in_50k_train": 2856
+      },
+      {
+        "word": "республикалық",
+        "stem": "республикалық",
+        "count_in_50k_train": 2829
+      },
+      {
+        "word": "президентінің",
+        "stem": "президент",
+        "count_in_50k_train": 2820
+      },
+      {
+        "word": "асыру",
+        "stem": "асыру",
+        "count_in_50k_train": 2634
+      },
+      {
+        "word": "аудандық",
+        "stem": "аудандық",
+        "count_in_50k_train": 2503
+      }
+    ]
+  },
+  "representations": {
+    "words": {
+      "vocab_size": 31240,
+      "test_tokens": 898667,
+      "oov_token_rate_pct": 0.38,
+      "oov_type_rate_pct": 14.87,
+      "min_df_2_vocab_size": 20270,
+      "time_s": 5.3
+    },
+    "words_no_stopwords": {
+      "vocab_size": 31189,
+      "test_tokens": 603188,
+      "oov_token_rate_pct": 0.57,
+      "oov_type_rate_pct": 14.92,
+      "min_df_2_vocab_size": 20222,
+      "time_s": 5.3
+    },
+    "stems": {
+      "vocab_size": 18652,
+      "test_tokens": 603188,
+      "oov_token_rate_pct": 0.33,
+      "oov_type_rate_pct": 14.78,
+      "min_df_2_vocab_size": 12222,
+      "time_s": 5.6
+    },
+    "char_3_5": {
+      "vocab_size": 174054,
+      "test_tokens": 16847738,
+      "oov_token_rate_pct": 0.6,
+      "oov_type_rate_pct": 16.86,
+      "min_df_2_vocab_size": 120474,
+      "time_s": 38.1
+    }
+  },
+  "downstream_macro_f1": {
+    "words": {
+      "area/test": 0.5937,
+      "area/test_strict": 0.5684,
+      "area/val": 0.5711,
+      "form/test": 0.8116,
+      "form/test_strict": 0.8051,
+      "form/val": 0.8326
+    },
+    "stems": {
+      "area/test": 0.5898,
+      "area/test_strict": 0.5671,
+      "area/val": 0.5773,
+      "form/test": 0.7943,
+      "form/test_strict": 0.7844,
+      "form/val": 0.8236
+    },
+    "char_3_5": {
+      "area/test": 0.5834,
+      "area/test_strict": 0.5597,
+      "area/val": 0.5707,
+      "form/test": 0.8021,
+      "form/test_strict": 0.7901,
+      "form/val": 0.8016
+    }
+  },
+  "elapsed_s": 64.5
+}

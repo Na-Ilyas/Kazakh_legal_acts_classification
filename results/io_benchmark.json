@@ -1,0 +1,107 @@
+{
+  "csv_size_mb": 321.16,
+  "parquet_size_mb": 25.78,
+  "size_ratio_csv_over_parquet": 12.46,
+  "subset_columns": [
+    "law_id",
+    "title",
+    "date_adopted",
+    "act_form",
+    "database_section"
+  ],
+  "repeats": 5,
+  "notes": "csv = pd.read_csv with pandas-3 default dtype inference (Arrow-backed str); csv_chunked = streamed with chunksize, frame never fully materialised; parquet = optimised dtypes (category/bool/datetime). Each case runs in a fresh spawned process; peak_rss_delta = VmHWM (reset via /proc/self/clear_refs before every read) minus RSS just before the read, max over repeats.",
+  "cases": [
+    {
+      "format": "csv",
+      "columns": "full",
+      "read_time_s_median": 0.45,
+      "read_times_s": [
+        0.578,
+        0.454,
+        0.45,
+        0.434,
+        0.427
+      ],
+      "peak_rss_mb": 1040.82,
+      "peak_rss_delta_mb": 722.87,
+      "frame_mem_mb": 353.51,
+      "rows": 215889,
+      "cols": 25
+    },
+    {
+      "format": "csv",
+      "columns": "5 cols",
+      "read_time_s_median": 0.18,
+      "read_times_s": [
+        0.183,
+        0.182,
+        0.18,
+        0.177,
+        0.178
+      ],
+      "peak_rss_mb": 275.13,
+      "peak_rss_delta_mb": 150.64,
+      "frame_mem_mb": 88.64,
+      "rows": 215889,
+      "cols": 5
+    },
+    {
+      "format": "csv_chunked",
+      "columns": "full",
+      "read_time_s_median": 0.383,
+      "read_times_s": [
+        0.406,
+        0.383,
+        0.373,
+        0.375,
+        0.387
+      ],
+      "peak_rss_mb": 277.3,
+      "peak_rss_delta_mb": 149.6,
+      "frame_mem_mb": null,
+      "rows": 215889,
+      "cols": 25
+    },
+    {
+      "format": "parquet",
+      "columns": "full",
+      "read_time_s_median": 0.218,
+      "read_times_s": [
+        0.335,
+        0.222,
+        0.216,
+        0.218,
+        0.15
+      ],
+      "peak_rss_mb": 1819.46,
+      "peak_rss_delta_mb": 1133.2,
+      "frame_mem_mb": 201.32,
+      "rows": 215889,
+      "cols": 25
+    },
+    {
+      "format": "parquet",
+      "columns": "5 cols",
+      "read_time_s_median": 0.016,
+      "read_times_s": [
+        0.04,
+        0.019,
+        0.016,
+        0.016,
+        0.014
+      ],
+      "peak_rss_mb": 914.56,
+      "peak_rss_delta_mb": 456.91,
+      "frame_mem_mb": 71.09,
+      "rows": 215889,
+      "cols": 5
+    }
+  ],
+  "memory": {
+    "object_dtype_mb": 636.85,
+    "pandas_default_mb": 353.45,
+    "optimized_full_frame_mb": 201.32,
+    "reduction_vs_object_pct": 68.4
+  }
+}

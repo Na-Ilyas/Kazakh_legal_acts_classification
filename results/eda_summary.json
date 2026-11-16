@@ -1,0 +1,34 @@
+{
+  "class_distribution": {
+    "figure": "reports/figures/eda_class_distribution_by_split.png",
+    "finding": "Strong label shift: Шешім grows from 36.5% of train to 64.0% of test while Қаулы falls from 42.4% to 18.8%, so accuracy is dominated by one class and macro-F1 is the right headline metric. For `area`, 'Қаржы' rises from 26.4% (train) to 44.0% (test)."
+  },
+  "acts_per_year_by_form": {
+    "figure": "reports/figures/eda_acts_per_year_by_form.png",
+    "finding": "Volume peaks in 2023 (15,092 acts); the share of Шешім (local council decisions) rises from 30% in 2010 to 62% in 2023, which explains the form label shift of the temporal split. 9,455 acts predate 2000.",
+    "sql_query": "acts_per_year_by_form"
+  },
+  "title_length": {
+    "figure": "reports/figures/eda_title_length_by_form.png",
+    "finding": "Median title length is 158 chars / 19 words (p95 337 chars, max 4,071); Заң titles are the shortest (median 142 chars) and Шешім the longest (163); only 47 titles exceed 1000 chars, so truncating long titles loses little."
+  },
+  "missingness": {
+    "figure": "reports/figures/eda_missingness.png",
+    "finding": "Model inputs are complete (title, date_adopted: 0 missing; act_form 0.03%), but placeholders hide a lot of missingness: 'regulatory_body' looks 99.99% filled yet 93,272 rows are placeholders; a naive isna() would miss them."
+  },
+  "duplicates": {
+    "figure": "reports/figures/eda_duplicates_overview.png",
+    "finding": "76,460 rows share their exact title with another row (22,544 distinct titles) while law_id is unique; after removing 6,846 eval rows with a train title, 17.87% of test titles still have a train near-duplicate (cos ≥ 0.9), hence the test_strict subset."
+  },
+  "top_bodies": {
+    "figure": "reports/figures/eda_top_bodies.png",
+    "finding": "The national Government is the largest single issuer (37,807 acts, 29% repealed), yet the top-15 bodies together adopt only 30.7% of all 215,889 acts: most acts come from the long tail of ~4.2k local bodies (maslikhats, akimats).",
+    "sql_query": "top_adopting_bodies"
+  },
+  "area_form_heatmap": {
+    "figure": "reports/figures/eda_area_form_heatmap.png",
+    "finding": "The two targets are correlated but not redundant: 7 of 33 areas have one form covering ≥70% of their acts (most concentrated: 'Қаржы', 79.6% Шешім), while the most mixed area 'Қоршаған ортаны қорғау' has at most 36.1% in any single form, so knowing the form does not determine the area.",
+    "sql_query": "area_form_matrix"
+  },
+  "elapsed_s": 4.6
+}

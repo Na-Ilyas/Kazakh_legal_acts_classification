@@ -1,0 +1,30 @@
+# Python 3.12. Versions pinned from `.venv/bin/pip freeze` of the machine that produced the results.
+#
+# PyTorch with CUDA 12.8 wheels (RTX 5090 / Blackwell needs cu128+). Install torch first:
+#   pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cu128
+# then:
+#   pip install -r requirements.txt
+# (CPU-only machines: `pip install torch==2.11.0` from PyPI works too; training is then much slower.)
+torch==2.11.0
+
+# Data handling
+numpy==2.5.5
+pandas==3.1.1
+pyarrow==26.0.1
+scipy==1.18.1
+psutil==7.2.2
+
+# Classical ML / baselines
+scikit-learn==1.9.1
+joblib==1.6.0
+threadpoolctl==3.8.0
+
+# Tokenizers and pretrained model (intfloat/multilingual-e5-small)
+tokenizers==0.23.3
+transformers==5.23.0
+huggingface_hub==2.4.0
+safetensors==0.8.0
+
+# Plots and training-curve logging (TensorBoard is optional: torch.utils.tensorboard -> runs/)
+matplotlib==3.11.2
+tensorboard==2.21.0

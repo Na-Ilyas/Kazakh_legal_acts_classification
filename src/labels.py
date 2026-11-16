@@ -52,7 +52,7 @@ def primary_form(raw: str) -> str:
 
 def clean_section(raw) -> str | None:
     """database_section with placeholders / numeric junk codes mapped to None."""
-    if not isinstance(raw, str):
+    if not isinstance(raw, str) or pd.isna(raw):
         return None
     value = raw.strip()
     if value in config.PLACEHOLDERS or value.isdigit():
@@ -91,8 +91,9 @@ def build_dataset(df: pd.DataFrame, drop_cross_split_duplicates: bool = True) ->
     # Area label: rare classes decided on TRAIN counts only (no peeking at test).
     train_counts = out.loc[out["split"] == "train", "database_section"].value_counts()
     keep = set(train_counts[train_counts >= config.AREA_MIN_TRAIN_COUNT].index)
+    # pd.isna (not `is None`): under pandas 3 missing values arrive as NaN.
     out["area_label"] = out["database_section"].map(
-        lambda s: None if s is None else (s if s in keep else config.AREA_OTHER)
+        lambda s: None if pd.isna(s) else (s if s in keep else config.AREA_OTHER)
     )
     stats["area_classes"] = sorted(keep) + [config.AREA_OTHER]
 

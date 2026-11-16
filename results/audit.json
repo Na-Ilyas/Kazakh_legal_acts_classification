@@ -1,0 +1,454 @@
+{
+  "generated": "2026-11-16",
+  "n_rows": 215889,
+  "missing": {
+    "source_id": {
+      "empty": 0,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 0,
+      "missing_pct": 0.0,
+      "whitespace_padded": 0
+    },
+    "law_id": {
+      "empty": 0,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 0,
+      "missing_pct": 0.0,
+      "whitespace_padded": 1
+    },
+    "date_adopted": {
+      "empty": 0,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 0,
+      "missing_pct": 0.0,
+      "whitespace_padded": 0
+    },
+    "date_modified": {
+      "empty": 106980,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 106980,
+      "missing_pct": 49.55,
+      "whitespace_padded": 0
+    },
+    "date_published": {
+      "empty": 190769,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 190769,
+      "missing_pct": 88.36,
+      "whitespace_padded": 0
+    },
+    "state_registry_number": {
+      "empty": 30868,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 30868,
+      "missing_pct": 14.3,
+      "whitespace_padded": 0
+    },
+    "law_registry_number": {
+      "empty": 0,
+      "placeholder": 445,
+      "placeholder_values": {
+        "ЖОҚ": 434,
+        "НЕТ": 11
+      },
+      "missing_total": 445,
+      "missing_pct": 0.21,
+      "whitespace_padded": 0
+    },
+    "gov_registration_number": {
+      "empty": 25126,
+      "placeholder": 78774,
+      "placeholder_values": {
+        "НЕТ": 54826,
+        "undefined": 23948
+      },
+      "missing_total": 103900,
+      "missing_pct": 48.13,
+      "whitespace_padded": 0
+    },
+    "ministry_registration_date": {
+      "empty": 186994,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 186994,
+      "missing_pct": 86.62,
+      "whitespace_padded": 0
+    },
+    "is_archive": {
+      "empty": 0,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 0,
+      "missing_pct": 0.0,
+      "whitespace_padded": 0
+    },
+    "is_repealed": {
+      "empty": 0,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 0,
+      "missing_pct": 0.0,
+      "whitespace_padded": 0
+    },
+    "adilet_url": {
+      "empty": 794,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 794,
+      "missing_pct": 0.37,
+      "whitespace_padded": 1
+    },
+    "ekb_url": {
+      "empty": 33742,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 33742,
+      "missing_pct": 15.63,
+      "whitespace_padded": 0
+    },
+    "title": {
+      "empty": 0,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 0,
+      "missing_pct": 0.0,
+      "whitespace_padded": 0
+    },
+    "description": {
+      "empty": 0,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 0,
+      "missing_pct": 0.0,
+      "whitespace_padded": 0
+    },
+    "official_publication_info": {
+      "empty": 951,
+      "placeholder": 40656,
+      "placeholder_values": {
+        "ЖОҚ": 40656
+      },
+      "missing_total": 41607,
+      "missing_pct": 19.27,
+      "whitespace_padded": 0
+    },
+    "act_form": {
+      "empty": 61,
+      "placeholder": 2,
+      "placeholder_values": {
+        "ЖОҚ": 2
+      },
+      "missing_total": 63,
+      "missing_pct": 0.03,
+      "whitespace_padded": 0
+    },
+    "legal_relation_area": {
+      "empty": 305,
+      "placeholder": 75,
+      "placeholder_values": {
+        "ЖОҚ": 75
+      },
+      "missing_total": 380,
+      "missing_pct": 0.18,
+      "whitespace_padded": 0
+    },
+    "legal_force": {
+      "empty": 78,
+      "placeholder": 2,
+      "placeholder_values": {
+        "ЖОҚ": 2
+      },
+      "missing_total": 80,
+      "missing_pct": 0.04,
+      "whitespace_padded": 0
+    },
+    "adopting_body": {
+      "empty": 28,
+      "placeholder": 42,
+      "placeholder_values": {
+        "ЖОҚ": 42
+      },
+      "missing_total": 70,
+      "missing_pct": 0.03,
+      "whitespace_padded": 0
+    },
+    "regulatory_body": {
+      "empty": 19,
+      "placeholder": 93272,
+      "placeholder_values": {
+        "ЖОҚ": 93272
+      },
+      "missing_total": 93291,
+      "missing_pct": 43.21,
+      "whitespace_padded": 0
+    },
+    "developer_body": {
+      "empty": 148355,
+      "placeholder": 3821,
+      "placeholder_values": {
+        "ЖОҚ": 3335,
+        "НЕТ": 486
+      },
+      "missing_total": 152176,
+      "missing_pct": 70.49,
+      "whitespace_padded": 0
+    },
+    "region": {
+      "empty": 24,
+      "placeholder": 0,
+      "placeholder_values": {},
+      "missing_total": 24,
+      "missing_pct": 0.01,
+      "whitespace_padded": 0
+    },
+    "place_of_adoption": {
+      "empty": 19,
+      "placeholder": 137,
+      "placeholder_values": {
+        "ЖОҚ": 137
+      },
+      "missing_total": 156,
+      "missing_pct": 0.07,
+      "whitespace_padded": 0
+    },
+    "database_section": {
+      "empty": 134,
+      "placeholder": 106,
+      "placeholder_values": {
+        "ЖОҚ": 106
+      },
+      "missing_total": 240,
+      "missing_pct": 0.11,
+      "whitespace_padded": 0
+    }
+  },
+  "dates": {
+    "date_adopted": {
+      "non_empty": 215889,
+      "bad_format": 0,
+      "unparseable": 0,
+      "min": "1947-10-30",
+      "max": "2026-07-20",
+      "examples_bad": []
+    },
+    "date_modified": {
+      "non_empty": 108909,
+      "bad_format": 0,
+      "unparseable": 0,
+      "min": "1992-09-30",
+      "max": "2026-03-10",
+      "examples_bad": []
+    },
+    "date_published": {
+      "non_empty": 25120,
+      "bad_format": 0,
+      "unparseable": 0,
+      "min": "2013-12-26",
+      "max": "2016-12-30",
+      "examples_bad": []
+    },
+    "ministry_registration_date": {
+      "non_empty": 28895,
+      "bad_format": 0,
+      "unparseable": 0,
+      "min": "1997-04-21",
+      "max": "2026-07-20",
+      "examples_bad": []
+    }
+  },
+  "constant_columns": [
+    "is_archive"
+  ],
+  "constant_values": {
+    "is_archive": [
+      "f"
+    ]
+  },
+  "date_anomalies": {
+    "adopted_in_future": 0,
+    "adopted_before_1900": 0,
+    "adopted_before_1991_independence": 62,
+    "modified_before_adopted": 2,
+    "published_before_adopted": 1,
+    "ministry_registration_before_adopted": 2,
+    "modified_in_future": 0,
+    "titles_with_year_mention_pct": 44.27,
+    "acts_per_year_min_max": [
+      1947,
+      2026
+    ]
+  },
+  "multivalue": {
+    "act_form": {
+      "distinct_raw_strings": 861,
+      "distinct_tag_sets": 593,
+      "order_only_duplicates": 268,
+      "distinct_tags": 75,
+      "tags_per_act_mean": 1.48,
+      "tags_per_act_max": 7,
+      "acts_with_multiple_tags_pct": 42.56,
+      "top_tags": {
+        "Шешім": 95110,
+        "Қаулы": 77982,
+        "Өзгерту": 52174,
+        "Бұйрық": 30351,
+        "Қағида": 11293,
+        "Толықтыру": 10674,
+        "Өкім": 4625,
+        "Ереже": 4322,
+        "Жоба": 4302,
+        "Регламент": 4161,
+        "Жарлық": 4154,
+        "Заң": 3445,
+        "Тізбе": 3007,
+        "Келісім": 2029,
+        "Әдістеме": 1891
+      }
+    },
+    "legal_relation_area": {
+      "distinct_raw_strings": 25283,
+      "distinct_names_naive_comma_split": 450,
+      "distinct_names_vocab_aware_split": 336,
+      "vocab_aware_names_seen_as_whole_value": 317,
+      "numeric_code_fragments_dropped": 20,
+      "areas_per_act_mean": 1.98,
+      "areas_per_act_max": 12,
+      "acts_with_multiple_areas_pct": 70.68
+    },
+    "adopting_body": {
+      "distinct": 4251,
+      "joint_acts_multiple_bodies_pct": 2.01
+    }
+  },
+  "duplicates": {
+    "law_id": {
+      "rows_in_duplicate_groups": 0,
+      "redundant_rows": 0,
+      "distinct_duplicated_values": 0
+    },
+    "title_exact": {
+      "rows_in_duplicate_groups": 76460,
+      "redundant_rows": 53916,
+      "distinct_duplicated_values": 22544
+    },
+    "title_normalized": {
+      "rows_in_duplicate_groups": 80757,
+      "redundant_rows": 57285,
+      "distinct_duplicated_values": 23472
+    },
+    "title_plus_description": {
+      "rows_in_duplicate_groups": 98,
+      "redundant_rows": 66,
+      "distinct_duplicated_values": 32
+    },
+    "title_plus_date_adopted": {
+      "rows_in_duplicate_groups": 5395,
+      "redundant_rows": 3514,
+      "distinct_duplicated_values": 1881
+    },
+    "duplicate_titles_with_conflicting_form_label": 802,
+    "top_duplicated_titles": {
+      "қауымдық сервитут белгілеу туралы": 667,
+      "шектеу іс шараларын белгілеу туралы": 595,
+      "қазақстан республикасы үкіметінің резервінен қаражат бөлу туралы": 410,
+      "қазақстан республикасы үкіметінің кейбір шешімдерінің күші жойылды деп тану туралы": 387,
+      "әлеуметтік көмек көрсетудің оның мөлшерлерін белгілеудің және мұқтаж азаматтардың жекелеген санаттарының тізбесін айқындаудың қағидаларын бекіту туралы": 192
+    }
+  },
+  "text_quality": {
+    "title_chars": {
+      "min": 4,
+      "median": 157.0,
+      "p95": 337.0,
+      "max": 4071
+    },
+    "title_words": {
+      "min": 1,
+      "median": 19.0,
+      "p95": 40.0,
+      "max": 525
+    },
+    "titles_over_1000_chars": 47,
+    "titles_under_20_chars": 312,
+    "titles_with_mixed_latin_cyrillic_word_pct": 11.42,
+    "titles_without_kazakh_specific_letters_pct": 0.18,
+    "titles_with_leading_trailing_space": 0,
+    "titles_with_double_space": 786
+  },
+  "label_coverage": {
+    "rows_in_dataset": 208098,
+    "form_label_from_missing_act_form": 60,
+    "form_label_counts": {
+      "Шешім": 90436,
+      "Қаулы": 76198,
+      "Бұйрық": 27769,
+      "Өкім": 4595,
+      "Жарлық": 3944,
+      "Заң": 3471,
+      "Басқа": 1685
+    },
+    "area_label_missing": 238,
+    "area_label_n_classes": 33,
+    "area_collapsed_to_other": 584,
+    "removed_eval_rows_seen_in_train": 6846,
+    "removed_test_rows_seen_in_val": 945,
+    "split_sizes": {
+      "train": 156570,
+      "test": 38618,
+      "val": 12910
+    }
+  },
+  "cleaning_decisions": [
+    {
+      "decision": "Placeholders ('ЖОҚ', 'undefined', '', '-', ...) -> NA",
+      "justification": "They are source-system fill values, not information; counting them as values would inflate cardinality and create fake classes."
+    },
+    {
+      "decision": "`database_section` numeric codes ('3700', '3800') -> NA",
+      "justification": "Not section names (19 rows); cannot be mapped to a curated area, so treated as missing for task `area`."
+    },
+    {
+      "decision": "`is_archive` dropped from modelling",
+      "justification": "Constant column ('f' for every row) - zero information."
+    },
+    {
+      "decision": "`act_form` parsed as an unordered tag set (strip whitespace, split on ',')",
+      "justification": "Raw strings differ only by tag order/padding; set semantics collapses order-only duplicates."
+    },
+    {
+      "decision": "`legal_relation_area` split with a parenthesis- and case-aware splitter",
+      "justification": "Naive ', ' splitting breaks names that contain commas; numeric classifier codes are dropped."
+    },
+    {
+      "decision": "Primary form = highest base form in Заң > Жарлық > Қаулы > Шешім > Бұйрық > Өкім, else Басқа",
+      "justification": "Joint acts carry several base forms; a hierarchy gives one deterministic label (aliases such as 'Нормативтік қаулы' -> Қаулы)."
+    },
+    {
+      "decision": "Rare areas (< 300 train rows) collapsed to Басқа, decided on TRAIN only",
+      "justification": "Classes with a handful of examples make macro-F1 unstable; using train counts only avoids peeking at test."
+    },
+    {
+      "decision": "Temporal split train <= 2021, val 2022, test >= 2023",
+      "justification": "Mimics deployment on future acts and prevents look-ahead leakage."
+    },
+    {
+      "decision": "Val/test rows whose normalised title occurs in train removed; test_strict excludes near-duplicates (cos >= 0.9)",
+      "justification": "Templated titles repeat every year; without this the test set measures memorisation."
+    },
+    {
+      "decision": "Titles kept verbatim for models (no truncation at data level, NFC-normalised in text_prep)",
+      "justification": "Length outliers are genuine (long amendment titles); models truncate at their own max length."
+    },
+    {
+      "decision": "Dates parsed with strict ISO format; anomalies reported, not 'fixed'",
+      "justification": "No ground truth to repair them; affected rows are few and dates only drive the split by year."
+    }
+  ],
+  "elapsed_s": 8.7
+}
