@@ -8,3 +8,5 @@ artifacts/models/
 *.pdf
 !reports/*.pdf
 .ipynb_checkpoints/
+artifacts/cache/
+runs/
