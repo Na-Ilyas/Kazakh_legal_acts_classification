@@ -10,3 +10,9 @@ artifacts/models/
 .ipynb_checkpoints/
 artifacts/cache/
 runs/
+artifacts/
+data/
+logs/
+runs/
+.gpu.lock
+docs/PROJECT_BRIEF.md
