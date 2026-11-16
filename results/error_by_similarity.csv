@@ -1,61 +1,79 @@
 task,family_label,model_name,sim_bucket,n,errors,error_rate
-form,baseline: char_1nn,char_1nn,1: <0.60,4717,1752,0.3714
-form,baseline: char_1nn,char_1nn,2: 0.60-0.75,9463,950,0.1004
-form,baseline: char_1nn,char_1nn,3: 0.75-0.85,11756,518,0.0441
-form,baseline: char_1nn,char_1nn,4: 0.85-0.90,5786,181,0.0313
-form,baseline: char_1nn,char_1nn,5: 0.90-0.95,3818,122,0.032
-form,baseline: char_1nn,char_1nn,6: >=0.95,3078,114,0.037
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,1: <0.60,4717,655,0.1389
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2: 0.60-0.75,9463,292,0.0309
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,3: 0.75-0.85,11756,204,0.0174
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,4: 0.85-0.90,5786,112,0.0194
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,5: 0.90-0.95,3818,78,0.0204
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,6: >=0.95,3078,103,0.0335
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,1: <0.60,4717,1055,0.2237
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2: 0.60-0.75,9463,736,0.0778
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,3: 0.75-0.85,11756,557,0.0474
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,4: 0.85-0.90,5786,354,0.0612
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,5: 0.90-0.95,3818,354,0.0927
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,6: >=0.95,3078,442,0.1436
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,1: <0.60,4717,676,0.1433
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,2: 0.60-0.75,9463,329,0.0348
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,3: 0.75-0.85,11756,201,0.0171
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,4: 0.85-0.90,5786,125,0.0216
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,5: 0.90-0.95,3818,83,0.0217
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,6: >=0.95,3078,111,0.0361
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,1: <0.60,4717,631,0.1338
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,2: 0.60-0.75,9463,255,0.0269
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,3: 0.75-0.85,11756,186,0.0158
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,4: 0.85-0.90,5786,99,0.0171
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,5: 0.90-0.95,3818,74,0.0194
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,6: >=0.95,3078,90,0.0292
-area,baseline: char_1nn,char_1nn,1: <0.60,4706,2255,0.4792
-area,baseline: char_1nn,char_1nn,2: 0.60-0.75,9443,2497,0.2644
-area,baseline: char_1nn,char_1nn,3: 0.75-0.85,11729,2272,0.1937
-area,baseline: char_1nn,char_1nn,4: 0.85-0.90,5761,1166,0.2024
-area,baseline: char_1nn,char_1nn,5: 0.90-0.95,3813,934,0.245
-area,baseline: char_1nn,char_1nn,6: >=0.95,3071,920,0.2996
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,1: <0.60,4706,1562,0.3319
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2: 0.60-0.75,9443,2014,0.2133
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,3: 0.75-0.85,11729,2099,0.179
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,4: 0.85-0.90,5761,1111,0.1928
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,5: 0.90-0.95,3813,862,0.2261
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,6: >=0.95,3071,823,0.268
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,1: <0.60,4706,1814,0.3855
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2: 0.60-0.75,9443,2347,0.2485
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,3: 0.75-0.85,11729,2328,0.1985
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,4: 0.85-0.90,5761,1222,0.2121
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,5: 0.90-0.95,3813,988,0.2591
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,6: >=0.95,3071,993,0.3233
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,1: <0.60,4706,1553,0.33
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,2: 0.60-0.75,9443,2072,0.2194
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,3: 0.75-0.85,11729,2126,0.1813
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,4: 0.85-0.90,5761,1125,0.1953
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,5: 0.90-0.95,3813,914,0.2397
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,6: >=0.95,3071,884,0.2879
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,1: <0.60,4706,1460,0.3102
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,2: 0.60-0.75,9443,1901,0.2013
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,3: 0.75-0.85,11729,2020,0.1722
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,4: 0.85-0.90,5761,1115,0.1935
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,5: 0.90-0.95,3813,860,0.2255
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,6: >=0.95,3071,823,0.268
+form,baseline: char_1nn,char_1nn,1: <0.60,3388,1545,0.456
+form,baseline: char_1nn,char_1nn,2: 0.60-0.75,5128,1043,0.2034
+form,baseline: char_1nn,char_1nn,3: 0.75-0.85,4914,515,0.1048
+form,baseline: char_1nn,char_1nn,4: 0.85-0.90,4211,204,0.0484
+form,baseline: char_1nn,char_1nn,5: 0.90-0.95,6790,154,0.0227
+form,baseline: char_1nn,char_1nn,6: >=0.95,14036,136,0.0097
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,1: <0.60,3388,613,0.1809
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2: 0.60-0.75,5128,324,0.0632
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,3: 0.75-0.85,4914,219,0.0446
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,4: 0.85-0.90,4211,105,0.0249
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,5: 0.90-0.95,6790,88,0.013
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,6: >=0.95,14036,113,0.0081
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,1: <0.60,3388,940,0.2774
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2: 0.60-0.75,5128,763,0.1488
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,3: 0.75-0.85,4914,530,0.1079
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,4: 0.85-0.90,4211,358,0.085
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,5: 0.90-0.95,6790,335,0.0493
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,6: >=0.95,14036,552,0.0393
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,1: <0.60,3388,657,0.1939
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,2: 0.60-0.75,5128,305,0.0595
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,3: 0.75-0.85,4914,195,0.0397
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,4: 0.85-0.90,4211,108,0.0256
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,5: 0.90-0.95,6790,67,0.0099
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,6: >=0.95,14036,120,0.0085
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,1: <0.60,3388,580,0.1712
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,2: 0.60-0.75,5128,314,0.0612
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,3: 0.75-0.85,4914,181,0.0368
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,4: 0.85-0.90,4211,93,0.0221
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,5: 0.90-0.95,6790,69,0.0102
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,6: >=0.95,14036,113,0.0081
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,1: <0.60,3388,568,0.1677
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,2: 0.60-0.75,5128,306,0.0597
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,3: 0.75-0.85,4914,172,0.035
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,4: 0.85-0.90,4211,91,0.0216
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,5: 0.90-0.95,6790,71,0.0105
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,6: >=0.95,14036,113,0.0081
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,1: <0.60,3388,660,0.1948
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,2: 0.60-0.75,5128,332,0.0647
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,3: 0.75-0.85,4914,225,0.0458
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,4: 0.85-0.90,4211,127,0.0302
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,5: 0.90-0.95,6790,107,0.0158
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,6: >=0.95,14036,183,0.013
+area,baseline: char_1nn,char_1nn,1: <0.60,3378,1890,0.5595
+area,baseline: char_1nn,char_1nn,2: 0.60-0.75,5117,2042,0.3991
+area,baseline: char_1nn,char_1nn,3: 0.75-0.85,4899,1594,0.3254
+area,baseline: char_1nn,char_1nn,4: 0.85-0.90,4191,1235,0.2947
+area,baseline: char_1nn,char_1nn,5: 0.90-0.95,6781,1928,0.2843
+area,baseline: char_1nn,char_1nn,6: >=0.95,14011,1368,0.0976
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,1: <0.60,3378,1392,0.4121
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2: 0.60-0.75,5117,1521,0.2972
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,3: 0.75-0.85,4899,1309,0.2672
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,4: 0.85-0.90,4191,1111,0.2651
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,5: 0.90-0.95,6781,1839,0.2712
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,6: >=0.95,14011,1272,0.0908
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,1: <0.60,3378,1575,0.4663
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2: 0.60-0.75,5117,1812,0.3541
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,3: 0.75-0.85,4899,1534,0.3131
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,4: 0.85-0.90,4191,1291,0.308
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,5: 0.90-0.95,6781,1967,0.2901
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,6: >=0.95,14011,1472,0.1051
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,1: <0.60,3378,1351,0.3999
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,2: 0.60-0.75,5117,1526,0.2982
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,3: 0.75-0.85,4899,1339,0.2733
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,4: 0.85-0.90,4191,1122,0.2677
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,5: 0.90-0.95,6781,1878,0.277
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,6: >=0.95,14011,1276,0.0911
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,1: <0.60,3378,1184,0.3505
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,2: 0.60-0.75,5117,1353,0.2644
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,3: 0.75-0.85,4899,1167,0.2382
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,4: 0.85-0.90,4191,1041,0.2484
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,5: 0.90-0.95,6781,1802,0.2657
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,6: >=0.95,14011,1173,0.0837
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,1: <0.60,3378,1139,0.3372
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,2: 0.60-0.75,5117,1328,0.2595
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,3: 0.75-0.85,4899,1168,0.2384
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,4: 0.85-0.90,4191,1020,0.2434
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,5: 0.90-0.95,6781,1795,0.2647
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,6: >=0.95,14011,1152,0.0822

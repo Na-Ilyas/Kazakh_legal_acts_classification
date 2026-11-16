@@ -1,41 +1,53 @@
 task,family_label,model_name,year,n,errors,error_rate
-form,baseline: char_1nn,char_1nn,2023,12687,972,0.0766
-form,baseline: char_1nn,char_1nn,2024,12576,1175,0.0934
-form,baseline: char_1nn,char_1nn,2025,12064,1289,0.1068
-form,baseline: char_1nn,char_1nn,2026,1291,201,0.1557
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2023,12687,408,0.0322
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2024,12576,400,0.0318
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2025,12064,541,0.0448
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2026,1291,95,0.0736
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2023,12687,1105,0.0871
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2024,12576,1010,0.0803
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2025,12064,1195,0.0991
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2026,1291,188,0.1456
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,2023,12687,413,0.0326
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,2024,12576,419,0.0333
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,2025,12064,599,0.0497
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,2026,1291,94,0.0728
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,2023,12687,371,0.0292
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,2024,12576,360,0.0286
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,2025,12064,507,0.042
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,2026,1291,97,0.0751
-area,baseline: char_1nn,char_1nn,2023,12672,3317,0.2618
-area,baseline: char_1nn,char_1nn,2024,12535,3101,0.2474
-area,baseline: char_1nn,char_1nn,2025,12029,3161,0.2628
-area,baseline: char_1nn,char_1nn,2026,1287,465,0.3613
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2023,12672,2908,0.2295
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2024,12535,2637,0.2104
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2025,12029,2575,0.2141
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2026,1287,351,0.2727
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2023,12672,3289,0.2595
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2024,12535,3030,0.2417
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2025,12029,2961,0.2462
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2026,1287,412,0.3201
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,2023,12672,2951,0.2329
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,2024,12535,2717,0.2168
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,2025,12029,2620,0.2178
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,2026,1287,386,0.2999
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,2023,12672,2847,0.2247
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,2024,12535,2567,0.2048
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,2025,12029,2429,0.2019
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,2026,1287,336,0.2611
+form,baseline: char_1nn,char_1nn,2023,12627,946,0.0749
+form,baseline: char_1nn,char_1nn,2024,12535,1171,0.0934
+form,baseline: char_1nn,char_1nn,2025,12023,1278,0.1063
+form,baseline: char_1nn,char_1nn,2026,1282,202,0.1576
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2023,12627,416,0.0329
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2024,12535,404,0.0322
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2025,12023,551,0.0458
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2026,1282,91,0.071
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2023,12627,1099,0.087
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2024,12535,1004,0.0801
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2025,12023,1187,0.0987
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2026,1282,188,0.1466
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,2023,12627,403,0.0319
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,2024,12535,409,0.0326
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,2025,12023,542,0.0451
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,2026,1282,98,0.0764
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,2023,12627,356,0.0282
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,2024,12535,359,0.0286
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,2025,12023,548,0.0456
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,2026,1282,87,0.0679
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,2023,12627,343,0.0272
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,2024,12535,356,0.0284
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,2025,12023,532,0.0442
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,2026,1282,90,0.0702
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,2023,12627,463,0.0367
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,2024,12535,468,0.0373
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,2025,12023,609,0.0507
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,2026,1282,94,0.0733
+area,baseline: char_1nn,char_1nn,2023,12612,3326,0.2637
+area,baseline: char_1nn,char_1nn,2024,12495,3130,0.2505
+area,baseline: char_1nn,char_1nn,2025,11990,3142,0.2621
+area,baseline: char_1nn,char_1nn,2026,1280,459,0.3586
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2023,12612,2878,0.2282
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2024,12495,2636,0.211
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2025,11990,2566,0.214
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,2026,1280,364,0.2844
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2023,12612,3270,0.2593
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2024,12495,3022,0.2419
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2025,11990,2952,0.2462
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,2026,1280,407,0.318
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,2023,12612,2839,0.2251
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,2024,12495,2680,0.2145
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,2025,11990,2611,0.2178
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,2026,1280,362,0.2828
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,2023,12612,2671,0.2118
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,2024,12495,2390,0.1913
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,2025,11990,2341,0.1952
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,2026,1280,318,0.2484
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,2023,12612,2638,0.2092
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,2024,12495,2366,0.1894
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,2025,11990,2282,0.1903
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,2026,1280,316,0.2469

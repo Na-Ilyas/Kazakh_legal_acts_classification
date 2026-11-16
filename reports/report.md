@@ -180,7 +180,56 @@ The differences are within about 1.5 points, so normalization is not the bottlen
 
 ## 7. Models
 
-<!-- MODELS -->
+All models take the **title only** as input and are trained on the train split. Model choices (loss, epochs, hyperparameters, ensemble weights) are made on validation macro-F1. Each model logs its val, test and test_strict scores, plus its per-act test predictions, to SQLite.
+
+### 7.1 Baselines (`src/baseline.py`, `src/leakage.py`)
+
+- **Majority class** (DummyClassifier).
+- **TF-IDF + logistic regression**, with four feature sets: word 1–2-grams, character 2–5-grams (`char_wb`), stemmed words, and word + character n-grams combined. The model is L2-regularized logistic regression fitted with `SGDClassifier(loss="log_loss")`. The regularization strength C ∈ {1, 4, 16, 64} and the class weighting are chosen on val. The standard lbfgs solver needed more than 1.5 GB of RAM per fit on the 67M-non-zero character matrix, which was not feasible on the shared machine, and scored lower.
+- **char 1-NN:** copy the label of the nearest training title, using cosine on character n-grams. This measures how far plain template matching gets.
+
+### 7.2 Tiny transformer from scratch (`src/tiny_transformer.py`)
+
+The encoder is written by hand; it does not use `nn.TransformerEncoder`. Its structure:
+
+- token embeddings and learned positional embeddings;
+- N pre-LayerNorm blocks, each with our own **multi-head self-attention** (QKV projections, padding mask, scaled dot-product attention) and a GELU feed-forward layer;
+- masked mean pooling and a linear classification head.
+
+Inputs use our own 8k BPE tokens, with max_len 80. Training details:
+
+- AdamW, warm-up + cosine schedule, bf16 autocast, gradient clipping and early stopping on val macro-F1.
+- The loss (plain cross-entropy, sqrt-inverse class weights, or label smoothing 0.1) is chosen on val; label smoothing won.
+- The ablation grid covers 2 vs 4 layers, d_model 256 vs 128, dropout 0.1 vs 0.3 and BPE 8k vs 4k.
+
+The largest configuration has **5.2M parameters**, half the 10M budget, and its size is checked in code.
+
+Two improvements on top:
+
+- **MLM pretraining (`src/mlm_pretrain.py`).** BERT-style masked-language-model pretraining on the titles *and* descriptions of train-period acts only (≤ 2021), followed by fine-tuning on the classification task.
+- **Knowledge distillation (`src/distill.py`).** The fine-tuned e5-small (118M parameters) is the teacher, and the tiny transformer is the student. The loss is α·T²·KL(teacher ∥ student) + (1 − α)·CE(gold). The teacher's soft labels are computed on train titles only. α ∈ {0.5, 0.9}, the temperature T ∈ {2, 4} and the starting point (random or MLM-pretrained) are chosen on val.
+
+### 7.3 Compact pretrained encoders (≤ 120M parameters)
+
+- **multilingual-e5-small** (`src/finetune_e5.py`, 118M parameters). Two uses:
+  - full fine-tuning with masked mean pooling and a linear head, the "query: " input prefix, bf16 and the best epoch chosen on val;
+  - a **frozen** variant: e5 embeddings + logistic regression. Together with TF-IDF, this answers the "sparse n-grams vs dense embeddings" question.
+- **kaz-roberta-conversational** (`src/model_survey.py`, `src/roberta_tune.py`, 83.5M parameters). A monolingual Kazakh RoBERTa, found through a small survey of compact Kazakh-capable encoders (`results/model_survey.md`). Its tokenizer splits Kazakh text into 1.26 tokens per word, against 1.73 for e5. The variants tried, each selected on val:
+  - layer-wise learning-rate decay;
+  - class weights;
+  - label smoothing;
+  - recency sample weights, which give recent training years more influence;
+  - a final **train+val refit** of the selected configuration (`*_trainval`). Its val score is in-sample and is not used for selection.
+
+### 7.4 Model compression and seq2seq
+
+- **Kazakh vocabulary pruning (`src/vocab_prune.py`).** About 96M of e5-small's 118M parameters are its 250k-token embedding matrix, yet Kazakh titles use only about 10k of those tokens. We keep the token ids that occur in train titles, copy their embedding rows unchanged, remap the ids, and map unseen ids to `<unk>` (test OOV: 0.045 % of tokens). The result is **25.5M parameters** (−78 %). The same procedure applied to kaz-roberta gives 61.6M (−26 %).
+- **Seq2seq label generation (`src/seq2seq_mt5.py`).** google/mt5-small (300M parameters) is pruned the same way to **58.7M** and trained to *generate* the label text from the title. Decoding is constrained: every candidate label is scored by its sequence log-likelihood, so the output is always a valid class.
+
+### 7.5 Correcting for label shift (`src/posthoc.py`)
+
+- **Prior-shift adjustment:** p_adj(c|x) ∝ p(c|x) · (p_target(c) / p_train(c))^λ. The validation year is split in two halves by a hash of law_id. Half A estimates p_target from its labels, and half B selects λ. Test labels are never used.
+- **Ensembles:** a weighted average of member probabilities. The weights are chosen on a 0.1 simplex grid on val, optionally followed by the prior adjustment.
 
 ## 8. Results
 

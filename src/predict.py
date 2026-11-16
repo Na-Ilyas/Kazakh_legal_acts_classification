@@ -30,11 +30,17 @@ EXAMPLES = [
 DEMO_FAMILIES = ("tfidf", "tiny_transformer", "pretrained", "posthoc")
 
 
+# Strongest single model per task for the demo (Kazakh RoBERTa from src.roberta_tune; the area one
+# is the train+val refit, which is fine for deployment but never used for val-based selection).
+DEMO_PRETRAINED = {"form": "kaz_roberta_ft", "area": "kaz_roberta_llrd_rec_trainval"}
+
+
 def _selected_names(task: str) -> set[str] | None:
-    """Names of the best model per demo family (by val F1) or None if compare has not run."""
+    """Best model per demo family (by val F1) + the demo RoBERTa, or None if compare has not run."""
     try:
         best = load_json(config.RESULTS_DIR / "best_models.json").get(task, {})
-        return {v["model_name"] for k, v in best.items() if k in DEMO_FAMILIES}
+        names = {v["model_name"] for k, v in best.items() if k in DEMO_FAMILIES and k != "pretrained"}
+        return names | ({DEMO_PRETRAINED[task]} if task in DEMO_PRETRAINED else set())
     except (FileNotFoundError, ValueError):
         return None
 

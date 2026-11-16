@@ -315,6 +315,9 @@ def cache_external_probs(tasks: tuple[str, ...] = ("form", "area")) -> dict:
         spec = member_specs(task).get("roberta")
         if spec is None:
             continue
+        if all(load_probs(Path(spec["path"]).name, s) is not None for s in ("val", "test")):
+            done[task] = f"{spec['name']} (cache already present)"
+            continue
         data = load_task(task)
         pred = load_predictor(ModelSpec("external", spec["name"], task, spec["path"]), device)
         for split in ("val", "test"):

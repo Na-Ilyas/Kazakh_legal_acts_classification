@@ -6,9 +6,9 @@
       "f1_test": 0.5363
     },
     "posthoc": {
-      "model_name": "tiny_transformer_4L_recency_tau8_prioradj",
-      "f1_val": 0.6299,
-      "f1_test": 0.5832
+      "model_name": "ensemble_tfidf_tiny_e5_roberta",
+      "f1_val": 0.6407,
+      "f1_test": 0.6215
     },
     "pretrained": {
       "model_name": "kaz_roberta_llrd_rec",
@@ -31,9 +31,9 @@
       "f1_test": 0.5832
     },
     "_overall": {
-      "model_name": "tiny_transformer_4L_recency_tau8_prioradj",
-      "f1_val": 0.6299,
-      "f1_test": 0.5832
+      "model_name": "ensemble_tfidf_tiny_e5_roberta",
+      "f1_val": 0.6407,
+      "f1_test": 0.6215
     }
   },
   "form": {
@@ -43,14 +43,14 @@
       "f1_test": 0.6697
     },
     "posthoc": {
-      "model_name": "ensemble_tfidf_tiny_e5_prioradj",
-      "f1_val": 0.919,
-      "f1_test": 0.8552
+      "model_name": "kaz_roberta_llrd_rec_prioradj",
+      "f1_val": 0.9342,
+      "f1_test": 0.8434
     },
     "pretrained": {
-      "model_name": "kaz_roberta_kkprune_ft",
-      "f1_val": 0.8843,
-      "f1_test": 0.8491
+      "model_name": "kaz_roberta_llrd_rec",
+      "f1_val": 0.8978,
+      "f1_test": 0.8414
     },
     "pretrained_frozen": {
       "model_name": "e5_frozen_lr",
@@ -73,9 +73,9 @@
       "f1_test": 0.7992
     },
     "_overall": {
-      "model_name": "ensemble_tfidf_tiny_e5_prioradj",
-      "f1_val": 0.919,
-      "f1_test": 0.8552
+      "model_name": "kaz_roberta_llrd_rec_prioradj",
+      "f1_val": 0.9342,
+      "f1_test": 0.8434
     }
   }
 }

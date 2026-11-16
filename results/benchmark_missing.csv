@@ -1,0 +1,12 @@
+kind,path,model_name,task,n_params,size_mb,load_time_s,n_texts,batch_size,cpu_threads,repeats,latency_cpu_ms_per_1000,infer_ram_mb
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_form_2L,tiny_transformer_2L,form,3650311,14.71,0.04,1000,64,8,3,293.1,115.8
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_form_2L_d128,tiny_transformer_2L_d128,form,1431943,6.25,0.03,1000,64,8,3,146.3,71.1
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_form_2L_do30,tiny_transformer_2L_do30,form,3650311,14.71,0.05,1000,64,8,3,304.7,116.1
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_form_4L_bpe4k,tiny_transformer_4L_bpe4k,form,4209927,16.44,0.05,1000,64,8,3,641.1,141.5
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_form_4L_d128,tiny_transformer_4L_d128,form,1828487,7.77,0.03,1000,64,8,3,220.1,74.1
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_form_4L_do30,tiny_transformer_4L_do30,form,5229831,20.74,0.06,1000,64,8,3,526.9,126.3
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_area_2L,tiny_transformer_2L,area,3656993,14.74,0.05,1000,64,8,3,297.1,111.8
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_area_2L_d128,tiny_transformer_2L_d128,area,1435297,6.26,0.03,1000,64,8,3,131.6,71.3
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_area_2L_do30,tiny_transformer_2L_do30,area,3656993,14.74,0.05,1000,64,8,3,302.4,112.2
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_area_4L_d128,tiny_transformer_4L_d128,area,1831841,7.78,0.03,1000,64,8,3,209.8,73.0
+tiny,/home/ilyas/Prog_AI_final/artifacts/models/tiny_transformer_area_4L_do30,tiny_transformer_4L_do30,area,5236513,20.77,0.06,1000,64,8,3,493.7,127.4

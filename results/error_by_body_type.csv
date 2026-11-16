@@ -1,131 +1,170 @@
 task,family_label,model_name,body_type,n,errors,error_rate
-form,baseline: char_1nn,char_1nn,Президент,351,129,0.3675
-form,baseline: char_1nn,char_1nn,Әкім,1434,372,0.2594
-form,baseline: char_1nn,char_1nn,Парламент,336,82,0.244
-form,baseline: char_1nn,char_1nn,unknown,33,6,0.1818
-form,baseline: char_1nn,char_1nn,Бірлескен (joint),943,168,0.1782
-form,baseline: char_1nn,char_1nn,Министрлік,4639,785,0.1692
-form,baseline: char_1nn,char_1nn,Сот / прокуратура,210,33,0.1571
-form,baseline: char_1nn,char_1nn,Үкімет,1576,204,0.1294
-form,baseline: char_1nn,char_1nn,Агенттік / комитет,538,67,0.1245
-form,baseline: char_1nn,char_1nn,Халықаралық / ЕАЭО,278,31,0.1115
-form,baseline: char_1nn,char_1nn,Әкімдік,5173,460,0.0889
-form,baseline: char_1nn,char_1nn,Ұлттық Банк,87,6,0.069
-form,baseline: char_1nn,char_1nn,Мәслихат,22993,1276,0.0555
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Президент,351,92,0.2621
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Әкім,1434,309,0.2155
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Сот / прокуратура,210,24,0.1143
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Үкімет,1576,147,0.0933
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,unknown,33,3,0.0909
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Халықаралық / ЕАЭО,278,25,0.0899
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Бірлескен (joint),943,83,0.088
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Агенттік / комитет,538,31,0.0576
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Министрлік,4639,265,0.0571
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Ұлттық Банк,87,4,0.046
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Әкімдік,5173,229,0.0443
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Парламент,336,12,0.0357
-form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Мәслихат,22993,216,0.0094
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Президент,351,220,0.6268
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,unknown,33,13,0.3939
+form,baseline: char_1nn,char_1nn,Президент,346,130,0.3757
+form,baseline: char_1nn,char_1nn,Әкім,1414,366,0.2588
+form,baseline: char_1nn,char_1nn,Парламент,331,85,0.2568
+form,baseline: char_1nn,char_1nn,Бірлескен (joint),942,171,0.1815
+form,baseline: char_1nn,char_1nn,Министрлік,4596,805,0.1752
+form,baseline: char_1nn,char_1nn,unknown,32,5,0.1563
+form,baseline: char_1nn,char_1nn,Сот / прокуратура,210,31,0.1476
+form,baseline: char_1nn,char_1nn,Үкімет,1545,200,0.1294
+form,baseline: char_1nn,char_1nn,Агенттік / комитет,537,69,0.1285
+form,baseline: char_1nn,char_1nn,Халықаралық / ЕАЭО,278,32,0.1151
+form,baseline: char_1nn,char_1nn,Әкімдік,5151,452,0.0877
+form,baseline: char_1nn,char_1nn,Ұлттық Банк,85,6,0.0706
+form,baseline: char_1nn,char_1nn,Мәслихат,22973,1227,0.0534
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Президент,346,90,0.2601
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Әкім,1414,307,0.2171
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,unknown,32,4,0.125
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Сот / прокуратура,210,23,0.1095
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Үкімет,1545,151,0.0977
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Бірлескен (joint),942,84,0.0892
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Халықаралық / ЕАЭО,278,24,0.0863
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Министрлік,4596,266,0.0579
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Агенттік / комитет,537,26,0.0484
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Әкімдік,5151,239,0.0464
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Парламент,331,13,0.0393
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Ұлттық Банк,85,3,0.0353
+form,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Мәслихат,22973,226,0.0098
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Президент,346,217,0.6272
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,unknown,32,12,0.375
 form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Халықаралық / ЕАЭО,278,99,0.3561
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Бірлескен (joint),943,306,0.3245
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Әкім,1434,378,0.2636
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Бірлескен (joint),942,307,0.3259
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Әкім,1414,376,0.2659
 form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Сот / прокуратура,210,37,0.1762
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Министрлік,4639,747,0.161
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Үкімет,1576,252,0.1599
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Агенттік / комитет,538,77,0.1431
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Әкімдік,5173,697,0.1347
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Парламент,336,44,0.131
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Ұлттық Банк,87,11,0.1264
-form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Мәслихат,22993,604,0.0263
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,Президент,351,118,0.3362
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,Әкім,1434,288,0.2008
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,Үкімет,1576,182,0.1155
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,Сот / прокуратура,210,21,0.1
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,unknown,33,3,0.0909
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,Халықаралық / ЕАЭО,278,24,0.0863
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,Министрлік,4639,295,0.0636
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,Әкімдік,5173,312,0.0603
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,Ұлттық Банк,87,5,0.0575
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,Бірлескен (joint),943,53,0.0562
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,Агенттік / комитет,538,23,0.0428
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,Парламент,336,14,0.0417
-form,tiny transformer: tiny_transformer_4L_mlm,tiny_transformer_4L_mlm,Мәслихат,22993,180,0.0078
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,Президент,351,79,0.2251
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,Әкім,1434,301,0.2099
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,Сот / прокуратура,210,25,0.119
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,Үкімет,1576,158,0.1003
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,unknown,33,3,0.0909
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,Бірлескен (joint),943,68,0.0721
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,Министрлік,4639,279,0.0601
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,Ұлттық Банк,87,5,0.0575
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,Халықаралық / ЕАЭО,278,15,0.054
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,Агенттік / комитет,538,24,0.0446
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,Парламент,336,13,0.0387
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,Әкімдік,5173,185,0.0358
-form,e5-small fine-tuned: e5_small_ft,e5_small_ft,Мәслихат,22993,177,0.0077
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Үкімет,1545,253,0.1638
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Министрлік,4596,744,0.1619
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Агенттік / комитет,537,77,0.1434
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Әкімдік,5151,693,0.1345
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Парламент,331,43,0.1299
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Ұлттық Банк,85,9,0.1059
+form,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Мәслихат,22973,598,0.026
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Президент,346,111,0.3208
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Әкім,1414,288,0.2037
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Сот / прокуратура,210,23,0.1095
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Үкімет,1545,160,0.1036
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Халықаралық / ЕАЭО,278,28,0.1007
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Бірлескен (joint),942,71,0.0754
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Министрлік,4596,298,0.0648
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,unknown,32,2,0.0625
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Парламент,331,17,0.0514
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Агенттік / комитет,537,24,0.0447
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Әкімдік,5151,210,0.0408
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Ұлттық Банк,85,3,0.0353
+form,tiny transformer: tiny_transformer_4L_kd_a90_T2,tiny_transformer_4L_kd_a90_T2,Мәслихат,22973,212,0.0092
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Президент,346,73,0.211
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Әкім,1414,291,0.2058
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,unknown,32,4,0.125
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Сот / прокуратура,210,24,0.1143
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Үкімет,1545,116,0.0751
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Халықаралық / ЕАЭО,278,18,0.0647
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Министрлік,4596,279,0.0607
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Бірлескен (joint),942,54,0.0573
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Әкімдік,5151,251,0.0487
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Агенттік / комитет,537,25,0.0466
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Парламент,331,12,0.0363
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Ұлттық Банк,85,3,0.0353
+form,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Мәслихат,22973,195,0.0085
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Президент,346,72,0.2081
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Әкім,1414,277,0.1959
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Сот / прокуратура,210,24,0.1143
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Үкімет,1545,121,0.0783
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Халықаралық / ЕАЭО,278,17,0.0612
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Министрлік,4596,255,0.0555
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Бірлескен (joint),942,51,0.0541
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Әкімдік,5151,269,0.0522
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Агенттік / комитет,537,25,0.0466
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Парламент,331,13,0.0393
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Ұлттық Банк,85,3,0.0353
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,unknown,32,1,0.0313
+form,ensemble / prior-adjusted: kaz_roberta_llrd_rec_prioradj,kaz_roberta_llrd_rec_prioradj,Мәслихат,22973,188,0.0082
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,unknown,32,10,0.3125
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Президент,346,108,0.3121
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Әкім,1414,245,0.1733
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Үкімет,1545,227,0.1469
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Халықаралық / ЕАЭО,278,36,0.1295
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Сот / прокуратура,210,25,0.119
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Бірлескен (joint),942,112,0.1189
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Ұлттық Банк,85,8,0.0941
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Агенттік / комитет,537,42,0.0782
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Парламент,331,25,0.0755
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Министрлік,4596,293,0.0638
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Әкімдік,5151,253,0.0491
+form,seq2seq: mt5_small_kkprune_text,mt5_small_kkprune_text,Мәслихат,22973,247,0.0108
 area,baseline: char_1nn,char_1nn,unknown,32,20,0.625
-area,baseline: char_1nn,char_1nn,Президент,350,188,0.5371
-area,baseline: char_1nn,char_1nn,Үкімет,1575,746,0.4737
-area,baseline: char_1nn,char_1nn,Сот / прокуратура,210,93,0.4429
-area,baseline: char_1nn,char_1nn,Бірлескен (joint),942,417,0.4427
-area,baseline: char_1nn,char_1nn,Министрлік,4629,1903,0.4111
-area,baseline: char_1nn,char_1nn,Әкімдік,5167,2040,0.3948
-area,baseline: char_1nn,char_1nn,Парламент,336,119,0.3542
-area,baseline: char_1nn,char_1nn,Агенттік / комитет,538,190,0.3532
-area,baseline: char_1nn,char_1nn,Әкім,1394,342,0.2453
-area,baseline: char_1nn,char_1nn,Мәслихат,22958,3948,0.172
-area,baseline: char_1nn,char_1nn,Ұлттық Банк,87,10,0.1149
+area,baseline: char_1nn,char_1nn,Президент,345,180,0.5217
+area,baseline: char_1nn,char_1nn,Үкімет,1545,731,0.4731
+area,baseline: char_1nn,char_1nn,Бірлескен (joint),941,428,0.4548
+area,baseline: char_1nn,char_1nn,Сот / прокуратура,210,92,0.4381
+area,baseline: char_1nn,char_1nn,Министрлік,4586,1882,0.4104
+area,baseline: char_1nn,char_1nn,Әкімдік,5145,2050,0.3984
+area,baseline: char_1nn,char_1nn,Агенттік / комитет,537,198,0.3687
+area,baseline: char_1nn,char_1nn,Парламент,334,118,0.3533
+area,baseline: char_1nn,char_1nn,Әкім,1374,354,0.2576
+area,baseline: char_1nn,char_1nn,Мәслихат,22938,3966,0.1729
+area,baseline: char_1nn,char_1nn,Ұлттық Банк,85,10,0.1176
 area,baseline: char_1nn,char_1nn,Халықаралық / ЕАЭО,278,17,0.0612
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Президент,350,170,0.4857
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,unknown,32,14,0.4375
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Сот / прокуратура,210,84,0.4
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Бірлескен (joint),942,352,0.3737
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Үкімет,1575,569,0.3613
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Әкімдік,5167,1766,0.3418
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Министрлік,4629,1539,0.3325
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Агенттік / комитет,538,166,0.3086
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Парламент,336,85,0.253
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Әкім,1394,265,0.1901
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Мәслихат,22958,3430,0.1494
-area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Ұлттық Банк,87,7,0.0805
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Президент,345,166,0.4812
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,unknown,32,13,0.4063
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Сот / прокуратура,210,85,0.4048
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Үкімет,1545,584,0.378
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Бірлескен (joint),941,355,0.3773
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Әкімдік,5145,1790,0.3479
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Министрлік,4586,1556,0.3393
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Агенттік / комитет,537,172,0.3203
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Парламент,334,95,0.2844
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Әкім,1374,246,0.179
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Мәслихат,22938,3350,0.146
+area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Ұлттық Банк,85,8,0.0941
 area,TF-IDF+LR: tfidf_word_char_lr,tfidf_word_char_lr,Халықаралық / ЕАЭО,278,16,0.0576
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Президент,350,209,0.5971
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Президент,345,205,0.5942
 area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Сот / прокуратура,210,117,0.5571
 area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,unknown,32,15,0.4688
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Үкімет,1575,685,0.4349
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Бірлескен (joint),942,400,0.4246
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Агенттік / комитет,538,219,0.4071
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Министрлік,4629,1815,0.3921
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Әкімдік,5167,1991,0.3853
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Парламент,336,105,0.3125
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Әкім,1394,326,0.2339
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Мәслихат,22958,3757,0.1636
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Үкімет,1545,670,0.4337
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Бірлескен (joint),941,400,0.4251
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Агенттік / комитет,537,218,0.406
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Министрлік,4586,1804,0.3934
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Әкімдік,5145,1984,0.3856
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Парламент,334,105,0.3144
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Әкім,1374,325,0.2365
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Мәслихат,22938,3755,0.1637
 area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Халықаралық / ЕАЭО,278,34,0.1223
-area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Ұлттық Банк,87,9,0.1034
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,Президент,350,186,0.5314
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,unknown,32,16,0.5
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,Үкімет,1575,658,0.4178
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,Сот / прокуратура,210,85,0.4048
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,Бірлескен (joint),942,349,0.3705
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,Әкімдік,5167,1831,0.3544
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,Министрлік,4629,1638,0.3539
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,Агенттік / комитет,538,185,0.3439
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,Парламент,336,94,0.2798
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,Әкім,1394,249,0.1786
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,Мәслихат,22958,3339,0.1454
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,Ұлттық Банк,87,10,0.1149
-area,tiny transformer: tiny_transformer_4L_do30,tiny_transformer_4L_do30,Халықаралық / ЕАЭО,278,23,0.0827
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,Президент,350,175,0.5
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,Сот / прокуратура,210,89,0.4238
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,Үкімет,1575,606,0.3848
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,unknown,32,12,0.375
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,Бірлескен (joint),942,333,0.3535
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,Агенттік / комитет,538,173,0.3216
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,Әкімдік,5167,1655,0.3203
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,Министрлік,4629,1446,0.3124
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,Парламент,336,75,0.2232
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,Әкім,1394,214,0.1535
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,Мәслихат,22958,3356,0.1462
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,Халықаралық / ЕАЭО,278,28,0.1007
-area,e5-small fine-tuned: e5_small_ft,e5_small_ft,Ұлттық Банк,87,7,0.0805
+area,e5 frozen+LR: e5_frozen_lr,e5_frozen_lr,Ұлттық Банк,85,9,0.1059
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Президент,345,181,0.5246
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,unknown,32,15,0.4688
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Сот / прокуратура,210,85,0.4048
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Үкімет,1545,621,0.4019
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Бірлескен (joint),941,351,0.373
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Әкімдік,5145,1784,0.3467
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Министрлік,4586,1552,0.3384
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Агенттік / комитет,537,172,0.3203
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Парламент,334,97,0.2904
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Әкім,1374,235,0.171
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Мәслихат,22938,3361,0.1465
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Ұлттық Банк,85,8,0.0941
+area,tiny transformer: tiny_transformer_4L_recency_tau8,tiny_transformer_4L_recency_tau8,Халықаралық / ЕАЭО,278,21,0.0755
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Президент,345,164,0.4754
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,unknown,32,13,0.4063
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Сот / прокуратура,210,80,0.381
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Бірлескен (joint),941,356,0.3783
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Үкімет,1545,560,0.3625
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Әкімдік,5145,1573,0.3057
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Министрлік,4586,1375,0.2998
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Агенттік / комитет,537,154,0.2868
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Парламент,334,79,0.2365
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Әкім,1374,194,0.1412
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Мәслихат,22938,3151,0.1374
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Ұлттық Банк,85,7,0.0824
+area,e5-small fine-tuned: kaz_roberta_llrd_rec,kaz_roberta_llrd_rec,Халықаралық / ЕАЭО,278,6,0.0216
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Президент,345,166,0.4812
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Сот / прокуратура,210,87,0.4143
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,unknown,32,12,0.375
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Үкімет,1545,549,0.3553
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Бірлескен (joint),941,330,0.3507
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Әкімдік,5145,1548,0.3009
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Министрлік,4586,1341,0.2924
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Агенттік / комитет,537,152,0.2831
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Парламент,334,76,0.2275
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Мәслихат,22938,3142,0.137
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Әкім,1374,178,0.1295
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Ұлттық Банк,85,6,0.0706
+area,ensemble / prior-adjusted: ensemble_tfidf_tiny_e5_roberta,ensemble_tfidf_tiny_e5_roberta,Халықаралық / ЕАЭО,278,7,0.0252
