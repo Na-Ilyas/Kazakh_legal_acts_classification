@@ -28,18 +28,25 @@ EXAMPLES = [
 # Comparison groups shown in the demo (one model each: the best on validation, see
 # results/best_models.json written by src.compare). Frozen-e5, char-1NN, mT5 and the
 # prior-adjusted singles are left out to keep RAM low; all_models=True shows everything.
-DEMO_GROUPS = ("baseline/tfidf", "tiny (from scratch)", "tiny + MLM + KD (teacher e5)", "ensemble")
-# Strongest single model per task for the demo (Kazakh RoBERTa from src.roberta_tune, loaded through
-# its meta.json loader; the area one is the train+val refit - fine for deployment, never val-selected).
-DEMO_PRETRAINED = {"form": "kaz_roberta_ft", "area": "kaz_roberta_llrd_rec_trainval"}
+DEMO_GROUPS = ("baseline/tfidf", "tiny (from scratch)")
+# Strongest pretrained models for the demo (loaded through their meta.json loaders): Kazakh RoBERTa
+# (area: the train+val refit - fine for deployment, never val-selected) and KazBERT.
+DEMO_PRETRAINED = {"form": ["kaz_roberta_ft", "kazbert_ft"],
+                   "area": ["kaz_roberta_llrd_rec_trainval", "kazbert_ft"]}
+
+
 def _selected_names(task: str) -> set[str] | None:
-    """Best model per demo family (by val F1) + the demo RoBERTa, or None if compare has not run."""
+    """TF-IDF, the from-scratch tiny model, the val-best tiny model overall (any teacher / MLM variant)
+    and the demo pretrained models; None if src.compare has not written best_models.json yet."""
     try:
         best = load_json(config.RESULTS_DIR / "best_models.json").get(task, {})
-        names = {v["model_name"] for k, v in best.items() if k in DEMO_GROUPS}
-        return names | ({DEMO_PRETRAINED[task]} if task in DEMO_PRETRAINED else set())
     except (FileNotFoundError, ValueError):
         return None
+    names = {v["model_name"] for k, v in best.items() if k in DEMO_GROUPS}
+    tiny = [v for k, v in best.items() if k.startswith("tiny") and k != "tiny tokenizer ablation"]
+    if tiny:
+        names.add(max(tiny, key=lambda v: v["f1_val"])["model_name"])
+    return names | set(DEMO_PRETRAINED.get(task, []))
 
 
 def get_predictors(task: str, device: str = "cpu", all_models: bool = False) -> list[tuple[ModelSpec, object]]:

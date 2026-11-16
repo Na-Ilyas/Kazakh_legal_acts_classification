@@ -215,7 +215,7 @@ for (const task of ["form", "area"]) {
       catAxisLabelFontSize: 11, catAxisOrientation: "maxMin", showLegend: true, legendPos: "t", legendFontSize: 11,
       valGridLine: { style: "none" }, catGridLine: { style: "none" }, catAxisLabelColor: HEX.dk1, ...chartText });
   const best = rows.filter((r) => !r.model.includes("trainval") && !r.model.startsWith("ensemble")).reduce((a, r) => (r.test_strict > (a?.test_strict ?? 0) ? r : a), null);
-  const tiny = rows.find((r) => r.label.startsWith("Tiny 4L"));
+  const tiny = rows.find((r) => r.label.startsWith("Tiny 4L + MLM + KD"));
   const tfidf = rows.find((r) => r.model === "tfidf_word_char_lr");
   card(s, 9.2, 1.4, 3.5, 5.4);
   if (best) stat(s, 9.4, 1.55, 3.2, pct(best.test_strict), `best single model ≤120M (test_strict): ${best.label}, ${fmtParams(best.n_params)} params`);

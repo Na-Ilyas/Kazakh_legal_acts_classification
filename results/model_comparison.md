@@ -9,9 +9,10 @@ Macro-F1 on val (2022), test (>=2023) and test_strict (test without near-duplica
 | kaz_roberta_llrd_rec | pretrained kaz-roberta | 0.6162 | – | 0.6285 | [0.613, 0.642] | +0.046 [+0.032, +0.058] better | 0.6080 | 0.7988 | 83.48M | 323.6 | 9,775.9 | 250.8 | 3,173.2 | 950.1 | 119.0 |
 | kaz_roberta_ft | pretrained kaz-roberta | 0.6013 | – | 0.6223 | [0.609, 0.635] | +0.040 [+0.029, +0.051] better | 0.6011 | 0.7937 | 83.48M | 323.6 | 9,692.6 | 246.7 | 3,170.7 | 926.3 | 87.4 |
 | kaz_roberta_kkprune_ft | pretrained kaz-roberta | 0.6000 | – | 0.6213 | [0.608, 0.634] | +0.038 [+0.028, +0.050] better | 0.6003 | 0.7936 | 61.61M | 240.4 | 9,631.3 | 247.5 | 2,843.0 | 936.5 | 65.2 |
-| kazbert_ft | pretrained kazbert | 0.6239 | – | 0.6201 | [0.607, 0.632] | +0.037 [+0.027, +0.049] better | 0.5968 | 0.7993 | 110.64M | 422.9 | 23,375.2 | – | 5,217.7 | – | 212.9 |
+| kazbert_ft | pretrained kazbert | 0.6239 | – | 0.6201 | [0.607, 0.632] | +0.037 [+0.027, +0.049] better | 0.5968 | 0.7993 | 110.64M | 422.9 | 23,034.8 | 523.2 | 5,217.7 | 1,019.0 | 212.9 |
+| tiny_transformer_4L_mlm_kdavg_a100_T2 | tiny + MLM + KD (averaged teachers) | 0.6054 | – | 0.6187 | [0.605, 0.632] | +0.036 [+0.025, +0.048] better | 0.5976 | 0.7952 | 5.24M | 20.8 | 504.0 | 51.9 | 1,100.3 | 123.8 | 38.7 |
 | e5_small_ft | pretrained e5 | 0.5836 | – | 0.6010 | [0.588, 0.613] | +0.018 [+0.005, +0.030] better | 0.5792 | 0.7883 | 117.67M | 465.2 | 3,506.4 | 108.3 | 3,408.0 | 852.0 | 128.6 |
-| e5_small_kkprune_ft | pretrained e5 | 0.5805 | – | 0.5997 | [0.587, 0.612] | +0.017 [+0.004, +0.029] better | 0.5790 | 0.7878 | 25.53M | 98.4 | 8,051.2 | – | 1,998.1 | – | 77.0 |
+| e5_small_kkprune_ft | pretrained e5 | 0.5805 | – | 0.5997 | [0.587, 0.612] | +0.017 [+0.004, +0.029] better | 0.5790 | 0.7878 | 25.53M | 98.4 | 3,726.5 | 115.9 | 1,998.1 | 759.2 | 77.0 |
 | tiny_transformer_4L_mlm_kdrob_a50_T2 | tiny + KD (kaz-roberta teacher) | 0.5967 | – | 0.5979 | [0.585, 0.610] | +0.015 [+0.004, +0.026] better | 0.5759 | 0.7903 | 5.24M | 20.8 | 515.5 | 50.2 | 1,100.3 | 124.4 | 34.0 |
 | tiny_transformer_4L_mlm_kd_a50_T2 | tiny + MLM + KD (teacher e5) | 0.5922 | – | 0.5974 | [0.584, 0.610] | +0.015 [+0.002, +0.027] better | 0.5797 | 0.7904 | 5.24M | 20.8 | 502.3 | 49.9 | 1,100.3 | 124.5 | 33.9 |
 | tiny_transformer_4L_mlm | tiny + MLM | 0.5857 | – | 0.5921 | [0.579, 0.605] | +0.009 [-0.002, +0.021] tie | 0.5695 | 0.7832 | 5.24M | 20.8 | 508.6 | 50.3 | 1,090.5 | 129.6 | 33.4 |
@@ -28,7 +29,7 @@ Macro-F1 on val (2022), test (>=2023) and test_strict (test without near-duplica
 | model | group | F1 val | F1 val½B | F1 test | test 95% CI | Δ vs TF-IDF [95% CI] | F1 test_strict | acc test | params | size MB | CPU ms/1000 | GPU ms/1000 | train peak MB | infer RAM MB | train s |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | ensemble_tfidf_tiny_e5_roberta (>120M, reference) | ensemble | – | 0.6407 | 0.6215 | [0.608, 0.633] | +0.039 [+0.030, +0.047] better | 0.6035 | 0.8019 | 213.51M | 846.2 | 13,960.2 | 660.5 | – | 1,519.4 | 328.3 |
-| llm_teacher_qwen3_1p7b (teacher only, >120M, reference) | llm_teacher | 0.5486 | – | 0.5862 | [0.571, 0.599] | +0.004 [-0.011, +0.017] tie | 0.5691 | 0.7712 | 1727.13M | 3,317.5 | 2,425.4 | – | 15,615.2 | – | 528.2 |
+| llm_teacher_qwen3_1p7b (teacher only, >120M, reference) | llm_teacher | 0.5486 | – | 0.5862 | [0.571, 0.599] | +0.004 [-0.011, +0.017] tie | 0.5691 | 0.7712 | 1727.13M | 3,317.5 | GPU 2,425 | – | 15,615.2 | – | 528.2 |
 | tiny_transformer_4L_recency_tau8_prioradj | posthoc | – | 0.6386 | 0.5836 | [0.570, 0.596] | +0.001 [-0.011, +0.013] tie | 0.5576 | 0.7792 | 5.24M | 20.8 | 536.2 | 51.2 | – | 123.1 | 33.4 |
 
 ### Task `area`: refits on train+val (no held-out val score, never selected on val)
@@ -45,9 +46,10 @@ Macro-F1 on val (2022), test (>=2023) and test_strict (test without near-duplica
 | kazbert_ft | pretrained kazbert | 0.8794 | – | 0.8601 | [0.832, 0.886] | +0.040 [+0.020, +0.062] better | 0.8662 | 0.9702 | 110.62M | 422.8 | 25,676.2 | 527.7 | 5,234.2 | 990.3 | 125.9 |
 | kaz_roberta_ft | pretrained kaz-roberta | 0.8830 | – | 0.8528 | [0.822, 0.881] | +0.033 [+0.014, +0.053] better | 0.8675 | 0.9659 | 83.46M | 323.5 | 9,707.8 | 246.5 | 3,170.5 | 926.2 | 71.0 |
 | kaz_roberta_kkprune_ft | pretrained kaz-roberta | 0.8843 | – | 0.8491 | [0.818, 0.878] | +0.029 [+0.011, +0.050] better | 0.8633 | 0.9656 | 61.59M | 240.3 | 9,755.5 | 248.9 | 2,836.6 | 889.6 | 66.2 |
-| e5_small_kkprune_ft | pretrained e5 | 0.8628 | – | 0.8448 | [0.816, 0.874] | +0.025 [+0.004, +0.048] better | 0.8521 | 0.9653 | 25.52M | 98.3 | 8,554.8 | – | 1,991.0 | – | 82.8 |
+| e5_small_kkprune_ft | pretrained e5 | 0.8628 | – | 0.8448 | [0.816, 0.874] | +0.025 [+0.004, +0.048] better | 0.8521 | 0.9653 | 25.52M | 98.3 | 3,557.1 | 107.0 | 1,991.0 | 775.0 | 82.8 |
 | e5_small_ft | pretrained e5 | 0.8656 | – | 0.8415 | [0.813, 0.867] | +0.021 [+0.005, +0.040] better | 0.8462 | 0.9651 | 117.66M | 465.1 | 3,471.0 | 111.7 | 3,396.4 | 881.9 | 104.5 |
 | kaz_roberta_llrd_rec | pretrained kaz-roberta | 0.8978 | – | 0.8414 | [0.813, 0.869] | +0.021 [+0.007, +0.037] better | 0.8478 | 0.9649 | 83.46M | 323.5 | 10,874.8 | 273.3 | 3,168.9 | 949.3 | 124.6 |
+| tiny_transformer_4L_mlm_kdavg_a90_T2 | tiny + MLM + KD (averaged teachers) | 0.8778 | – | 0.8387 | [0.808, 0.867] | +0.018 [-0.001, +0.038] tie | 0.8495 | 0.9648 | 5.23M | 20.7 | 534.5 | 51.4 | 1,092.5 | 126.4 | 48.3 |
 | tiny_transformer_4L_mlm_kdrob_a50_T2 | tiny + KD (kaz-roberta teacher) | 0.8683 | – | 0.8273 | [0.801, 0.854] | +0.007 [-0.012, +0.026] tie | 0.8286 | 0.9637 | 5.23M | 20.7 | 540.7 | 55.3 | 1,091.8 | 122.4 | 39.2 |
 | tiny_transformer_4L_mlm_kd_a90_T2 | tiny + MLM + KD (teacher e5) | 0.8647 | – | 0.8252 | [0.799, 0.852] | +0.005 [-0.015, +0.026] tie | 0.8280 | 0.9655 | 5.23M | 20.7 | 538.3 | 52.1 | 1,092.5 | 125.0 | 53.3 |
 | tfidf_word_char_lr | baseline/tfidf | 0.8576 | – | 0.8202 | [0.793, 0.847] | +0.000 [+0.000, +0.000] baseline | 0.8253 | 0.9620 | 1.51M | 15.2 | 189.6 | – | 561.0 | 135.6 | 27.4 |
@@ -65,7 +67,7 @@ Macro-F1 on val (2022), test (>=2023) and test_strict (test without near-duplica
 | model | group | F1 val | F1 val½B | F1 test | test 95% CI | Δ vs TF-IDF [95% CI] | F1 test_strict | acc test | params | size MB | CPU ms/1000 | GPU ms/1000 | train peak MB | infer RAM MB | train s |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | ensemble_tfidf_tiny_e5_roberta (>120M, reference) | ensemble | – | 0.9314 | 0.8497 | [0.819, 0.880] | +0.029 [+0.017, +0.045] better | 0.8607 | 0.9675 | 207.86M | 824.6 | 14,330.4 | 644.8 | – | 1,493.9 | 314.6 |
-| llm_teacher_qwen3_1p7b (teacher only, >120M, reference) | llm_teacher | 0.7536 | – | 0.7747 | [0.743, 0.807] | -0.045 [-0.068, -0.026] worse | 0.7745 | 0.9482 | 1727.03M | 3,317.3 | 2,423.6 | – | 15,613.5 | – | 302.0 |
+| llm_teacher_qwen3_1p7b (teacher only, >120M, reference) | llm_teacher | 0.7536 | – | 0.7747 | [0.743, 0.807] | -0.045 [-0.068, -0.026] worse | 0.7745 | 0.9482 | 1727.03M | 3,317.3 | GPU 2,424 | – | 15,613.5 | – | 302.0 |
 
 ### Task `form`: refits on train+val (no held-out val score, never selected on val)
 

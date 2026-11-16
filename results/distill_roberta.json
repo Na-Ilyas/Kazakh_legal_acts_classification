@@ -128,5 +128,109 @@
     "latency_cpu_ms_per_1000": 8090.3,
     "best_epoch": 3,
     "train_time_s": 75.37
-  }
+  },
+  "tiny_avg_form": [
+    {
+      "task": "form",
+      "model_name": "tiny_transformer_4L_mlm_kdavg_a50_T2",
+      "val_f1": 0.8741,
+      "val": 0.8741,
+      "test": 0.8284,
+      "test_strict": 0.8362,
+      "best_epoch": 8,
+      "train_time_s": 53.89,
+      "kd_alpha": 0.5,
+      "kd_temperature": 2.0,
+      "teacher": "mean(kaz_roberta_ft, kazbert_ft)",
+      "init": "MLM-pretrained encoder",
+      "lr": 0.0003,
+      "loss_selected_on_val": "smooth"
+    },
+    {
+      "task": "form",
+      "model_name": "tiny_transformer_4L_mlm_kdavg_a90_T2",
+      "val_f1": 0.8778,
+      "val": 0.8778,
+      "test": 0.8387,
+      "test_strict": 0.8495,
+      "best_epoch": 7,
+      "train_time_s": 48.34,
+      "kd_alpha": 0.9,
+      "kd_temperature": 2.0,
+      "teacher": "mean(kaz_roberta_ft, kazbert_ft)",
+      "init": "MLM-pretrained encoder",
+      "lr": 0.0003,
+      "loss_selected_on_val": "smooth"
+    }
+  ],
+  "tiny_avg_area": [
+    {
+      "task": "area",
+      "model_name": "tiny_transformer_4L_mlm_kdavg_a50_T2",
+      "val_f1": 0.6003,
+      "val": 0.6003,
+      "test": 0.5962,
+      "test_strict": 0.5722,
+      "best_epoch": 4,
+      "train_time_s": 34.03,
+      "kd_alpha": 0.5,
+      "kd_temperature": 2.0,
+      "teacher": "mean(kaz_roberta_llrd_rec, kazbert_ft)",
+      "init": "MLM-pretrained encoder",
+      "lr": 0.0003,
+      "loss_selected_on_val": "smooth"
+    },
+    {
+      "task": "area",
+      "model_name": "tiny_transformer_4L_mlm_kdavg_a90_T2",
+      "val_f1": 0.6049,
+      "val": 0.6049,
+      "test": 0.6116,
+      "test_strict": 0.5927,
+      "best_epoch": 4,
+      "train_time_s": 62.53,
+      "kd_alpha": 0.9,
+      "kd_temperature": 2.0,
+      "teacher": "mean(kaz_roberta_llrd_rec, kazbert_ft)",
+      "init": "MLM-pretrained encoder",
+      "lr": 0.0003,
+      "loss_selected_on_val": "smooth"
+    }
+  ],
+  "tiny_avg_form_a100": [
+    {
+      "task": "form",
+      "model_name": "tiny_transformer_4L_mlm_kdavg_a100_T2",
+      "val_f1": 0.8758,
+      "val": 0.8758,
+      "test": 0.8267,
+      "test_strict": 0.8323,
+      "best_epoch": 6,
+      "train_time_s": 43.96,
+      "kd_alpha": 1.0,
+      "kd_temperature": 2.0,
+      "teacher": "mean(kaz_roberta_ft, kazbert_ft)",
+      "init": "MLM-pretrained encoder",
+      "lr": 0.0003,
+      "loss_selected_on_val": "smooth"
+    }
+  ],
+  "tiny_avg_area_a100": [
+    {
+      "task": "area",
+      "model_name": "tiny_transformer_4L_mlm_kdavg_a100_T2",
+      "val_f1": 0.6054,
+      "val": 0.6054,
+      "test": 0.6187,
+      "test_strict": 0.5976,
+      "best_epoch": 5,
+      "train_time_s": 38.69,
+      "kd_alpha": 1.0,
+      "kd_temperature": 2.0,
+      "teacher": "mean(kaz_roberta_llrd_rec, kazbert_ft)",
+      "init": "MLM-pretrained encoder",
+      "lr": 0.0003,
+      "loss_selected_on_val": "smooth"
+    }
+  ]
 }

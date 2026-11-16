@@ -1,18 +1,18 @@
 {
  "helped": [
-  "Kazakh pretrained encoders: KazBERT 0.860 form, kaz-roberta 0.629 area (+0.03 to +0.05 over TF-IDF, CI excludes 0)",
-  "MLM pretraining + distillation for the 5.2M tiny model: form 0.793 → 0.827, area 0.584 → 0.598",
+  "Distilling from the averaged kaz-roberta + KazBERT teacher after MLM pretraining: tiny form 0.793 → 0.839, area 0.584 → 0.619 (5.2M params)",
+  "Kazakh pretrained encoders (kaz-roberta, KazBERT): form 0.841–0.860, area 0.620–0.629, +0.02 to +0.05 over TF-IDF (CI excludes 0)",
   "Kazakh vocabulary pruning: e5 118M → 25.5M (−78 %) at equal F1 (0.845 vs 0.842)",
   "kaz-roberta with layer-wise LR decay + recency weighting: area 0.622 → 0.629; train+val refit 0.634",
   "Word + char n-grams for TF-IDF: 0.820 vs 0.803 (word) / 0.778 (char)"
  ],
  "not_helped": [
   "Kazakh suffix stemming: 0.783 vs 0.803 for word forms (suffixes carry signal)",
-  "Deeper tiny model: 4 vs 2 layers within seed noise (±0.012–0.019 std)",
+  "Deeper tiny model: 4 vs 2 layers within seed noise (std 0.012–0.019)",
   "Seq2seq label generation (mT5, 58.7M): 0.791 form, below TF-IDF",
   "LLM teacher Qwen3-1.7B: 0.775 form, weaker than every encoder; Sherkala-8B is gated",
-  "Stronger teacher for the tiny student (kaz-roberta vs e5): +0.002, within noise",
-  "Ensembles and prior-shift correction: all families fail on the same hard titles"
+  "A single stronger teacher (kaz-roberta vs e5): +0.002 for the student, within noise",
+  "Prior-shift correction and ensembles: ≤ +0.01, within CIs (all families fail on the same titles)"
  ],
  "confusion_figure": "confusion_form_kaz_roberta_llrd_rec.png",
  "error_points": [
@@ -23,11 +23,16 @@
   "Confidence ≥ 0.9 covers 97 % of titles at 97.7 % accuracy → route the rest to manual review"
  ],
  "conclusions": [
-  "A 5.2M tiny transformer from scratch needs MLM + distillation to tie TF-IDF on form; then it beats it on area and matches the 118M e5-small at about 1/7 of the CPU latency",
-  "Kazakh encoders (KazBERT, kaz-roberta) are best within 120M: +0.03 to +0.05 macro-F1",
-  "Vocabulary pruning cuts e5 by 78 % for free; seq2seq and the LLM teacher did not pay off",
+  "A 5.2M transformer from scratch needs MLM + distillation: then it ties TF-IDF on form (0.839), beats it on area (0.619) and is level with or above e5-small at 1/7 of its CPU latency",
+  "Kazakh encoders (kaz-roberta, KazBERT) are best within 120M and tied with each other: +0.02 to +0.05 macro-F1",
+  "Vocabulary pruning cuts e5 by 78 % for free; seq2seq and the 1.7B LLM teacher did not pay off",
   "54 % of test titles are templated near-duplicates and the error rate grows yearly, so temporal + strict evaluation and CIs are essential"
  ],
- "team": ["Ilyas Nagiyev — [role]", "Beksultan Aliyev — [role]", "Yernur Baimukhambetov — [role]"],
- "efficiency_note": "CPU latency: unified benchmark (batch 64, 8 threads, median of 3) on a shared machine; absolute values vary by about ±20 %. F1 = macro-F1 on test_strict."
+ "team": [
+  "Ilyas Nagiyev — [role]",
+  "Beksultan Aliyev — [role]",
+  "Yernur Baimukhambetov — [role]"
+ ],
+ "efficiency_note": "CPU latency: unified benchmark (batch 64, 8 threads, median of 3) on a shared machine; absolute values vary by about ±20 %. F1 = macro-F1 on test_strict.",
+ "demo_text": "Title> 2025-2027 жылдарға арналған аудандық бюджет туралы\n\n  Task 'form':\n    tfidf_word_char_lr                    -> Шешім   (1.00)    2.1 ms\n    tiny_transformer_2L_d128              -> Шешім   (0.92)    7.7 ms\n    tiny_transformer_4L_mlm_kdavg_a90_T2  -> Шешім   (1.00)    1.9 ms\n    kaz_roberta_ft                        -> Шешім   (1.00)  258.1 ms\n    kazbert_ft                            -> Шешім   (1.00)  117.9 ms\n\n  Task 'area':\n    tfidf_word_char_lr                    -> Қаржы   (0.99)    6.0 ms\n    tiny_transformer_4L_do30              -> Қаржы   (0.95)    2.2 ms\n    tiny_transformer_4L_mlm_kdavg_a100_T2 -> Қаржы   (1.00)    1.5 ms\n    kaz_roberta_llrd_rec_trainval         -> Қаржы   (1.00)   21.6 ms\n    kazbert_ft                            -> Қаржы   (1.00)   43.8 ms\n\n(«district budget for 2025–2027» → form: Шешім (maslikhat decision), area: Қаржы (finance))"
 }

@@ -28,28 +28,30 @@ The tables show macro-F1 on the 2023–2026 test acts and on **test_strict**, wh
 |---|---|---|---|---|---|
 | TF-IDF word+char + LR (baseline) | 1.5M | ~190 | 0.820 | 0.825 | — |
 | Tiny transformer, from scratch (2L, d128) | 1.4M | ~150 | 0.810 | 0.809 | tie |
-| **Tiny transformer + MLM + distillation** | **5.2M** | **~540** | **0.827** | **0.829** | tie |
+| **Tiny transformer + MLM + distillation (kaz-roberta + KazBERT teachers)** | **5.2M** | **~530** | **0.839** | **0.850** | tie |
 | e5-small fine-tuned | 117.7M | ~3,700 | 0.842 | 0.846 | better |
-| e5-small, Kazakh vocab-pruned | 25.5M | — | 0.845 | 0.852 | better |
+| e5-small, Kazakh vocab-pruned | 25.5M | ~3,600 | 0.845 | 0.852 | better |
 | kaz-roberta fine-tuned | 83.5M | ~9,700 | 0.853 | 0.868 | better |
-| **KazBERT fine-tuned** | 110.6M | — | **0.860** | 0.866 | better |
+| kaz-roberta + LLRD + recency (val-best encoder) | 83.5M | ~10,900 | 0.841 | 0.848 | better |
+| KazBERT fine-tuned (highest test) | 110.6M | ~25,700 | 0.860 | 0.866 | better |
 
 **Regulation area (33 classes)**
 
 | Model | Params | CPU ms / 1000 | Test | Strict | vs TF-IDF (95 % CI) |
 |---|---|---|---|---|---|
-| TF-IDF word+char + LR (baseline) | 7.1M | ~230 | 0.583 | 0.556 | — |
+| TF-IDF word+char + LR (baseline) | 7.1M | ~230 | 0.583 | 0.555 | — |
 | Tiny transformer, from scratch (4L) | 5.2M | ~500 | 0.584 | 0.564 | tie |
-| **Tiny transformer + MLM + distillation** | **5.2M** | **~520** | **0.598** | **0.576** | better |
+| **Tiny transformer + MLM + distillation (kaz-roberta + KazBERT teachers)** | **5.2M** | **~500** | **0.619** | **0.598** | better |
 | e5-small fine-tuned | 117.7M | ~3,500 | 0.601 | 0.579 | better |
-| **kaz-roberta + LLRD + recency** | 83.5M | ~9,800 | **0.629** | **0.608** | better |
+| KazBERT fine-tuned (val-best encoder) | 110.6M | ~23,000 | 0.620 | 0.597 | better |
+| kaz-roberta + LLRD + recency (highest test) | 83.5M | ~9,800 | 0.629 | 0.608 | better |
 
 The full tables, with every variant, latency, memory and bootstrap CIs, are in `results/model_comparison.md` and `results/ablations.md`. The written report is `reports/report.md` (also `.docx`), and the slides are `reports/presentation.pptx`.
 
 **Takeaways**
 
-- The tiny transformer needs MLM pretraining and distillation to catch the TF-IDF baseline. With them, it matches the 23× larger e5-small on the area task at about 1/7 of its CPU latency.
-- Kazakh-specific encoders are the most accurate models within the 120M-parameter budget.
+- The tiny transformer needs MLM pretraining and distillation to catch the TF-IDF baseline. Distilled from the averaged predictions of kaz-roberta and KazBERT, the 5.2M model ties TF-IDF on form and beats it on area. It is level with or above the 23× larger e5-small, within 0.01–0.02 of the best encoders, at about 1/7 of e5's CPU latency.
+- Kazakh-specific encoders (kaz-roberta, KazBERT) are the most accurate models within the 120M-parameter budget. They are tied with each other: the val-selected and the test-best encoder differ per task, and both are shown.
 - Kazakh vocabulary pruning shrinks e5-small by 78 % at equal F1.
 
 ## Setup
@@ -142,7 +144,7 @@ Generated and not in git: `data/raw/` (CSV), `data/processed/` (Parquet), `data/
 | 5 | file I/O (CSV, JSON, Parquet, SQLite) | `data_io.py`, `results/`, `experiments_db.py` |
 | 6 | try/except | user input in `main.py`, downloads and I/O in `data_io.py`, model loading in `inference.py` |
 | 7 | console menu | `main.py` |
-| 8 | modularity | 30 modules in `src/`, stdlib `pathlib`, `json`, `datetime`, `os` |
+| 8 | modularity | 32 modules in `src/`, stdlib `pathlib`, `json`, `datetime`, `os` |
 | 9 | comparison of approaches + baseline (quality, time, memory) | `results/model_comparison.md`, `results/io_benchmark.json`, `results/text_prep_comparison.json` |
 | 10 | SQLite, ER diagram, ≥ 8 SQL queries | `sql/`, `reports/figures/er_diagram.png`, `results/sql/` |
 | 11 | large data: chunksize, dtypes, Parquet, memory measurement | `data_io.py`, `results/memory_optimization.json` |

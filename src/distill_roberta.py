@@ -15,6 +15,8 @@
         teacher), alpha in {0.5, 0.9}, T = 2 -> tiny_transformer_4L_mlm_kdrob_a{50,90}_T2;
      b) the vocabulary-pruned e5-small (25.5M) -> e5_small_kkprune_kdrob, with the alpha
         selected on val for the tiny student of the same task.
+3. KazBERT as a second teacher: the tiny student distilled from the MEAN of the kaz-roberta and
+   KazBERT train probabilities -> tiny_transformer_4L_mlm_kdavg_a{50,90,100}_T2 (alpha on val).
 Every run logs val / test / test_strict (+ test predictions) to SQLite through
 src.model_utils.log_all_splits (shared src.metrics).
 
@@ -23,6 +25,8 @@ GPU commands must go through the shared lock, one short job each:
     flock .gpu.lock .venv/bin/python -m src.distill_roberta kazbert --task form
     flock .gpu.lock .venv/bin/python -m src.distill_roberta tiny --task area
     flock .gpu.lock .venv/bin/python -m src.distill_roberta e5 --task area
+    flock .gpu.lock .venv/bin/python -m src.distill_roberta teacher --kazbert-teacher
+    flock .gpu.lock .venv/bin/python -m src.distill_roberta tiny --mode avg --alphas 0.5,0.9,1.0
 """
 from __future__ import annotations
 
@@ -174,7 +178,7 @@ def kd_tiny(task: str, alphas: tuple[float, ...] = ALPHAS, temp: float = TEMP, m
             f"KD student from MLM-pretrained encoder: {t_name} teacher (probabilities on TRAIN titles), "
             f"alpha={alpha}, T={temp}",
             init_from=MLM_DIR / "encoder.pt", teacher=teacher))
-    _save_summary(f"tiny_{mode}_{task}", rows)
+    _save_summary(f"tiny_{mode}_{task}_a" + "_".join(str(int(a * 100)) for a in alphas), rows)
     del tensors, teacher
     torch.cuda.empty_cache()
     return rows
@@ -308,9 +312,11 @@ def write_survey_section() -> str:
     lines = [SECTION_MARKER, "",
              "KazBERT fine-tuned with the kaz-roberta recipe (form: lr 5e-5, 3 epochs; area: LLRD 0.8 + recency "
              "weights). Distillation students use teacher probabilities on TRAIN titles from the val-selectable "
-             "kaz-roberta models (`kaz_roberta_ft` form, `kaz_roberta_llrd_rec` area); `kd_` rows (e5 teacher) are "
-             "shown for reference. Macro-F1 from SQLite; selection on val only. CPU ms per 1000 titles "
-             "(8 threads, busy shared machine).", "",
+             "kaz-roberta models (`kaz_roberta_ft` form, `kaz_roberta_llrd_rec` area); `kdavg` = mean of the "
+             "kaz-roberta and `kazbert_ft` train probabilities; `kd_` rows (e5 teacher) are shown for reference. "
+             "Macro-F1 from SQLite; selection on val only. CPU ms per 1000 titles (8 threads, busy shared machine; "
+             "`e5_small_kkprune_kdrob` has the same architecture as `e5_small_kkprune_ft`, its higher latency is "
+             "load noise, and its MB includes the saved tokenizer files).", "",
              "| task | model | val | test | test_strict | params | MB | CPU ms/1000 |", "|---|---|---|---|---|---|---|---|"]
     for r in piv.to_dict("records"):
         lines.append(f"| {r['task']} | {r['model_name']} | {r.get('val', float('nan')):.4f} | "
@@ -362,6 +368,11 @@ def run(tasks: tuple[str, ...] = ("form", "area"), kazbert_ft: bool = True, tiny
             out[f"tiny_{task}"] = {r["model_name"]: r["val_f1"] for r in kd_tiny(task)}
         if e5:
             out[f"e5_{task}"] = kd_e5_pruned(task)["f1_macro"]
+    if kazbert_ft and tiny:                  # 3. KazBERT as a second teacher (averaged probabilities)
+        out["teacher_kazbert"] = teacher_probs(tasks, teachers=KAZBERT_TEACHERS)
+        for task in tasks:
+            out[f"tiny_avg_{task}"] = {r["model_name"]: r["val_f1"]
+                                       for r in kd_tiny(task, ALPHAS + (1.0,), mode="avg")}
     write_survey_section()
     return out
 

@@ -217,6 +217,8 @@ def model_group(name: str, family: str) -> str:
             return "tiny + KD (LLM teacher)"
         if "kdrob" in n:
             return "tiny + KD (kaz-roberta teacher)"
+        if "kdavg" in n:
+            return "tiny + MLM + KD (averaged teachers)"
         if "_mlm" in n and "_kd" in n:
             return "tiny + MLM + KD (teacher e5)"
         if "_kd" in n:

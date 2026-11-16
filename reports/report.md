@@ -12,7 +12,7 @@
 - compact pretrained encoders (multilingual-e5-small, kaz-roberta, KazBERT);
 - vocabulary pruning, seq2seq generation (mT5), knowledge distillation (including an LLM teacher), prior-shift correction and ensembles.
 
-The best models within the 120M budget are Kazakh encoders: macro-F1 0.860 (form, KazBERT) and 0.629 (area, kaz-roberta), 0.03–0.05 above TF-IDF. With MLM pretraining and distillation, the 5.2M-parameter tiny transformer ties TF-IDF on form (0.827) and beats it on area (0.598), matching the 118M e5-small at about 1/7 of its CPU latency. The data pipeline streams the 337 MB CSV into Parquet (−68 % memory). A normalized SQLite database with 17 analytic queries stores both the corpus and every experiment.
+The best models within the 120M budget are the Kazakh encoders kaz-roberta and KazBERT. On test they reach 0.841–0.860 macro-F1 on form and 0.620–0.629 on area, 0.02–0.05 above TF-IDF. Their confidence intervals overlap, so we treat them as tied. We pretrain the 5.2M-parameter tiny transformer with MLM and distill it from the averaged predictions of the two Kazakh encoders. It then ties TF-IDF on form (0.839) and beats it significantly on area (0.619), coming within 0.01–0.02 of the best encoders at 1/7 of e5-small's CPU latency and 1/18 of kaz-roberta's. The data pipeline streams the 337 MB CSV into Parquet (−68 % memory). A normalized SQLite database with 17 analytic queries stores both the corpus and every experiment.
 
 ## 1. Task and research questions
 
@@ -215,6 +215,8 @@ Two improvements on top:
 
 - **MLM pretraining (`src/mlm_pretrain.py`).** BERT-style masked-language-model pretraining on the titles *and* descriptions of train-period acts only (≤ 2021), followed by fine-tuning on the classification task.
 - **Knowledge distillation (`src/distill.py`).** The fine-tuned e5-small (118M parameters) is the teacher, and the tiny transformer is the student. The loss is α·T²·KL(teacher ∥ student) + (1 − α)·CE(gold). The teacher's soft labels are computed on train titles only. α ∈ {0.5, 0.9}, the temperature T ∈ {2, 4} and the starting point (random or MLM-pretrained) are chosen on val.
+  - **Teachers.** We used three teachers, each fine-tuned on train only: e5-small, kaz-roberta (`src/distill_roberta.py`), and the class-aligned **average of the kaz-roberta and KazBERT probabilities**. The averaged teacher gave the best student on val for both tasks.
+  - **Disclosures.** For form, the kaz-roberta teacher is the plain fine-tune (`kaz_roberta_ft`), not the val-best LLRD + recency variant. α = 1.0 (pure distillation) was added in a second run. On area, the α = 1.0 student beat the α = 0.9 student by only 0.0005 on val, so the two are effectively tied (test 0.619 vs 0.612).
 
 ### 7.3 Compact pretrained encoders (≤ 120M parameters)
 
@@ -259,12 +261,14 @@ The tables below are generated from the SQLite experiment table (`reports/fill_t
 | Tiny 4L + MLM | 5.2M | 21 | 547 | 0.851 | 0.819 [0.792, 0.844] | -0.002 (tie) | 0.817 |
 | Tiny 4L + MLM + KD (e5 teacher) | 5.2M | 21 | 538 | 0.865 | 0.825 [0.799, 0.852] | +0.005 (tie) | 0.828 |
 | Tiny 4L + MLM + KD (kaz-roberta teacher) | 5.2M | 21 | 541 | 0.868 | 0.827 [0.801, 0.854] | +0.007 (tie) | 0.829 |
+| **Tiny 4L + MLM + KD (kaz-roberta + KazBERT teachers)** | 5.2M | 21 | 534 | 0.878 | 0.839 [0.808, 0.867] | +0.018 (tie) | 0.850 |
 | mT5-small seq2seq, vocab-pruned | 58.7M | 225 | 20,552 | 0.821 | 0.791 [0.761, 0.820] | -0.029 (tie) | 0.796 |
 | e5-small frozen + LR | 117.7M | 449 | 3,568 | 0.663 | 0.699 [0.675, 0.725] | -0.121 (worse) | 0.698 |
 | e5-small fine-tuned | 117.7M | 465 | 3,668 | 0.866 | 0.842 [0.813, 0.867] | +0.021 (better) | 0.846 |
-| e5-small fine-tuned, vocab-pruned | 25.5M | 98 | 8,555 | 0.863 | 0.845 [0.816, 0.874] | +0.025 (better) | 0.852 |
+| e5-small fine-tuned, vocab-pruned | 25.5M | 98 | 3,557 | 0.863 | 0.845 [0.816, 0.874] | +0.025 (better) | 0.852 |
 | e5-small vocab-pruned + KD (kaz-roberta teacher) | 25.5M | 115 | 7,767 | 0.853 | 0.845 | – | 0.854 |
 | kaz-roberta fine-tuned | 83.5M | 324 | 9,708 | 0.883 | 0.853 [0.822, 0.881] | +0.033 (better) | 0.868 |
+| kaz-roberta + LLRD + recency (val-best encoder) | 83.5M | 324 | 10,875 | 0.898 | 0.841 [0.813, 0.869] | +0.021 (better) | 0.848 |
 | kaz-roberta, vocab-pruned | 61.6M | 240 | 9,756 | 0.884 | 0.849 [0.818, 0.878] | +0.029 (better) | 0.863 |
 | KazBERT fine-tuned | 110.6M | 423 | 25,676 | 0.879 | 0.860 [0.832, 0.886] | +0.040 (better) | 0.866 |
 <!-- END:main_form -->
@@ -282,14 +286,15 @@ The tables below are generated from the SQLite experiment table (`reports/fill_t
 | Tiny 4L + MLM | 5.2M | 21 | 549 | 0.586 | 0.592 [0.579, 0.605] | +0.009 (tie) | 0.569 |
 | Tiny 4L + MLM + KD (e5 teacher) | 5.2M | 21 | 502 | 0.592 | 0.597 [0.584, 0.610] | +0.015 (better) | 0.580 |
 | Tiny 4L + MLM + KD (kaz-roberta teacher) | 5.2M | 21 | 516 | 0.597 | 0.598 [0.585, 0.610] | +0.015 (better) | 0.576 |
+| **Tiny 4L + MLM + KD (kaz-roberta + KazBERT teachers)** | 5.2M | 21 | 504 | 0.605 | 0.619 [0.605, 0.632] | +0.036 (better) | 0.598 |
 | e5-small frozen + LR | 117.7M | 449 | 3,700 | 0.528 | 0.532 [0.519, 0.545] | -0.050 (worse) | 0.501 |
 | e5-small fine-tuned | 117.7M | 465 | 5,060 | 0.584 | 0.601 [0.588, 0.613] | +0.018 (better) | 0.579 |
-| e5-small fine-tuned, vocab-pruned | 25.5M | 98 | 8,051 | 0.580 | 0.600 [0.587, 0.612] | +0.017 (better) | 0.579 |
+| e5-small fine-tuned, vocab-pruned | 25.5M | 98 | 3,726 | 0.580 | 0.600 [0.587, 0.612] | +0.017 (better) | 0.579 |
 | e5-small vocab-pruned + KD (kaz-roberta teacher) | 25.5M | 115 | 8,090 | 0.577 | 0.604 | – | 0.584 |
 | kaz-roberta fine-tuned | 83.5M | 324 | 9,693 | 0.601 | 0.622 [0.609, 0.635] | +0.040 (better) | 0.601 |
-| kaz-roberta + LLRD + recency (val-selected) | 83.5M | 324 | 9,776 | 0.616 | 0.629 [0.613, 0.642] | +0.046 (better) | 0.608 |
+| kaz-roberta + LLRD + recency | 83.5M | 324 | 9,776 | 0.616 | 0.629 [0.613, 0.642] | +0.046 (better) | 0.608 |
 | kaz-roberta, vocab-pruned | 61.6M | 240 | 9,631 | 0.600 | 0.621 [0.608, 0.634] | +0.038 (better) | 0.600 |
-| KazBERT fine-tuned | 110.6M | 423 | 23,375 | 0.624 | 0.620 [0.607, 0.632] | +0.037 (better) | 0.597 |
+| KazBERT fine-tuned (val-best encoder) | 110.6M | 423 | 23,035 | 0.624 | 0.620 [0.607, 0.632] | +0.037 (better) | 0.597 |
 <!-- END:main_area -->
 
 ### 8.3 Reference rows
@@ -301,6 +306,7 @@ These rows are not eligible as "the" model. They are refits without a held-out v
 <!-- BEGIN:ref_form -->
 | Model | Params | Size MB | CPU ms / 1000 | F1 val | F1 test [95 % CI] | Δ vs TF-IDF | F1 test_strict |
 |---|---|---|---|---|---|---|---|
+| Ensemble TF-IDF+tiny+e5 + prior-shift adj. (124M, >120M) | 124.4M | 501 | 4,192 | – | 0.862 | – | 0.879 |
 | Ensemble TF-IDF+tiny+e5+kaz-roberta (208M, >120M) | 207.9M | 825 | 14,330 | – | 0.850 [0.819, 0.880] | +0.029 (better) | 0.861 |
 | LLM teacher Qwen3-1.7B + LoRA (teacher only; latency on GPU) | 1727.0M | 3317 | 2,424 | 0.754 | 0.775 [0.743, 0.807] | -0.045 (worse) | 0.775 |
 <!-- END:ref_form -->
@@ -322,11 +328,15 @@ These rows are not eligible as "the" model. They are refits without a held-out v
 **RQ1: tiny transformer vs baseline vs pretrained.**
 
 - **Plain from-scratch model (5.2M parameters):** on the form task it is significantly *worse* than TF-IDF + LR (0.793 vs 0.820). On the area task it is tied with TF-IDF.
-- **With MLM pretraining on train-period text and distillation from a fine-tuned encoder:** the same 5.2M model reaches 0.825–0.827 on form (tied with TF-IDF) and 0.597–0.598 on area. On area it is significantly better than TF-IDF (+0.015 [+0.002, +0.027]) and matches the 118M e5-small (0.601).
-- **Pretrained Kazakh encoders** are clearly best:
-  - Form: KazBERT 0.860 and kaz-roberta 0.853, both +0.03 to +0.04 over TF-IDF with CIs excluding 0.
-  - Area: kaz-roberta with layer-wise LR decay and recency weighting reaches 0.629, +0.046 over TF-IDF.
+- **With MLM pretraining on train-period text and distillation:**
+  - With a single teacher (e5 or kaz-roberta), the same 5.2M model reaches 0.825–0.827 on form and 0.597–0.598 on area.
+  - With the **averaged predictions of kaz-roberta and KazBERT** as the teacher (the val-best variant on both tasks), it reaches **0.839 on form**: +0.018 [−0.001, +0.038] vs TF-IDF, a tie, and level with e5-small's 0.842. On area it reaches **0.619**: +0.036 [+0.025, +0.048] vs TF-IDF, significantly better, and above e5-small's 0.601.
+- **Pretrained Kazakh encoders** are clearly best. We report both the val-selected encoder and the highest test score, because they differ:
+  - **Form.** The val-selected encoder is kaz-roberta with LLRD + recency weighting: val 0.898, test 0.841, strict 0.848. The highest test score is KazBERT's 0.860 (val 0.879); kaz-roberta fine-tuned has 0.853 (val 0.883).
+  - **Area.** The val-selected encoder is KazBERT: val 0.624, test 0.620. The highest test score is kaz-roberta with LLRD + recency weighting: 0.629 (val 0.616).
+  - All of them are 0.02–0.05 above TF-IDF with CIs excluding 0. Their CIs overlap each other, so we call the Kazakh encoders tied.
 - **Monolingual Kazakh beats multilingual.** The monolingual Kazakh encoders beat the multilingual e5-small, which is consistent with their lower tokenizer fertility (1.26–1.45 vs 1.73 tokens per word).
+- **The highest form numbers overall** come from an ensemble of TF-IDF, the tiny model and e5 with prior-shift correction: 0.862 test / 0.879 strict. That is only +0.002 / +0.012 over the best single model, and at 124M parameters it exceeds the budget, so it is listed as a reference only.
 - **Frozen e5 embeddings + LR** are far below TF-IDF on both tasks (form 0.699). For formulaic legal titles, sparse n-grams beat generic sentence embeddings, and fine-tuning is essential.
 
 **RQ2: what does quality cost?**
@@ -334,22 +344,23 @@ These rows are not eligible as "the" model. They are refits without a held-out v
 | Model | Parameters | CPU latency per 1000 titles | Form F1 | Area F1 |
 |---|---|---|---|---|
 | TF-IDF | 1.5–7M | about 0.2 s | 0.820 | 0.583 |
-| Distilled tiny transformer | 5.2M (21 MB) | about 0.5 s | 0.827 | 0.598 |
+| Distilled tiny transformer (2 teachers) | 5.2M (21 MB) | about 0.5 s | 0.839 | 0.619 |
 | e5-small | 118M | about 3.5 s | 0.842 | 0.601 |
-| kaz-roberta | 83M | about 9.7 s | 0.853 | 0.629 |
+| kaz-roberta | 83M | about 9.7 s | 0.841–0.853 | 0.622–0.629 |
+| KazBERT | 111M | about 24 s | 0.860 | 0.620 |
 
-- About +0.03 to +0.04 macro-F1 over the tiny model costs 16–23× the parameters and roughly 20× the CPU latency.
+- The remaining +0.01 to +0.02 macro-F1 of the best encoders over the distilled tiny model costs 16–21× the parameters and 18–48× the CPU latency.
 - **Kazakh vocabulary pruning** removes 78 % of e5's parameters (118M → 25.5M, 465 → 98 MB) with no loss in F1 (form 0.845 vs 0.842). Embedding lookups are not the compute bottleneck, so CPU latency does not improve.
 
 **RQ3: dependence on the protocol.**
 
 - **Near-duplicates.** On `test_strict` (no templated near-duplicate in train), the ranking of models is unchanged. The scores barely move for the strong models (kaz-roberta form 0.853 → 0.868) but drop for template matching (char 1-NN: 0.670 → 0.632 on form, 0.536 → 0.488 on area). The fine-tuned models therefore do not rely on memorized templates.
-- **Temporal drift.** The best model's error rate grows every year, from 2.7 % in 2023 to 7.0 % in 2026 (Section 9).
+- **Temporal drift.** The best model's error rate grows every year, from 2.8 % in 2023 to 6.8 % in 2026 (Section 9).
 - **Validation is an imperfect selector.** Variants tuned toward the 2022 validation year can lose on 2023+ test data.
 
 ## 9. Error analysis
 
-`src/error_analysis.py` analyzes the test predictions stored in SQLite, with JOINs of `predictions` against `acts`, `bodies` and the near-duplicate table. The analyzed model is the best single model on validation, kaz-roberta with LLRD and recency weighting. Full details are in `results/error_analysis.md`.
+`src/error_analysis.py` analyzes the test predictions stored in SQLite, with JOINs of `predictions` against `acts`, `bodies` and the near-duplicate table. The analyzed model is kaz-roberta with LLRD and recency weighting: the val-best single model on form, and the best test model on area. Full details are in `results/error_analysis.md`.
 
 ![Normalized confusion matrix, act form](figures/confusion_form_kaz_roberta_llrd_rec.png)
 
@@ -401,8 +412,8 @@ The project is a Python 3.12 package (`src/`) with one module per concern. Each 
 ## 11. Limitations
 
 - **Validation is a weak proxy for the test years.** The 2022 validation year sits between train and test in its class mix, so variants that win on val sometimes lose on test. Example: kaz-roberta with layer-wise LR decay and recency weighting has the best form val score (0.898) but a lower test score than the plain fine-tune. We kept the val-selection rule and report the variants side by side instead of picking winners on test.
-- **Small classes make macro-F1 noisy.** The form class Басқа has 26 test titles, and several area classes have fewer than 20. One prediction can move macro-F1 by several tenths of a point. A paired bootstrap over test rows (300 resamples) gives the following:
-  - Per-model 95 % CIs of about ±0.027 on the form task (e5-small fine-tuned: [0.814, 0.867]).
+- **Small classes make macro-F1 noisy.** The form class Басқа has 26 test titles, and several area classes have fewer than 20. One prediction can move macro-F1 by several tenths of a point. A paired bootstrap over test rows gives the following:
+  - Per-model 95 % CIs of about ±0.027 on the form task (e5-small fine-tuned: [0.813, 0.867]; 1000 resamples in `results/bootstrap_ci.csv`).
   - kaz-roberta beats e5-small by +0.011 [+0.001, +0.022], which is barely significant.
   - On the area task, TF-IDF and the 4-layer tiny transformer are statistically tied: −0.0005 [−0.014, +0.012].
 
@@ -419,9 +430,9 @@ The project is a Python 3.12 package (`src/`) with one module per concern. Each 
 
 ## 12. Conclusions
 
-1. **The tiny transformer can match the classical baseline, but only with help.** Trained purely from scratch, the 5.2M-parameter model loses to TF-IDF + LR on act form (0.793 vs 0.820) and ties on area. MLM pretraining on train-period text plus knowledge distillation from a fine-tuned encoder lifts it to a tie on form (0.827) and a significant win on area (0.598 vs 0.583). There it equals the 23× larger e5-small, at about 0.5 s per 1000 titles on CPU.
-2. **Kazakh-specific pretrained encoders give the best quality** within the 120M budget: KazBERT (form 0.860) and kaz-roberta (area 0.629, or 0.634 after a train+val refit). They are 0.03–0.05 above TF-IDF, and the bootstrap CIs exclude 0. A monolingual vocabulary beats the multilingual e5 at a similar size.
-3. **Compression is cheap.** Pruning the vocabulary to Kazakh tokens shrinks e5-small by 78 % (118M → 25.5M) and kaz-roberta by 26 % with no loss in F1. A distilled 5M model keeps 93–97 % of the best model's macro-F1 at roughly 1/20 of its CPU latency.
+1. **The tiny transformer can match the classical baseline, but only with help.** Trained purely from scratch, the 5.2M-parameter model loses to TF-IDF + LR on act form (0.793 vs 0.820) and ties on area. MLM pretraining on train-period text plus distillation from the averaged predictions of two Kazakh encoders lifts it to a tie on form (0.839, level with e5-small's 0.842) and a significant win on area (0.619 vs 0.583, above e5-small's 0.601). It runs at about 0.5 s per 1000 titles on CPU, with 23× fewer parameters than e5-small.
+2. **Kazakh-specific pretrained encoders give the best quality** within the 120M budget. kaz-roberta and KazBERT reach test 0.841–0.860 on form and 0.620–0.629 on area (0.634 after a train+val refit), 0.02–0.05 above TF-IDF with CIs excluding 0. They are tied with each other, and which one is "best" depends on whether you select on validation or read test. A monolingual vocabulary beats the multilingual e5 at a similar size.
+3. **Compression is cheap.** Pruning the vocabulary to Kazakh tokens shrinks e5-small by 78 % (118M → 25.5M) and kaz-roberta by 26 % with no loss in F1. The distilled 5.2M model keeps 97.5–98.4 % of the best test macro-F1 at 1/18 to 1/48 of the encoders' CPU latency.
 4. **More is not always better.** Several ideas did not help:
    - seq2seq label generation (mT5);
    - a 1.7B LLM teacher;

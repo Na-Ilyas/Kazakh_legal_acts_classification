@@ -72,6 +72,12 @@
       "val_split": "val",
       "f1_test": 0.5921
     },
+    "tiny + MLM + KD (averaged teachers)": {
+      "model_name": "tiny_transformer_4L_mlm_kdavg_a100_T2",
+      "f1_val": 0.6054,
+      "val_split": "val",
+      "f1_test": 0.6187
+    },
     "tiny + MLM + KD (teacher e5)": {
       "model_name": "tiny_transformer_4L_mlm_kd_a50_T2",
       "f1_val": 0.5922,
@@ -163,6 +169,12 @@
       "f1_val": 0.8514,
       "val_split": "val",
       "f1_test": 0.8188
+    },
+    "tiny + MLM + KD (averaged teachers)": {
+      "model_name": "tiny_transformer_4L_mlm_kdavg_a90_T2",
+      "f1_val": 0.8778,
+      "val_split": "val",
+      "f1_test": 0.8387
     },
     "tiny + MLM + KD (teacher e5)": {
       "model_name": "tiny_transformer_4L_mlm_kd_a90_T2",

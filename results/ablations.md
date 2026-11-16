@@ -10,10 +10,13 @@ Every logged variant that is not the val-best of its group (see `results/model_c
 | kaz_roberta_llrd | pretrained kaz-roberta | 0.6065 | – | 0.6216 | – | – | 0.6000 | 0.7955 | 83.48M | 323.6 | 10,018.5 | – | 3,175.3 | – | 119.6 |
 | kaz_roberta_llrd_cw | pretrained kaz-roberta | 0.6066 | – | 0.6193 | – | – | 0.5980 | 0.7913 | 83.48M | 323.6 | 10,018.5 | – | 3,172.6 | – | 120.3 |
 | kaz_roberta_llrd_ls | pretrained kaz-roberta | 0.6046 | – | 0.6181 | – | – | 0.5946 | 0.7951 | 83.48M | 323.6 | 10,018.5 | – | 3,172.6 | – | 123.6 |
+| tiny_transformer_4L_mlm_kdavg_a90_T2 | tiny + MLM + KD (averaged teachers) | 0.6049 | – | 0.6116 | – | – | 0.5927 | 0.7939 | 5.24M | 20.8 | 513.4 | 51.6 | 1,100.3 | 123.7 | 62.5 |
 | kaz_roberta_llrd_rec_prioradj | posthoc | – | 0.6339 | 0.6097 | – | – | 0.5887 | 0.7950 | 83.48M | 323.6 | 9,775.9 | 250.8 | – | – | 119.0 |
 | kaz_roberta_ep5 | pretrained kaz-roberta | 0.6025 | – | 0.6093 | – | – | 0.5861 | 0.7920 | 83.48M | 323.6 | 10,018.5 | – | 3,175.4 | – | 119.5 |
+| e5_small_kkprune_kdrob | pretrained e5 | 0.5769 | – | 0.6043 | – | – | 0.5840 | 0.7885 | 25.53M | 114.7 | 8,090.3 | – | 2,004.7 | – | 75.4 |
 | ensemble_tfidf_tiny_e5 (>120M, reference) | ensemble | – | 0.6180 | 0.6040 | – | – | 0.5839 | 0.7916 | 130.04M | 522.6 | 4,258.5 | 158.0 | – | – | 209.3 |
 | tiny_transformer_4L_mlm_kdrob_a90_T2 | tiny + KD (kaz-roberta teacher) | 0.5934 | – | 0.6032 | – | – | 0.5801 | 0.7886 | 5.24M | 20.8 | 547.7 | 65.1 | 1,100.3 | 105.9 | 44.0 |
+| tiny_transformer_4L_mlm_kdavg_a50_T2 | tiny + MLM + KD (averaged teachers) | 0.6003 | – | 0.5962 | – | – | 0.5722 | 0.7916 | 5.24M | 20.8 | 516.4 | 51.6 | 1,100.3 | 74.9 | 34.0 |
 | tiny_transformer_2L_do30 | tiny (from scratch) | 0.5842 | – | 0.5937 | – | – | 0.5681 | 0.7780 | 3.66M | 14.7 | 302.4 | – | 628.0 | 112.2 | 26.6 |
 | tiny_transformer_4L_kd_a90_T2 | tiny + KD (teacher e5) | 0.5786 | – | 0.5936 | – | – | 0.5671 | 0.7861 | 5.24M | 20.8 | 512.9 | 54.1 | 1,080.4 | 125.0 | 48.4 |
 | ablation_tfidf_word_fold_num | baseline/tfidf | 0.5861 | – | 0.5915 | – | – | 0.5624 | 0.7793 | 3.81M | – | – | – | – | – | 3.0 |
@@ -36,6 +39,9 @@ Every logged variant that is not the val-best of its group (see `results/model_c
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | ensemble_tfidf_tiny_e5_prioradj (>120M, reference) | ensemble | – | 0.9190 | 0.8624 | – | – | 0.8792 | 0.9687 | 124.40M | 501.1 | 4,192.3 | 161.5 | – | – | 190.0 |
 | ensemble_tfidf_tiny_e5 (>120M, reference) | ensemble | – | 0.9166 | 0.8531 | – | – | 0.8617 | 0.9679 | 124.40M | 501.1 | 4,192.3 | 161.5 | – | – | 190.0 |
+| e5_small_kkprune_kdrob | pretrained e5 | 0.8527 | – | 0.8450 | – | – | 0.8543 | 0.9641 | 25.52M | 114.6 | 7,767.3 | – | 1,990.5 | – | 77.7 |
+| tiny_transformer_4L_mlm_kdavg_a50_T2 | tiny + MLM + KD (averaged teachers) | 0.8741 | – | 0.8284 | – | – | 0.8362 | 0.9652 | 5.23M | 20.7 | 540.6 | 52.1 | 1,091.8 | 119.2 | 53.9 |
+| tiny_transformer_4L_mlm_kdavg_a100_T2 | tiny + MLM + KD (averaged teachers) | 0.8758 | – | 0.8267 | – | – | 0.8323 | 0.9644 | 5.23M | 20.7 | 538.7 | 56.9 | 1,091.8 | 5.9 | 44.0 |
 | tiny_transformer_4L_mlm_kdrob_a90_T2 | tiny + KD (kaz-roberta teacher) | 0.8569 | – | 0.8237 | – | – | 0.8252 | 0.9617 | 5.23M | 20.7 | 540.5 | 55.8 | 1,092.5 | 122.9 | 34.0 |
 | tiny_transformer_2L_do30 | tiny (from scratch) | 0.8292 | – | 0.8132 | – | – | 0.8153 | 0.9560 | 3.65M | 14.7 | 304.7 | – | 627.9 | 116.1 | 24.7 |
 | tiny_transformer_4L_kd_a90_T4 | tiny + KD (teacher e5) | 0.8549 | – | 0.8102 | – | – | 0.8075 | 0.9619 | 5.23M | 20.7 | 517.2 | 51.2 | 1,072.5 | 126.3 | 53.2 |

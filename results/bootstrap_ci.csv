@@ -5,6 +5,7 @@ area,kaz_roberta_ft,tfidf_word_char_lr,38377,0.6223,0.6087,0.6347,0.0395,0.0289,
 area,ensemble_tfidf_tiny_e5_roberta,tfidf_word_char_lr,38377,0.6215,0.6084,0.6331,0.0388,0.0305,0.0468,better
 area,kaz_roberta_kkprune_ft,tfidf_word_char_lr,38377,0.6213,0.6075,0.6337,0.0385,0.0281,0.0498,better
 area,kazbert_ft,tfidf_word_char_lr,38377,0.6201,0.6068,0.6319,0.0374,0.0268,0.0493,better
+area,tiny_transformer_4L_mlm_kdavg_a100_T2,tfidf_word_char_lr,38377,0.6187,0.6051,0.632,0.036,0.0245,0.048,better
 area,e5_small_ft,tfidf_word_char_lr,38377,0.601,0.5883,0.613,0.0183,0.0055,0.0305,better
 area,e5_small_kkprune_ft,tfidf_word_char_lr,38377,0.5997,0.587,0.6117,0.017,0.0039,0.0294,better
 area,tiny_transformer_4L_mlm_kdrob_a50_T2,tfidf_word_char_lr,38377,0.5979,0.5849,0.6098,0.0152,0.0044,0.0262,better
@@ -27,6 +28,7 @@ form,kaz_roberta_kkprune_ft,tfidf_word_char_lr,38467,0.8491,0.8182,0.8779,0.0289
 form,e5_small_kkprune_ft,tfidf_word_char_lr,38467,0.8448,0.8164,0.8737,0.0246,0.0038,0.0475,better
 form,e5_small_ft,tfidf_word_char_lr,38467,0.8415,0.8127,0.8673,0.0213,0.0047,0.0395,better
 form,kaz_roberta_llrd_rec,tfidf_word_char_lr,38467,0.8414,0.813,0.8694,0.0212,0.0073,0.0375,better
+form,tiny_transformer_4L_mlm_kdavg_a90_T2,tfidf_word_char_lr,38467,0.8387,0.8083,0.8673,0.0185,-0.0006,0.0384,tie
 form,tiny_transformer_4L_mlm_kdrob_a50_T2,tfidf_word_char_lr,38467,0.8273,0.8007,0.8535,0.0071,-0.0119,0.0261,tie
 form,tiny_transformer_4L_mlm_kd_a90_T2,tfidf_word_char_lr,38467,0.8252,0.7988,0.852,0.005,-0.0154,0.0259,tie
 form,tfidf_word_char_lr,tfidf_word_char_lr,38467,0.8202,0.7931,0.8469,0.0,0.0,0.0,baseline
